@@ -1,16 +1,30 @@
-# React + Vite
+# Nine2Six - Trip Planner Pro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Trip Planner Pro** is a web application that helps users plan, track, and manage a personal or family travel plan.
 
-Currently, two official plugins are available:
+The application covers:
+- Itinerary management
+- Packing checklist
+- Travel budget planning
+- Trip progress dashboard
+- Data persistence using mocked data or localStorage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup Guide
+### Installation
+1. **Clone the repository**
+2. Install dependencies (Ensure you have Node.js installed)
+    ```bash
+    npm install
+    ```
+3. **Run the application**
+    ```bash
+    npm run dev
+    ```
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Adding Shadcn Components
+This project uses shadcn/ui. Since we are using a JavaScript configuration with path aliases, follow these steps to add new UI elements:
+1. Browse the [shadcn documentation](https://ui.shadcn.com/docs/components) to find a component.
+2. Find and run the installation command in your terminal. It should be in below format:
+    ```bash
+    npx shadcn@latest add <component-name>
+    ```
