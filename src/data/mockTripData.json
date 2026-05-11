@@ -1,0 +1,36 @@
+{
+  "tripName": "Da Nang Family Trip",
+  "budget": 12000000,
+  "itinerary": [
+    {
+      "id": 1,
+      "title": "Flight to Da Nang",
+      "location": "Tan Son Nhat Airport",
+      "date": "2026-06-10",
+      "time": "08:00",
+      "category": "Transport",
+      "priority": "High",
+      "status": "Planned"
+    }
+  ],
+  "packingList": [
+    {
+      "id": 1,
+      "name": "Passport / ID card",
+      "category": "Documents",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed"
+    }
+  ],
+  "budgetItems": [
+    {
+      "id": 1,
+      "name": "Flight tickets",
+      "category": "Transport",
+      "estimatedCost": 4000000,
+      "actualCost": 4200000,
+      "paymentStatus": "Paid"
+    }
+  ]
+}
