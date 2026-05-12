@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 export function Header() {
   return (
-    <header className="flex justify-between items-center px-3 py-5 bg-gray-50">
+    <header className="sticky top-0 z-50 flex justify-between items-center px-3 py-3 bg-gray-50 shadow-md">
       <div className="flex gap-12">
         <span className="text-2xl font-bold drop-shadow-sm text-primary">
           Trip Planner Pro

@@ -1,19 +1,17 @@
-import { Button } from "@/components/ui/button";
-import { useDispatch, useSelector } from "react-redux"
-import { decrement, increment } from "./packingSlice";
+import { useSelector } from "react-redux"
 
 export function SamplePackingComponent() {
-  const dispatch = useDispatch();
-  const count = useSelector((state) => state.packing.count);
+  const checklist = useSelector((state) => state.packing.checklist);
   
   return (
-    <>
-      <h1 className="text-2xl bg-amber-100">I am a sample packing component</h1>
+    <div className="bg-amber-50">
+      <h1 className="text-2xl">I am a placeholder component for packing checklist</h1>
+
       <div>
-        <Button onClick={() => dispatch(decrement())}>-</Button>
-        <span className="m-5">{count}</span>
-        <Button onClick={() => dispatch(increment())}>+</Button>
+        {checklist.map((item) => (
+          <p key={item.id}>{item.name}</p>
+        ))}
       </div>
-    </>
+    </div>
   )
 }
