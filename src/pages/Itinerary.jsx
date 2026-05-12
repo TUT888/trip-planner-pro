@@ -1,10 +1,12 @@
+import { ItineraryCard } from "@/features/itinerary/ItineraryCard";
 import { SampleItineraryComponent } from "@/features/itinerary/SampleItineraryComponent";
+import './Itinerary.css';
+import { ItineraryList } from "@/features/itinerary/ItineraryList";
 
 export function Itinerary() {
   return (
-    <>
-      <h1 className="text-2xl">Hello from Itinerary</h1>
-      <SampleItineraryComponent />
-    </>
+    <div className="font-[Ubuntu,sans-serif]"> 
+      <ItineraryList/>
+    </div>
   )
 }
