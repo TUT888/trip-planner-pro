@@ -2,7 +2,7 @@ import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService"
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST),
+  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) || [],
 };
 
 export const packingSlice = createSlice({

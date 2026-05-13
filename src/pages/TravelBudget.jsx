@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BudgetTracking } from '../features/budget/components/BudgetTracking';
 import { BudgetOverview } from '../features/budget/components/BudgetOverview';
@@ -7,10 +8,12 @@ import { resetBudget } from '../features/budget/budgetSlice';
 
 export function TravelBudget() {
   const dispatch = useDispatch();
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const handleReset = () => {
     if (window.confirm("Are you sure you want to reset all budget data?")) {
       dispatch(resetBudget());
+      setSelectedCategory('All');
     }
   };
 
@@ -47,8 +50,11 @@ export function TravelBudget() {
       
       <BudgetTracking />
       <BudgetOverview />
-      <BudgetCategoryBreakdown />
-      <BudgetList />
+      <BudgetCategoryBreakdown 
+        selectedCategory={selectedCategory} 
+        onSelectCategory={setSelectedCategory} 
+      />
+      <BudgetList selectedCategory={selectedCategory} />
     </div>
   )
 }

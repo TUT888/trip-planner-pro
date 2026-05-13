@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBudgetTotals, selectInitialBudget, selectBudgetAlerts } from '../budgetSelectors';
 import { setInitialBudget } from '../budgetSlice';
-import { TriangleAlert, Edit2, Check } from 'lucide-react';
+import { TriangleAlert, AlertCircle, Edit2, Check } from 'lucide-react';
 
 export function BudgetTracking() {
   const dispatch = useDispatch();
@@ -35,59 +35,71 @@ export function BudgetTracking() {
   };
 
   return (
-    <div className="bg-[#ffecd6] border border-[#eab308] p-6 shadow-sm mb-6 mt-4">
-      <div className="flex justify-between items-start mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Budget Tracking</h2>
+    <div className="space-y-4 mb-6">
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm transition-all flex items-center justify-between gap-8">
         
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-xl font-bold text-gray-900">
-            <span>{Math.round(totals.totalActual)} /</span>
-            {isEditing ? (
-              <div className="flex items-center gap-1">
-                <input 
-                  type="number" 
-                  value={editValue} 
-                  onChange={(e) => setEditValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="w-24 px-2 py-1 text-base border border-orange-300 rounded focus:outline-none"
-                  autoFocus
-                />
-                <button onClick={handleSave} className="text-green-600 hover:text-green-700">
-                  <Check className="w-5 h-5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsEditing(true)}>
-                <span>{initialBudget}</span>
-                <Edit2 className="w-4 h-4 text-orange-500 opacity-50 group-hover:opacity-100" />
-              </div>
-            )}
+        {/* Left Column: Title, Numbers, Progress Bar */}
+        <div className="flex-1 flex flex-col gap-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-black text-gray-900">Budget Tracking</h2>
+            
+            <div className="flex items-center gap-2 text-xl font-bold text-gray-900">
+              <span>{Math.round(totals.totalActual)} /</span>
+              {isEditing ? (
+                <div className="flex items-center gap-1">
+                  <input 
+                    type="number" 
+                    value={editValue} 
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="w-24 px-2 py-1 text-base border border-pink-300 rounded focus:outline-none focus:ring-2 focus:ring-pink-200"
+                    autoFocus
+                  />
+                  <button onClick={handleSave} className="text-green-600 hover:text-green-700 bg-green-50 p-1.5 rounded-full">
+                    <Check className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsEditing(true)}>
+                  <span>{initialBudget}</span>
+                  <Edit2 className="w-4 h-4 text-gray-400 opacity-50 group-hover:opacity-100 group-hover:text-pink-500 transition-colors" />
+                </div>
+              )}
+            </div>
           </div>
-          
-          <div className="text-5xl font-black text-gray-900 leading-none">
-            {Math.round(rawPercentage)} %
+
+          <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden relative">
+            <div 
+              className={`h-full transition-all duration-1000 ease-out ${percentage >= 100 ? 'bg-red-500' : percentage >= 80 ? 'bg-yellow-400' : 'bg-pink-500'}`}
+              style={{ width: `${percentage}%` }}
+            ></div>
           </div>
+        </div>
+
+        {/* Right Column: Large Percentage */}
+        <div className="text-6xl md:text-7xl font-black text-pink-500 leading-none flex-shrink-0">
+          {Math.round(rawPercentage)}<span className="text-4xl md:text-5xl ml-1">%</span>
         </div>
       </div>
 
-      <div className="w-[80%] h-6 bg-white border border-gray-800 rounded-sm overflow-hidden mb-4 relative">
-        <div 
-          className="h-full bg-gray-200 border-r border-gray-800 transition-all duration-500" 
-          style={{ width: `${percentage}%` }}
-        ></div>
-      </div>
-
-      {alerts.warning && !alerts.critical && (
-        <div className="flex items-center gap-2 text-[#d97706]">
-          <TriangleAlert className="w-5 h-5" />
-          <p className="font-medium">{alerts.message}</p>
+      {/* Alerts */}
+      {alerts.critical && (
+        <div className="bg-red-50 text-red-800 p-4 rounded-lg flex items-center gap-4 border border-red-200 shadow-sm">
+          <AlertCircle className="w-6 h-6 text-red-500" />
+          <div className="flex-1">
+            <p className="font-bold text-sm">Critical Budget Alert!</p>
+            <p className="text-xs opacity-90">{alerts.message}</p>
+          </div>
         </div>
       )}
       
-      {alerts.critical && (
-        <div className="flex items-center gap-2 text-red-600">
-          <TriangleAlert className="w-5 h-5" />
-          <p className="font-bold">{alerts.message}</p>
+      {!alerts.critical && alerts.warning && (
+        <div className="bg-yellow-50 text-yellow-800 p-4 rounded-lg flex items-center gap-4 border border-yellow-200 shadow-sm">
+          <TriangleAlert className="w-6 h-6 text-yellow-500" />
+          <div className="flex-1">
+            <p className="font-bold text-sm">Approaching Limit</p>
+            <p className="text-xs opacity-90">{alerts.message}</p>
+          </div>
         </div>
       )}
     </div>
