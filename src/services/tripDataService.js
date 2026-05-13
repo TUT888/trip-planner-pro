@@ -1,4 +1,13 @@
+import mockTripData from "../data/mockTripData.json" with { type: 'json' }
+
 const STORAGE_KEY = "trip"
+export const TRIP_PROPERTIES = Object.freeze({
+  NAME: "tripName", 
+  INIT_BUDGET: "budget", 
+  ITINERARY: "itinerary", 
+  PACKING_LIST: "packingList", 
+  BUDGET_ITEMS: "budgetItems"
+})
 
 export const saveData = (property, value) => {
   // property: one of the values "budgetItems" | "packingList" | "itinerary"
@@ -14,15 +23,19 @@ export const saveData = (property, value) => {
 export const loadData = (property) => {
   // property: one of the values "budgetItems" | "packingList" | "itinerary"
   const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data)[property] : null;
+  if (data) return JSON.parse(data)[property]
+
+  saveTripData(mockTripData);
+  const newData = localStorage.getItem(STORAGE_KEY);
+  return newData ? JSON.parse(data)[property] : null;
 }
 
 // Save/load the entire trip object
-export const saveTripData = (data) => {
+const saveTripData = (data) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 };
 
-export const loadTripData = () => {
+const loadTripData = () => {
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) : null;
 };

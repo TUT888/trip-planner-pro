@@ -21,6 +21,38 @@
       "quantity": 1,
       "requiredStatus": "Required",
       "packedStatus": "Not Packed"
+    },
+    {
+      "id": 2,
+      "name": "Sunscreen SPF 50+",
+      "category": "Personal",
+      "quantity": 1,
+      "requiredStatus": "Optional",
+      "packedStatus": "Not Packed"
+    },
+    {
+      "id": 3,
+      "name": "Swimwear",
+      "category": "Clothes",
+      "quantity": 2,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed"
+    },
+    {
+      "id": 4,
+      "name": "Portable Power Bank",
+      "category": "Electronics",
+      "quantity": 1,
+      "requiredStatus": "Optional",
+      "packedStatus": "Packed"
+    },
+    {
+      "id": 5,
+      "name": "Basic First Aid Kit",
+      "category": "Medicine",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed"
     }
   ],
   "budgetItems": [
