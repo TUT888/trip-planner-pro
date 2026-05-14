@@ -1,7 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { TripDashboard } from './pages/TripDashboard'
 import { Itinerary } from './pages/Itinerary'
-import { PackingChecklist } from './pages/PackingChecklist'
+import  PackingChecklist  from './pages/PackingChecklist'
 import { TravelBudget } from './pages/TravelBudget'
 import { AppLayout } from './components/layout/AppLayout'
 

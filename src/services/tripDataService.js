@@ -9,33 +9,31 @@ export const TRIP_PROPERTIES = Object.freeze({
   BUDGET_ITEMS: "budgetItems"
 })
 
-export const saveData = (property, value) => {
-  // property: one of the values "budgetItems" | "packingList" | "itinerary"
-  // value: value of item (it should be a list, for example, list of budget items)
+// Save/load the entire trip object
+export const saveTripData = (property, value) => {
   const currentTrip = loadTripData() || {};
   const updatedTrip = {
     ...currentTrip,
     [property]: value
   };
-  saveTripData(updatedTrip);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTrip));
+};
+
+export const loadTripData = (property) => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  const tripData = data ? JSON.parse(data) : mockTripData;
+  
+  if (property) {
+    return tripData[property];
+  }
+  return tripData;
+};
+
+// Save/load specific properties (legacy API)
+export const saveData = (property, value) => {
+  saveTripData(property, value);
 }
 
 export const loadData = (property) => {
-  // property: one of the values "budgetItems" | "packingList" | "itinerary"
-  const data = localStorage.getItem(STORAGE_KEY);
-  if (data) return JSON.parse(data)[property]
-
-  saveTripData(mockTripData);
-  const newData = localStorage.getItem(STORAGE_KEY);
-  return newData ? JSON.parse(data)[property] : null;
+  return loadTripData(property);
 }
-
-// Save/load the entire trip object
-const saveTripData = (data) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-};
-
-const loadTripData = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : null;
-};
