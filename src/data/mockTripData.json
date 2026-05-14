@@ -4,17 +4,7 @@
   "itinerary": [
     {
       "id": 1,
-      "title": "Eat Ice-cream",
-      "location": "An Khanh",
-      "date": "2026-06-9",
-      "time": "08:00",
-      "category": "Food",
-      "priority": "Low",
-      "status": "Overdue"
-    },
-    {
-      "id": 2,
-      "title": "Flight to Da Nang",
+      "activityTitle": "Flight to Da Nang",
       "location": "Tan Son Nhat Airport",
       "date": "2026-06-10",
       "time": "08:00",
@@ -40,6 +30,56 @@
       "time": "09:00",
       "category": "Food",
       "priority": "High",
+      "status": "Planned"
+    },
+    {
+      "id": 2,
+      "activityTitle": "Visit Japanese Covered Bridge",
+      "location": "Japanese Covered Bridge, Hoi An",
+      "date": "2025-06-11",
+      "time": "09:00",
+      "category": "Sightseeing",
+      "priority": "High",
+      "status": "Planned"
+    },
+    {
+      "id": 3,
+      "activityTitle": "Explore Hoi An Ancient Town",
+      "location": "Hoi An Ancient Town",
+      "date": "2026-06-11",
+      "time": "15:00",
+      "category": "Sightseeing",
+      "priority": "High",
+      "status": "Planned"
+    },
+    {
+      "id": 4,
+      "activityTitle": "Lantern Walk at Night Market",
+      "location": "Hoi An Night Market",
+      "date": "2026-06-11",
+      "time": "19:30",
+      "category": "Shopping",
+      "priority": "Medium",
+      "status": "Planned"
+    },
+    {
+      "id": 5,
+      "activityTitle": "Basket Boat Tour",
+      "location": "Cam Thanh Coconut Village",
+      "date": "2026-06-12",
+      "time": "08:30",
+      "category": "Sightseeing",
+      "priority": "Medium",
+      "status": "Planned"
+    },
+    {
+      "id": 6,
+      "activityTitle": "Relax at An Bang Beach",
+      "location": "An Bang Beach, Hoi An",
+      "date": "2026-06-12",
+      "time": "16:00",
+      "category": "Sightseeing",
+      "priority": "Low",
       "status": "Planned"
     }
   ],

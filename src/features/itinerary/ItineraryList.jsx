@@ -1,125 +1,55 @@
+import { CalendarDays } from "lucide-react";
 import { ItineraryCard } from "./ItineraryCard";
+import { loadData, TRIP_PROPERTIES } from "@/services/tripDataService";
 
-const itineraryList = [
-    {
-        id: 1,
-        activityTitle: "Airport Pickup",
-        location: "Da Nang International Airport",
-        date: "2026-05-10",
-        time: "09:00",
-        category: "Transport",
-        priority: "High",
-        status: "Done",
-        isOverdue: false,
-    },
-    {
-        id: 2,
-        activityTitle: "Check in at Hotel",
-        location: "Hoi An Ancient Town",
-        date: "2026-05-10",
-        time: "14:00",
-        category: "Hotel",
-        priority: "High",
-        status: "Done",
-        isOverdue: false,
-    },
-    {
-        id: 3,
-        activityTitle: "Cau Pagoda Visit",
-        location: "Hoi An, Quang Nam",
-        date: "2026-05-11",
-        time: "15:00",
-        category: "Sightseeing",
-        priority: "Medium",
-        status: "Planned",
-        isOverdue: true,
-    },
-    {
-        id: 4,
-        activityTitle: "Dinner at Local Restaurant",
-        location: "Morning Glory Restaurant",
-        date: "2026-05-11",
-        time: "19:00",
-        category: "Food",
-        priority: "Medium",
-        status: "In Progress",
-        isOverdue: true,
-    },
-    {
-        id: 5,
-        activityTitle: "Lantern Shopping",
-        location: "Hoi An Night Market",
-        date: "2026-05-12",
-        time: "20:00",
-        category: "Shopping",
-        priority: "Low",
-        status: "Planned",
-        isOverdue: false,
-    },
-    {
-        id: 6,
-        activityTitle: "Basket Boat Tour",
-        location: "Cam Thanh Coconut Village",
-        date: "2026-05-13",
-        time: "08:30",
-        category: "Sightseeing",
-        priority: "High",
-        status: "Planned",
-        isOverdue: false,
-    },
-    {
-        id: 7,
-        activityTitle: "Coffee Break",
-        location: "Faifo Coffee",
-        date: "2026-05-13",
-        time: "15:30",
-        category: "Food",
-        priority: "Low",
-        status: "Planned",
-        isOverdue: false,
-    },
-    {
-        id: 8,
-        activityTitle: "Move to Da Nang",
-        location: "Hoi An to Da Nang",
-        date: "2026-05-14",
-        time: "10:00",
-        category: "Transport",
-        priority: "High",
-        status: "Planned",
-        isOverdue: false,
-    },
-    {
-        id: 9,
-        activityTitle: "Visit My Khe Beach",
-        location: "My Khe Beach, Da Nang",
-        date: "2026-05-14",
-        time: "16:00",
-        category: "Sightseeing",
-        priority: "Medium",
-        status: "Planned",
-        isOverdue: false,
-    },
-    {
-        id: 10,
-        activityTitle: "Pack Luggage",
-        location: "Hotel Room",
-        date: "2026-05-15",
-        time: "21:00",
-        category: "Other",
-        priority: "Medium",
-        status: "Planned",
-        isOverdue: false,
-    },
-];
-const test = itineraryList[1]
-
-export function ItineraryList() {
+function ItineraryEmptyState() {
     return (
-        <div>
-            <ItineraryCard activityTitle={test.activityTitle} location={test.location} date={test.date}
-            time={test.time} category={test.category} priority={test.priority} status={test.status}/>
+        <div
+            className="flex min-h-[280px] flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-[#cff5ea] bg-[#e8faf5] px-6 py-12 text-center"
+            role="status"
+            aria-live="polite"
+        >
+            <div className="flex size-14 items-center justify-center rounded-full bg-[#c2f2e4] text-[#3DC59D]">
+                <CalendarDays className="size-7" aria-hidden />
+            </div>
+            <div className="max-w-sm space-y-1">
+                <h2 className="text-lg font-semibold text-gray-900">No activities yet</h2>
+                <p className="text-sm text-gray-600">
+                    When you add trip activities, they will show up here. You can plan your day
+                    step by step.
+                </p>
+            </div>
         </div>
-    )
+    );
+}
 
+/**
+ * Renders all itinerary items, or an empty state when there are none.
+ * Data is loaded from mockTripData.json through tripDataService.
+ */
+export function ItineraryList() {
+    const itineraryItems = loadData(TRIP_PROPERTIES.ITINERARY) || [];
+
+    if (itineraryItems.length === 0) {
+        return <ItineraryEmptyState />;
+    }
+
+    return (
+        <div className="flex flex-col gap-4">
+            {itineraryItems.map((item) => (
+                <ItineraryCard
+                    key={item.id}
+                    id={item.id}
+                    activityTitle={item.activityTitle}
+                    location={item.location}
+                    date={item.date}
+                    time={item.time}
+                    category={item.category}
+                    priority={item.priority}
+                    status={item.status}
+                    isOverdue={item.isOverdue}
+                />
+            ))}
+        </div>
+    );
 }
