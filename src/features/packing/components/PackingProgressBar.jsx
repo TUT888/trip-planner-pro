@@ -12,7 +12,7 @@ export function PackingProgressBar() {
   const accent = percentage === 100 ? ACCENT.full : percentage >= 50 ? ACCENT.half : ACCENT.base;
 
   return (
-    <div className="flex items-center gap-3 w-64">
+    <div className="flex items-center gap-3">
       <div
         role="progressbar"
         aria-valuenow={percentage}

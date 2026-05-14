@@ -62,7 +62,7 @@ export function PackingList({ items = [], isFiltered = false }) {
   };
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-100">
+    <div className="overflow-x-auto rounded-sm shadow-sm border border-gray-100">
       <table className="w-full border-collapse">
         {/* Table head */}
         <thead>

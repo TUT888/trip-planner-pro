@@ -75,18 +75,17 @@ export function PackingFilterBar({ filters, onFilterChange }) {
       </div>
 
       {/* Clear filters */}
-      {isAnyFilterActive && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() =>
-            onFilterChange({ category: "All", packedStatus: "All" })
-          }
-          className="text-gray-400 hover:text-gray-700 ml-auto shrink-0"
-        >
-          Clear filters
-        </Button>
-      )}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() =>
+          onFilterChange({ category: "All", packedStatus: "All" })
+        }
+        className="hover:text-gray-800 ml-auto shrink-0"
+        disabled={!isAnyFilterActive}
+      >
+        Clear filters
+      </Button>
     </div>
   );
 }
