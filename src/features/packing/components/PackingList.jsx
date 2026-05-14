@@ -1,7 +1,9 @@
-import PackingItem from "./PackingItem";
+import { useDispatch } from "react-redux";
+import { PackingItem } from "./PackingItem";
 import { Luggage } from "lucide-react";
+import { cycleItemCategory, cycleItemRequired, removeFromCheckList, togglePacked } from "../packingSlice";
 
-// Column header config 
+// Column header config
 const COLUMNS = [
   { key: "index", label: "#", className: "w-10" },
   { key: "name", label: "Item name", className: "min-w-[120px]" },
@@ -12,7 +14,7 @@ const COLUMNS = [
   { key: "actions", label: "", className: "w-20" },
 ];
 
-// Empty states 
+// Empty states
 function EmptyState({ isFiltered }) {
   return (
     <tr>
@@ -44,16 +46,21 @@ function EmptyState({ isFiltered }) {
   );
 }
 
-// Main component 
-export default function PackingList({
-  items = [],
-  onTogglePacked,
-  onCycleCategory,
-  onCycleRequired,
-  onEdit,
-  onDelete,
-  isFiltered = false,
-}) {
+// Main component
+export function PackingList({ items = [], isFiltered = false }) {
+  const dispatch = useDispatch();
+
+  const handleTogglePacked = (id) => dispatch(togglePacked(id));
+  const handleDelete = (id) => dispatch(removeFromCheckList(id));
+  const handleCycleCategory = (id) => dispatch(cycleItemCategory(id));
+  const handleCycleRequired = (id) => dispatch(cycleItemRequired(id));
+
+  // Edit opens a modal — local state is fine here (UI-only, not persisted)
+  const handleEdit = (item) => {
+    // TODO (next task): open edit modal, dispatch(openEditModal(item))
+    console.log("Edit item:", item);
+  };
+
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-100">
       <table className="w-full border-collapse">
@@ -81,11 +88,11 @@ export default function PackingList({
                 key={item.id}
                 item={item}
                 index={idx + 1}
-                onTogglePacked={onTogglePacked}
-                onCycleCategory={onCycleCategory}
-                onCycleRequired={onCycleRequired}
-                onEdit={onEdit}
-                onDelete={onDelete}
+                onTogglePacked={handleTogglePacked}
+                onCycleCategory={handleCycleCategory}
+                onCycleRequired={handleCycleRequired}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))
           )}

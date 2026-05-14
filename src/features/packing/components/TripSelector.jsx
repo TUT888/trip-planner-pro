@@ -1,7 +1,14 @@
+import { selectActiveTripId, selectAllTrips } from "@/features/trip/tripSelector";
+import { setActiveTripId } from "@/features/trip/tripSlice";
 import { MapPin, ChevronDown } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function TripSelector({ trips = [], activeTripId, onSelectTrip }) {
-  const activeTrip = trips.find((t) => t.id === activeTripId);
+export function TripSelector() {
+  const dispatch = useDispatch();
+  const trips = useSelector(selectAllTrips);
+  const activeTripId = useSelector(selectActiveTripId);
+  
+  const handleSelectTrip = (id) => dispatch(setActiveTripId(id));
 
   if (trips.length === 0) {
     return (
@@ -20,7 +27,7 @@ export default function TripSelector({ trips = [], activeTripId, onSelectTrip })
       />
       <select
         value={activeTripId ?? ""}
-        onChange={(e) => onSelectTrip(e.target.value)}
+        onChange={(e) => handleSelectTrip(e.target.value)}
         aria-label="Select a trip"
         className="
           appearance-none pl-8 pr-8 py-1.5

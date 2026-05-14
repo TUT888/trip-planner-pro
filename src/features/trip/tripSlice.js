@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { loadTripData } from "../../services/tripDataService";
 import mockTripData from "../../data/mockTripData.json" ;
 
-// ── Initial state ────────────────────────────────────────────────────────────
+// Initial state 
 
 // Try to load existing trip data from localStorage, fallback to mock data
 const loadInitialTrips = () => {
@@ -43,24 +43,20 @@ const initialState = {
   activeTripId: 1,
 };
 
-// ── Slice ────────────────────────────────────────────────────────────────────
-
+// Slice 
 const tripSlice = createSlice({
   name: "trip",
   initialState,
 
   reducers: {
-    /** Set the active trip */
     setActiveTripId(state, action) {
       state.activeTripId = action.payload;
     },
 
-    /** Add a new trip */
     addTrip(state, action) {
       state.trips.push(action.payload);
     },
 
-    /** Update an existing trip */
     updateTrip(state, action) {
       const idx = state.trips.findIndex((t) => t.id === action.payload.id);
       if (idx !== -1) {
@@ -68,7 +64,6 @@ const tripSlice = createSlice({
       }
     },
 
-    /** Delete a trip by id */
     deleteTrip(state, action) {
       state.trips = state.trips.filter((t) => t.id !== action.payload);
       if (state.activeTripId === action.payload && state.trips.length > 0) {
@@ -78,28 +73,7 @@ const tripSlice = createSlice({
   },
 });
 
-// ── Actions ──────────────────────────────────────────────────────────────────
-
-export const { setActiveTripId, addTrip, updateTrip, deleteTrip } =
-  tripSlice.actions;
+// Actions 
+export const { setActiveTripId, addTrip, updateTrip, deleteTrip } = tripSlice.actions;
 
 export default tripSlice.reducer;
-
-// ── Selectors ────────────────────────────────────────────────────────────────
-
-/**
- * Get the currently active trip object
- */
-export const selectActiveTrip = (state) => {
-  return state.trip.trips.find((t) => t.id === state.trip.activeTripId);
-};
-
-/**
- * Get all trips
- */
-export const selectAllTrips = (state) => state.trip.trips;
-
-/**
- * Get active trip id
- */
-export const selectActiveTripId = (state) => state.trip.activeTripId;

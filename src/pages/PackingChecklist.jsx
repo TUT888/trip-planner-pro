@@ -1,53 +1,56 @@
-import { calculatePackingProgress } from "@/features/packing/packingUtils";
-
 import { useSelector, useDispatch } from "react-redux";
 import { useCallback } from "react";
 
+// Utils
+import { calculatePackingProgress } from "@/features/packing/packingUtils";
+
 // Redux actions
-import { togglePacked, removeFromCheckList, clearAll, setFilter, cycleItemCategory, cycleItemRequired } from "@/features/packing/packingSlice";
-
+import {
+  togglePacked,
+  removeFromCheckList,
+  clearAll,
+  setFilter,
+  cycleItemCategory,
+  cycleItemRequired,
+} from "@/features/packing/packingSlice";
 import { setActiveTripId } from "@/features/trip/tripSlice";
+import {
+  selectFilteredItems,
+  selectPackingChecklist,
+  selectPackingFilter,
+  selectProgress,
+} from "@/features/packing/packingSelector";
 
-import { selectFilteredItems } from "@/features/packing/packingSlice";
-
-import PackingProgressBar from "@/features/packing/components/PackingProgressBar";
-import PackingFilterBar from "@/features/packing/components/PackingFilterBar";
-import PackingList from "@/features/packing/components/PackingList";
-import TripSelector from "@/features/packing/components/TripSelector";
-
-// shadcn Button
-import { Button } from "@/components/ui/button";
+// Components
 import { Plus, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PackingProgressBar } from "@/features/packing/components/PackingProgressBar";
+import { PackingFilterBar } from "@/features/packing/components/PackingFilterBar";
+import { PackingList } from "@/features/packing/components/PackingList";
+import { TripSelector } from "@/features/packing/components/TripSelector";
+import {
+  selectActiveTrip,
+  selectActiveTripId,
+  selectAllTrips,
+} from "@/features/trip/tripSelector";
 
 export default function PackingChecklist() {
   const dispatch = useDispatch();
 
-  // Selectors
-  // Raw state
-  const checklist = useSelector((s) => s.packing.checklist);
-  const filters = useSelector((s) => s.packing.filters);
-  const trips = useSelector((s) => s.trip.trips);
-  const activeTripId = useSelector((s) => s.trip.activeTripId);
-  // Derived state
+  // Selectors for raw state
+  const filters = useSelector(selectPackingFilter);
+
+  // Selectors derived state
   const filteredItems = useSelector(selectFilteredItems);
-  const progress = Math.round(calculatePackingProgress(checklist));
 
   // Whether any filter is active (used for empty-state copy and "Clear filters" button)
   const isFiltered =
     filters.category !== "All" || filters.packedStatus !== "All";
 
-  const handleTogglePacked = useCallback((id) => dispatch(togglePacked(id)), [dispatch]);
-  const handleDelete = useCallback((id) => dispatch(removeFromCheckList(id)),[dispatch]);
-  const handleCycleCategory = useCallback((id) => dispatch(cycleItemCategory(id)),[dispatch]);
-  const handleCycleRequired = useCallback((id) => dispatch(cycleItemRequired(id)),[dispatch]);
-  const handleFilterChange = useCallback((partial) => dispatch(setFilter(partial)),[dispatch]);
-  const handleSelectTrip = useCallback((id) => dispatch(setActiveTripId(id)),[dispatch]);
-
-  // Edit opens a modal — local state is fine here (UI-only, not persisted)
-  const handleEdit = useCallback((item) => {
-    // TODO (next task): open edit modal, dispatch(openEditModal(item))
-    console.log("Edit item:", item);
-  }, []);
+  const handleFilterChange = useCallback(
+    (partial) => dispatch(setFilter(partial)),
+    [dispatch],
+  );
 
   const handleAddNew = () => {
     // TODO (next task): dispatch(openAddModal())
@@ -59,28 +62,15 @@ export default function PackingChecklist() {
   // Render
   return (
     <div className="p-6 max-w-screen-xl mx-auto">
-      {/* Header row */}
       <div className="flex items-top gap-4 flex-wrap mb-1">
-        {/* Title */}
         <h1 className="text-2xl font-semibold text-gray-900 shrink-0">
           Packing Checklist
         </h1>
 
-        {/* Progress bar — spans available space between title and buttons */}
-        <PackingProgressBar
-          packed={progress.packed}
-          total={progress.total}
-          percentage={progress.percentage}
-        />
+        <PackingProgressBar />
 
-        {/* Trip selector */}
-        <TripSelector
-          trips={trips}
-          activeTripId={activeTripId}
-          onSelectTrip={handleSelectTrip}
-        />
+        <TripSelector />
 
-        {/* Add new item */}
         <Button
           variant="outline"
           size="default"
@@ -106,16 +96,8 @@ export default function PackingChecklist() {
       {/* Filter bar */}
       <PackingFilterBar filters={filters} onFilterChange={handleFilterChange} />
 
-      {/* Packing table */}
-      <PackingList
-        items={filteredItems}
-        isFiltered={isFiltered}
-        onTogglePacked={handleTogglePacked}
-        onCycleCategory={handleCycleCategory}
-        onCycleRequired={handleCycleRequired}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      {/* Packing list */}
+      <PackingList items={filteredItems} isFiltered={isFiltered} />
     </div>
   );
 }

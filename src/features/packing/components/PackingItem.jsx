@@ -43,7 +43,7 @@ function QuantityPill({ value }) {
 }
 
 // Main component 
-export default function PackingItem({
+export function PackingItem({
   item,
   index,
   onTogglePacked,

@@ -1,14 +1,18 @@
-export default function PackingProgressBar({ packed = 0, total = 0, percentage = 0 }) {
-  const accent =
-    percentage === 100
-      ? { bar: "bg-green-500", track: "bg-green-100", label: "text-green-800" }
-      : percentage >= 50
-        ? { bar: "bg-pink-500", track: "bg-pink-100", label: "text-pink-900" }
-        : { bar: "bg-pink-400", track: "bg-pink-100", label: "text-pink-900" };
+import { useSelector } from "react-redux";
+import { selectProgress } from "../packingSelector";
+
+const ACCENT = {
+  full: { bar: "bg-green-500", track: "bg-green-100", label: "text-green-800" },
+  half: { bar: "bg-pink-500", track: "bg-pink-100", label: "text-pink-900" },
+  base: { bar: "bg-pink-400", track: "bg-pink-100", label: "text-pink-900" }
+}
+
+export function PackingProgressBar() {
+  const { packed, total, percentage } = useSelector(selectProgress);
+  const accent = percentage === 100 ? ACCENT.full : percentage >= 50 ? ACCENT.half : ACCENT.base;
 
   return (
-    <div className="flex items-center gap-3  w-64">
-      {/* Track */}
+    <div className="flex items-center gap-3 w-64">
       <div
         role="progressbar"
         aria-valuenow={percentage}
@@ -22,6 +26,7 @@ export default function PackingProgressBar({ packed = 0, total = 0, percentage =
           className={`h-full rounded-full transition-all duration-500 ease-out ${accent.bar}`}
           style={{ width: `${percentage}%` }}
         />
+        
         {/* Inline percentage label */}
         <span
           className={`absolute inset-0 flex items-center justify-center text-xs font-medium ${accent.label}`}

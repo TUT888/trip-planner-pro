@@ -28,7 +28,7 @@ function FilterPill({ label, active, onClick }) {
 }
 
 // Main component 
-export default function PackingFilterBar({ filters, onFilterChange }) {
+export function PackingFilterBar({ filters, onFilterChange }) {
   const isAnyFilterActive =
     filters.category !== "All" || filters.packedStatus !== "All";
 
