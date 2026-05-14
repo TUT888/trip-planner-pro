@@ -1,32 +1,19 @@
-
 import { calculatePackingProgress } from "@/features/packing/packingUtils";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useCallback } from "react";
 
 // Redux actions
-import {
-  togglePacked,
-  removeFromCheckList,
-  clearAll,
-  setFilter,
-  cycleItemCategory,   
-  cycleItemRequired,   
-} from "@/features/packing/packingSlice";
+import { togglePacked, removeFromCheckList, clearAll, setFilter, cycleItemCategory, cycleItemRequired } from "@/features/packing/packingSlice";
 
-import {
-  setActiveTripId,     
-} from "@/features/trip/tripSlice";
+import { setActiveTripId } from "@/features/trip/tripSlice";
 
+import { selectFilteredItems } from "@/features/packing/packingSlice";
 
-import {
-  selectFilteredItems,
-} from "@/features/packing/packingSlice";
-
-import PackingProgressBar from "@/features/packing/PackingProgressBar";
-import PackingFilterBar   from "@/features/packing/PackingFilterBar";
-import PackingList        from "@/features/packing/PackingList";
-import TripSelector       from "@/features/packing/TripSelector";
+import PackingProgressBar from "@/features/packing/components/PackingProgressBar";
+import PackingFilterBar from "@/features/packing/components/PackingFilterBar";
+import PackingList from "@/features/packing/components/PackingList";
+import TripSelector from "@/features/packing/components/TripSelector";
 
 // shadcn Button
 import { Button } from "@/components/ui/button";
@@ -35,26 +22,26 @@ import { Plus, RotateCcw } from "lucide-react";
 export default function PackingChecklist() {
   const dispatch = useDispatch();
 
-  // Selectors 
-  //  Raw state
-  const checklist    = useSelector((s) => s.packing.checklist);
-  const filters      = useSelector((s) => s.packing.filters);
-  const trips        = useSelector((s) => s.trip.trips);         
-  const activeTripId = useSelector((s) => s.trip.activeTripId);  
-  //  Derived state 
+  // Selectors
+  // Raw state
+  const checklist = useSelector((s) => s.packing.checklist);
+  const filters = useSelector((s) => s.packing.filters);
+  const trips = useSelector((s) => s.trip.trips);
+  const activeTripId = useSelector((s) => s.trip.activeTripId);
+  // Derived state
   const filteredItems = useSelector(selectFilteredItems);
-  const progress      = Math.round(calculatePackingProgress(checklist));  
+  const progress = Math.round(calculatePackingProgress(checklist));
 
   // Whether any filter is active (used for empty-state copy and "Clear filters" button)
   const isFiltered =
     filters.category !== "All" || filters.packedStatus !== "All";
 
-  const handleTogglePacked   = useCallback((id) => dispatch(togglePacked(id)),     [dispatch]);
-  const handleDelete         = useCallback((id) => dispatch(removeFromCheckList(id)),        [dispatch]);
-  const handleCycleCategory  = useCallback((id) => dispatch(cycleItemCategory(id)), [dispatch]);
-  const handleCycleRequired  = useCallback((id) => dispatch(cycleItemRequired(id)), [dispatch]);
-  const handleFilterChange   = useCallback((partial) => dispatch(setFilter(partial)), [dispatch]);
-  const handleSelectTrip     = useCallback((id) => dispatch(setActiveTripId(id)),   [dispatch]);
+  const handleTogglePacked = useCallback((id) => dispatch(togglePacked(id)), [dispatch]);
+  const handleDelete = useCallback((id) => dispatch(removeFromCheckList(id)),[dispatch]);
+  const handleCycleCategory = useCallback((id) => dispatch(cycleItemCategory(id)),[dispatch]);
+  const handleCycleRequired = useCallback((id) => dispatch(cycleItemRequired(id)),[dispatch]);
+  const handleFilterChange = useCallback((partial) => dispatch(setFilter(partial)),[dispatch]);
+  const handleSelectTrip = useCallback((id) => dispatch(setActiveTripId(id)),[dispatch]);
 
   // Edit opens a modal — local state is fine here (UI-only, not persisted)
   const handleEdit = useCallback((item) => {
@@ -69,11 +56,10 @@ export default function PackingChecklist() {
 
   const handleClearAll = () => dispatch(clearAll());
 
-  // Render 
+  // Render
   return (
     <div className="p-6 max-w-screen-xl mx-auto">
-
-      {/* ── Header row ── */}
+      {/* Header row */}
       <div className="flex items-top gap-4 flex-wrap mb-1">
         {/* Title */}
         <h1 className="text-2xl font-semibold text-gray-900 shrink-0">
@@ -117,15 +103,10 @@ export default function PackingChecklist() {
         </Button>
       </div>
 
-    
+      {/* Filter bar */}
+      <PackingFilterBar filters={filters} onFilterChange={handleFilterChange} />
 
-      {/* ── Filter bar ── */}
-      <PackingFilterBar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-      />
-
-      {/* ── Packing table ── */}
+      {/* Packing table */}
       <PackingList
         items={filteredItems}
         isFiltered={isFiltered}

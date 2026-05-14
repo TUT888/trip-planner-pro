@@ -2,12 +2,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PACKING_CATEGORY, PACKING_STATUS } from "@/features/packing/packingConstants";
 
-// ── Filter option definitions ─────────────────────────────────────────────
+// Filter option definitions 
 const CATEGORIES = ["All", ...Object.values(PACKING_CATEGORY)];
-
 const PACKED_STATUSES = ["All", ...Object.values(PACKING_STATUS)];
 
-// ── Pill button ───────────────────────────────────────────────────────────
+// Pill button 
 function FilterPill({ label, active, onClick }) {
   return (
     <button
@@ -20,7 +19,7 @@ function FilterPill({ label, active, onClick }) {
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
         active
           ? "bg-pink-500 text-white border-pink-500 shadow-sm"
-          : "bg-white text-gray-600 border-gray-200 hover:border-pink-300 hover:text-pink-700"
+          : "bg-white text-gray-600 border-gray-200 hover:border-pink-300 hover:text-pink-700",
       )}
     >
       {label}
@@ -28,15 +27,14 @@ function FilterPill({ label, active, onClick }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────
+// Main component 
 export default function PackingFilterBar({ filters, onFilterChange }) {
   const isAnyFilterActive =
     filters.category !== "All" || filters.packedStatus !== "All";
 
   return (
     <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-3">
-
-      {/* ── Category group ── */}
+      {/* Category group */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
           Category
@@ -53,10 +51,13 @@ export default function PackingFilterBar({ filters, onFilterChange }) {
         </div>
       </div>
 
-      {/* ── Divider ── */}
-      <div className="hidden sm:block h-5 w-px bg-gray-200 shrink-0" aria-hidden="true" />
+      {/* Divider */}
+      <div
+        className="hidden sm:block h-5 w-px bg-gray-200 shrink-0"
+        aria-hidden="true"
+      />
 
-      {/* ── Packed status group ── */}
+      {/* Packed status group */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
           Status
@@ -73,18 +74,19 @@ export default function PackingFilterBar({ filters, onFilterChange }) {
         </div>
       </div>
 
-      {/* ── Clear filters ── */}
+      {/* Clear filters */}
       {isAnyFilterActive && (
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onFilterChange({ category: "All", packedStatus: "All" })}
+          onClick={() =>
+            onFilterChange({ category: "All", packedStatus: "All" })
+          }
           className="text-gray-400 hover:text-gray-700 ml-auto shrink-0"
         >
           Clear filters
         </Button>
       )}
-
     </div>
   );
 }

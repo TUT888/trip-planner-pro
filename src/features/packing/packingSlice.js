@@ -1,18 +1,10 @@
 import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
 import { createSlice } from "@reduxjs/toolkit";
-import { loadTripData, saveTripData } from "../../services/tripDataService";
-
-// ── Constants ────────────────────────────────────────────────────────────────
-
-export const CATEGORIES     = ["Clothes", "Documents", "Electronics", "Medicine", "Personal", "Other"];
-export const REQUIRED_OPTS  = ["Required", "Optional"];
-
-// ── Initial state ────────────────────────────────────────────────────────────
 
 const initialState = {
-  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST)?? [],
+  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) ?? [],
   filters: {
-    category:     "All",
+    category: "All",
     packedStatus: "All",
   },
 };
@@ -20,34 +12,38 @@ const initialState = {
 export const packingSlice = createSlice({
   name: "packing",
   initialState,
-
   reducers: {
     addToChecklist: (state, action) => {
       state.checklist.push(action.payload);
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
     },
     updateCheckList: (state, action) => {
-      const itemIdx = state.checklist.findIndex((item) => item.id === action.payload.id);
+      const itemIdx = state.checklist.findIndex(
+        (item) => item.id === action.payload.id,
+      );
 
       if (itemIdx !== -1) {
         state.checklist[itemIdx] = {
           ...state.checklist[itemIdx],
-          ...action.payload
-        }
+          ...action.payload,
+        };
       }
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
     },
     removeFromCheckList: (state, action) => {
-      state.checklist = state.checklist.filter((item) => item.id !== action.payload);
+      state.checklist = state.checklist.filter(
+        (item) => item.id !== action.payload,
+      );
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
     },
 
     togglePacked(state, action) {
       const item = state.checklist.find((i) => i.id === action.payload);
       if (item) {
-        item.packedStatus = item.packedStatus === PACKING_STATUS.PACKED
-          ? PACKING_STATUS.NOT_PACKED
-          : PACKING_STATUS.PACKED;
+        item.packedStatus =
+          item.packedStatus === PACKING_STATUS.PACKED
+            ? PACKING_STATUS.NOT_PACKED
+            : PACKING_STATUS.PACKED;
         saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
       }
     },
@@ -71,16 +67,14 @@ export const packingSlice = createSlice({
       }
     },
 
-    // ── Filter action ──
+    // Filter action 
     setFilter(state, action) {
       state.filters = { ...state.filters, ...action.payload };
     },
-
   },
 });
 
-// ── Actions ──────────────────────────────────────────────────────────────────
-
+// Actions 
 export const {
   addToChecklist,
   updateCheckList,
@@ -94,7 +88,7 @@ export const {
 
 export default packingSlice.reducer;
 
-// ── Selectors (derived state — never stored) ─────────────────────────────────
+// Selectors (derived state - never stored) 
 
 /**
  * Returns items after applying category + packedStatus filters.
@@ -107,12 +101,13 @@ export const selectFilteredItems = (state) => {
       filters.category === "All" || item.category === filters.category;
     const statusMatch =
       filters.packedStatus === "All" ||
-      (filters.packedStatus === "Packed"     &&  item.packedStatus === PACKING_STATUS.PACKED) ||
-      (filters.packedStatus === "Not Packed" &&  item.packedStatus === PACKING_STATUS.NOT_PACKED);
+      (filters.packedStatus === "Packed" &&
+        item.packedStatus === PACKING_STATUS.PACKED) ||
+      (filters.packedStatus === "Not Packed" &&
+        item.packedStatus === PACKING_STATUS.NOT_PACKED);
     return catMatch && statusMatch;
   });
 };
-
 
 /**
  * Returns packing progress derived from ALL items (not filtered).
@@ -121,18 +116,19 @@ export const selectFilteredItems = (state) => {
  * @returns {{ packed: number, total: number, percentage: number }}
  */
 import { calculatePackingProgress } from "@/features/packing/packingUtils";
+import { PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS } from "./packingConstants";
 
 export const selectProgress = (state) => {
   const { checklist } = state.packing;
   if (checklist.length === 0) return { packed: 0, total: 0, percentage: 0 };
 
   const packed = checklist.filter(
-    (i) => i.packedStatus === PACKING_STATUS.PACKED
+    (i) => i.packedStatus === PACKING_STATUS.PACKED,
   ).length;
 
   return {
     packed,
-    total:      checklist.length,
+    total: checklist.length,
     percentage: Math.round(calculatePackingProgress(checklist)),
   };
 };

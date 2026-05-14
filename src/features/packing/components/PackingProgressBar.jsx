@@ -1,16 +1,10 @@
 export default function PackingProgressBar({ packed = 0, total = 0, percentage = 0 }) {
-  /**
-   * Derive a colour accent based on progress so the bar gives
-   * immediate feedback: red → amber → green as the user packs.
-   * All logic is local to this component; the parent only passes
-   * the raw numbers.
-   */
   const accent =
     percentage === 100
       ? { bar: "bg-green-500", track: "bg-green-100", label: "text-green-800" }
       : percentage >= 50
-      ? { bar: "bg-pink-500", track: "bg-pink-100", label: "text-pink-900" }
-      : { bar: "bg-pink-400", track: "bg-pink-100", label: "text-pink-900" };
+        ? { bar: "bg-pink-500", track: "bg-pink-100", label: "text-pink-900" }
+        : { bar: "bg-pink-400", track: "bg-pink-100", label: "text-pink-900" };
 
   return (
     <div className="flex items-center gap-3  w-64">

@@ -2,19 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-
 const CATEGORY_STYLES = {
-  Clothes:     "bg-green-100  text-green-800",
-  Documents:   "bg-blue-100   text-blue-800",
+  Clothes: "bg-green-100 text-green-800",
+  Documents: "bg-blue-100 text-blue-800",
   Electronics: "bg-purple-100 text-purple-800",
-  Medicine:    "bg-red-100    text-red-800",
-  Personal:    "bg-amber-100  text-amber-800",
-  Other:       "bg-gray-100   text-gray-700",
+  Medicine: "bg-red-100 text-red-800",
+  Personal: "bg-amber-100 text-amber-800",
+  Other: "bg-gray-100 text-gray-700",
 };
 
-// ── Sub-components (defined here, not exported) ──────────────────────────────
+// Sub-components (defined here, not exported) 
 
-/** A clickable badge that cycles its value on click. */
+// A clickable badge that cycles its value on click
 function CycleBadge({ label, colorClass, onClick, ariaLabel }) {
   return (
     <button
@@ -25,7 +24,7 @@ function CycleBadge({ label, colorClass, onClick, ariaLabel }) {
         "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium",
         "transition-opacity hover:opacity-75 focus-visible:outline-none",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-        colorClass
+        colorClass,
       )}
     >
       {label}
@@ -34,7 +33,7 @@ function CycleBadge({ label, colorClass, onClick, ariaLabel }) {
   );
 }
 
-/** Pink quantity pill — display only, quantity is edited via the modal. */
+// Pink quantity pill — display only, quantity is edited via the modal
 function QuantityPill({ value }) {
   return (
     <span className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-pink-50 text-pink-800 text-sm font-medium">
@@ -43,8 +42,7 @@ function QuantityPill({ value }) {
   );
 }
 
-// ── Main component ───────────────────────────────────────────────────────────
-
+// Main component 
 export default function PackingItem({
   item,
   index,
@@ -55,33 +53,31 @@ export default function PackingItem({
   onDelete,
 }) {
   const categoryStyle = CATEGORY_STYLES[item.category] ?? CATEGORY_STYLES.Other;
-  const requiredStyle = item.required === "Required"
-    ? "bg-green-100 text-green-800"
-    : "bg-gray-100  text-gray-600";
+  const requiredStyle =
+    item.required === "Required"
+      ? "bg-green-100 text-green-800"
+      : "bg-gray-100  text-gray-600";
 
   return (
     <tr
       className={cn(
         "border-b border-gray-100 transition-colors",
-        item.packed ? "bg-gray-50/60" : "hover:bg-gray-50"
+        item.packed ? "bg-gray-50/60" : "hover:bg-gray-50",
       )}
     >
-      
       <td className="px-3 py-3 text-sm text-gray-400 w-10 select-none">
         {index}
       </td>
 
-      
       <td
         className={cn(
           "px-3 py-3 text-sm font-medium transition-colors",
-          item.packed ? "line-through text-gray-400" : "text-gray-800"
+          item.packed ? "line-through text-gray-400" : "text-gray-800",
         )}
       >
         {item.name}
       </td>
 
-      
       <td className="px-3 py-3">
         <CycleBadge
           label={item.category}
@@ -91,12 +87,10 @@ export default function PackingItem({
         />
       </td>
 
-      
       <td className="px-3 py-3 text-center">
         <QuantityPill value={item.quantity} />
       </td>
 
-      
       <td className="px-3 py-3">
         <CycleBadge
           label={item.required}
@@ -106,7 +100,6 @@ export default function PackingItem({
         />
       </td>
 
-      
       <td className="px-3 py-3 text-center">
         <input
           type="checkbox"
@@ -117,7 +110,6 @@ export default function PackingItem({
         />
       </td>
 
-      
       <td className="px-3 py-3">
         <div className="flex items-center justify-end gap-1">
           <Button
