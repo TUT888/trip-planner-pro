@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
-import { CalendarIcon, Camera, EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
+import { Camera, EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
 import {
     Dialog,
     DialogClose,
@@ -9,18 +9,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
-import { Field } from "@/features/itinerary/components/ui/field";
-import { InputGroup, InputGroupInput } from "@/features/itinerary/components/ui/input-group";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/features/itinerary/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -34,27 +22,14 @@ import {
     AlertDialogTitle,
 } from "@/features/itinerary/components/ui/alert-dialog";
 import { useState } from "react";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/features/itinerary/components/ui/popover";
-
-
-function parseDateString(dateString) {
-    if (!dateString) return undefined;
-    const [year, month, day] = dateString.split("-").map(Number);
-    return new Date(year, month - 1, day);
-}
+import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
 
 
 
 export function ItineraryCard(props) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(parseDateString(props.date));
     const isOverdue = Boolean(props.isOverdue);
-    const formId = props.id != null ? String(props.id) : "new";
     return (
         <>
             <DropdownMenu>
@@ -143,113 +118,18 @@ export function ItineraryCard(props) {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-4">
-                        <div className="space-y-1.5">
-                            <label className="text-sm font-medium" htmlFor={`it-name-${formId}`}>
-                                Name
-                            </label>
-                            <Input id={`it-name-${formId}`} placeholder="Enter here" defaultValue="" />
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <label className="text-sm font-medium" htmlFor={`it-loc-${formId}`}>
-                                Location
-                            </label>
-                            <Input id={`it-loc-${formId}`} placeholder="Enter here" defaultValue="" />
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <span className="text-sm font-medium">Date</span>
-
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        data-empty={!selectedDate}
-                                        className="w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
-                                    >
-                                        <CalendarIcon />
-                                        {selectedDate ? selectedDate.toLocaleDateString() : <span>Pick a date</span>}
-                                    </Button>
-                                </PopoverTrigger>
-
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={selectedDate}
-                                        onSelect={setSelectedDate}
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-
-
-                        <div className="space-y-1.5">
-                            <span className="text-sm font-medium">Time</span>
-                            <Field>
-                                <InputGroup>
-                                    <InputGroupInput
-                                        id={`it-time-${formId}`}
-                                        type="time"
-                                        step="1"
-                                        defaultValue="12:30:00"
-                                        className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                    />
-                                </InputGroup>
-                            </Field>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <span className="text-sm font-medium">Category</span>
-                            <Select>
-                                <SelectTrigger className="w-full max-w-full">
-                                    <SelectValue placeholder="Pick category" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="transport">Transport</SelectItem>
-                                        <SelectItem value="food">Food</SelectItem>
-                                        <SelectItem value="sightseeing">Sightseeing</SelectItem>
-                                        <SelectItem value="shopping">Shopping</SelectItem>
-                                        <SelectItem value="hotel">Hotel</SelectItem>
-                                        <SelectItem value="other">Other</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <span className="text-sm font-medium">Priority</span>
-                            <Select>
-                                <SelectTrigger className="w-full max-w-full">
-                                    <SelectValue placeholder="Pick priority" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="low">Low</SelectItem>
-                                        <SelectItem value="medium">Medium</SelectItem>
-                                        <SelectItem value="high">High</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="space-y-1.5">
-                            <span className="text-sm font-medium">Status</span>
-                            <Select>
-                                <SelectTrigger className="w-full max-w-full">
-                                    <SelectValue placeholder="Pick status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value="planned">Planned</SelectItem>
-                                        <SelectItem value="in_progress">In Progress</SelectItem>
-                                        <SelectItem value="done">Done</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                    <div className="flex flex-col gap-5 overflow-y-auto px-6 py-4">
+                        <ItineraryForm
+                            initialValues={{
+                                activityTitle: props.activityTitle,
+                                location: props.location,
+                                date: props.date,
+                                time: props.time,
+                                category: props.category,
+                                priority: props.priority,
+                                status: props.status,
+                            }}
+                        />
                     </div>
 
                     <div className="mt-auto flex justify-end gap-2 border-t px-6 py-4">
