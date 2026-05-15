@@ -1,6 +1,8 @@
 import { CalendarDays } from "lucide-react";
 import { ItineraryCard } from "./ItineraryCard";
-import { loadData, TRIP_PROPERTIES } from "@/services/tripDataService";
+import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
+import { useState } from "react";
+
 
 function ItineraryEmptyState() {
     return (
@@ -23,16 +25,27 @@ function ItineraryEmptyState() {
     );
 }
 
-/**
- * Renders all itinerary items, or an empty state when there are none.
- * Data is loaded from mockTripData.json through tripDataService.
- */
-export function ItineraryList() {
-    const itineraryItems = loadData(TRIP_PROPERTIES.ITINERARY) || [];
 
+export function ItineraryList() {
+    const [itineraryItems, setItineraryItems] = useState(
+        loadData(TRIP_PROPERTIES.ITINERARY) || []
+    );
     if (itineraryItems.length === 0) {
         return <ItineraryEmptyState />;
     }
+    function handleUpdateItinerary(updatedItem) {
+        const nextItems = itineraryItems.map((item) => {
+            if (item.id === updatedItem.id) {
+                return updatedItem;
+            }
+
+            return item;
+        });
+
+        setItineraryItems(nextItems);
+        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
+    }
+
 
     return (
         <div className="flex flex-col gap-4">
@@ -48,6 +61,7 @@ export function ItineraryList() {
                     priority={item.priority}
                     status={item.status}
                     isOverdue={item.isOverdue}
+                    onUpdate={handleUpdateItinerary}
                 />
             ))}
         </div>

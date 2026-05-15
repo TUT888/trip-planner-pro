@@ -36,7 +36,7 @@ function formatDateForData(date) {
 }
 
 
-export function ItineraryForm({ initialValues }) {
+export function ItineraryForm({ initialValues, onSubmit }) {
     const [formData, setFormData] = useState({
         activityTitle: initialValues?.activityTitle || "",
         location: initialValues?.location || "",
@@ -101,7 +101,8 @@ export function ItineraryForm({ initialValues }) {
         if (!isValid) {
             return;
         }
-        console.log("Form data:", formData);
+        onSubmit?.(formData);
+
     }
 
 
@@ -160,6 +161,10 @@ export function ItineraryForm({ initialValues }) {
                         />
                     </PopoverContent>
                 </Popover>
+                {errors.date && (
+                    <p className="text-sm text-red-500">{errors.date}</p>
+                )}
+
             </div>
             <div className="flex flex-col gap-2">
                 <span className="text-sm font-medium">Time</span>
@@ -176,6 +181,10 @@ export function ItineraryForm({ initialValues }) {
 
                     </InputGroup>
                 </Field>
+                {errors.time && (
+                    <p className="text-sm text-red-500">{errors.time}</p>
+                )}
+
             </div>
             <div className="flex flex-col gap-2">
                 <span className="text-sm font-medium">Category</span>
@@ -200,6 +209,10 @@ export function ItineraryForm({ initialValues }) {
                         </SelectGroup>
                     </SelectContent>
                 </Select>
+                {errors.category && (
+                    <p className="text-sm text-red-500">{errors.category}</p>
+                )}
+
             </div>
             <div className="flex flex-col gap-2">
                 <span className="text-sm font-medium">Priority</span>
@@ -221,6 +234,10 @@ export function ItineraryForm({ initialValues }) {
                         </SelectGroup>
                     </SelectContent>
                 </Select>
+                {errors.priority && (
+                    <p className="text-sm text-red-500">{errors.priority}</p>
+                )}
+
             </div>
             <div className="flex flex-col gap-2">
                 <span className="text-sm font-medium">Status</span>
@@ -242,6 +259,10 @@ export function ItineraryForm({ initialValues }) {
                         </SelectGroup>
                     </SelectContent>
                 </Select>
+                {errors.status && (
+                    <p className="text-sm text-red-500">{errors.status}</p>
+                )}
+
             </div>
 
 

@@ -129,6 +129,14 @@ export function ItineraryCard(props) {
                                 priority: props.priority,
                                 status: props.status,
                             }}
+                            onSubmit={(formData) => {
+                                props.onUpdate?.({
+                                    id: props.id,
+                                    ...formData,
+                                });
+                                setEditOpen(false);
+                            }}
+
                         />
                     </div>
 
