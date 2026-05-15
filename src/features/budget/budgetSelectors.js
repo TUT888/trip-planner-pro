@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { BUDGET_CATEGORIES } from './budgetConstants';
+import { BUDGET_CATEGORIES, BUDGET_STATUS } from './budgetConstants';
 
 export const selectBudgetItems = (state) => state.budget.items;
 export const selectInitialBudget = (state) => Number(state.budget.initialBudget) || 0;
@@ -9,22 +9,29 @@ export const selectBudgetTotals = createSelector(
   (items, initialBudget) => {
     let totalEstimated = 0;
     let totalActual = 0;
+    let totalPaidActual = 0;
 
     items.forEach(item => {
-      totalEstimated += Number(item.estimatedCost) || 0;
-      totalActual += Number(item.actualCost) || 0;
+      const estimatedCost = Number(item.estimatedCost) || 0;
+      const actualCost = Number(item.actualCost) || 0;
+      totalEstimated += estimatedCost;
+      totalActual += actualCost;
+      if (item.status === BUDGET_STATUS.PAID) {
+        totalPaidActual += actualCost;
+      }
     });
 
     const diff = totalActual - totalEstimated;
     const diffPercentage = totalEstimated > 0 ? (diff / totalEstimated) * 100 : 0;
-    
-    // Remaining Budget is against the Initial Budget
-    const remainingBudget = initialBudget - totalActual;
+    const remainingBudget = initialBudget - totalEstimated;
+    const usagePercentage = initialBudget > 0 ? (totalPaidActual / initialBudget) * 100 : 0;
 
     return {
       totalEstimated,
       totalActual,
+      totalPaidActual,
       remainingBudget,
+      usagePercentage,
       diff,
       diffPercentage,
       isOverBudget: diff > 0
@@ -56,17 +63,17 @@ export const selectCategoryBreakdown = createSelector(
 
 export const selectBudgetAlerts = createSelector(
   [selectBudgetTotals, selectInitialBudget],
-  ({ totalActual }, initialBudget) => {
+  ({ totalPaidActual }, initialBudget) => {
     if (initialBudget === 0) return { warning: false, critical: false, message: null };
 
-    const percentage = (totalActual / initialBudget) * 100;
-    const diff = totalActual - initialBudget;
+    const percentage = (totalPaidActual / initialBudget) * 100;
+    const diff = totalPaidActual - initialBudget;
 
     if (percentage >= 100) {
       return {
         warning: false,
         critical: true,
-        message: `Your actual spending has exceeded your total estimated budget by $${diff.toFixed(2)}.`
+        message: `Your actual spending has exceeded your total estimated budget by $${Math.abs(diff).toFixed(2)}.`
       };
     }
 

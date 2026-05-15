@@ -13,8 +13,8 @@ export function BudgetTracking() {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(initialBudget);
 
-  const percentage = initialBudget > 0 ? Math.min(Math.round((totals.totalActual / initialBudget) * 100), 100) : 0;
-  const rawPercentage = initialBudget > 0 ? (totals.totalActual / initialBudget) * 100 : 0;
+  const percentage = initialBudget > 0 ? Math.min(Math.round((totals.totalPaidActual / initialBudget) * 100), 100) : 0;
+  const rawPercentage = initialBudget > 0 ? totals.usagePercentage : 0;
 
   const handleSave = () => {
     const val = Number(editValue);

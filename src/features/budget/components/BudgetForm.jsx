@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addBudgetItem, updateBudgetItem } from '../budgetSlice';
 import { BUDGET_CATEGORIES, BUDGET_STATUS } from '../budgetConstants';
+import { selectBudgetTotals } from '../budgetSelectors';
 import { X } from 'lucide-react';
 
 export function BudgetForm({ itemToEdit, onClose }) {
   const dispatch = useDispatch();
+  const totals = useSelector(selectBudgetTotals);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -31,8 +33,21 @@ export function BudgetForm({ itemToEdit, onClose }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // clear error for the field when typing
+    setFormData(prev => {
+      let nextState = { ...prev, [name]: value };
+
+      if (name === 'actualCost') {
+        const hasActual = value !== '' && !isNaN(value);
+        nextState.status = hasActual ? BUDGET_STATUS.PAID : BUDGET_STATUS.UNPAID;
+      }
+
+      if (name === 'status' && value === BUDGET_STATUS.PAID && (formData.actualCost === '' || isNaN(formData.actualCost))) {
+        return { ...prev, status: BUDGET_STATUS.UNPAID };
+      }
+
+      return nextState;
+    });
+
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -44,18 +59,26 @@ export function BudgetForm({ itemToEdit, onClose }) {
     
     if (formData.estimatedCost === '' || isNaN(formData.estimatedCost)) {
       newErrors.estimatedCost = 'Estimated cost is required';
-    } else if (Number(formData.estimatedCost) < 0) {
-      newErrors.estimatedCost = 'Cost cannot be negative';
+    } else if (Number(formData.estimatedCost) <= 0) {
+      newErrors.estimatedCost = 'Estimated cost must be greater than 0';
     }
 
-    if (formData.actualCost !== '' && !isNaN(formData.actualCost)) {
-      if (Number(formData.actualCost) < 0) {
-        newErrors.actualCost = 'Cost cannot be negative';
+    if (formData.actualCost !== '') {
+      if (isNaN(formData.actualCost)) {
+        newErrors.actualCost = 'Actual cost must be a number';
+      } else if (Number(formData.actualCost) <= 0) {
+        newErrors.actualCost = 'Actual cost must be greater than 0';
       }
     }
 
     if (formData.status === BUDGET_STATUS.PAID && (formData.actualCost === '' || isNaN(formData.actualCost))) {
       newErrors.actualCost = 'Actual cost is required if status is Paid';
+    }
+
+    const estimated = Number(formData.estimatedCost);
+    const remaining = totals.remainingBudget;
+    if (!itemToEdit && !isNaN(estimated) && estimated >= remaining) {
+      newErrors.estimatedCost = `Estimated cost must be less than remaining budget ($${remaining.toFixed(2)}).`;
     }
 
     setErrors(newErrors);
@@ -158,8 +181,13 @@ export function BudgetForm({ itemToEdit, onClose }) {
               className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
             >
               <option value={BUDGET_STATUS.UNPAID}>Unpaid</option>
-              <option value={BUDGET_STATUS.PAID}>Paid</option>
+              <option value={BUDGET_STATUS.PAID} disabled={formData.actualCost === '' || isNaN(formData.actualCost)}>
+                Paid
+              </option>
             </select>
+            {formData.actualCost === '' && formData.status === BUDGET_STATUS.PAID && (
+              <p className="text-red-500 text-xs mt-1">Status cannot be Paid without actual cost.</p>
+            )}
           </div>
 
           <div className="pt-4 flex justify-end gap-3">
