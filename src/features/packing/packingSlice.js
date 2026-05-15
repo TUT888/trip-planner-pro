@@ -14,8 +14,16 @@ export const packingSlice = createSlice({
   name: "packing",
   initialState,
   reducers: {
+    // Also included in update checklist
     addToChecklist: (state, action) => {
-      state.checklist.push(action.payload);
+      let newId = 1;
+      if (state.checklist.length > 0) {
+        newId = state.checklist[state.checklist.length-1].id + 1;
+      }
+      state.checklist.push({
+        id: newId,
+        ...action.payload
+      });
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
     },
     updateCheckList: (state, action) => {

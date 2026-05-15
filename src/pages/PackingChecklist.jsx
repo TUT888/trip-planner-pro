@@ -9,21 +9,33 @@ import { PackingProgressBar } from "@/features/packing/components/PackingProgres
 import { PackingFilterBar } from "@/features/packing/components/PackingFilterBar";
 import { PackingList } from "@/features/packing/components/PackingList";
 import { TripSelector } from "@/features/packing/components/TripSelector";
+import { useState } from "react";
+import { PackingForm } from "@/features/packing/components/PackingForm";
 
 export default function PackingChecklist() {
   const dispatch = useDispatch();
   const filters = useSelector(selectPackingFilter);
   const filteredItems = useSelector(selectFilteredItems);
 
+  const [formOpen, setFormOpen] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState(null)
+
   // Whether any filter is active (used for empty-state copy and "Clear filters" button)
   const isFiltered = filters.category !== "All" || filters.packedStatus !== "All";
 
   const handleFilterChange = (partial) => dispatch(setFilter(partial));
-  const handleClearAll = () => dispatch(clearAll());
+  const handleClearAll = () => {
+    dispatch(clearAll());
+  };
 
-  const handleAddNew = () => {
-    // TODO (next task): openAddModal()
-    console.log("Open add-item modal");
+  const handleOpenForm = (selectedItem = null) => {
+    setItemToEdit(selectedItem);
+    setFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setItemToEdit(null);
+    setFormOpen(false);
   };
 
   return (
@@ -41,7 +53,7 @@ export default function PackingChecklist() {
           <Button
             variant="outline"
             size="default"
-            onClick={handleAddNew}
+            onClick={() => handleOpenForm()}
             className="border-green-600 text-green-700 hover:bg-green-50 hover:text-green-800 shrink-0"
           >
             <Plus aria-hidden="true" />
@@ -66,8 +78,13 @@ export default function PackingChecklist() {
         <PackingFilterBar filters={filters} onFilterChange={handleFilterChange} />
 
         {/* Packing list section */}
-        <PackingList items={filteredItems} isFiltered={isFiltered} />
+        <PackingList items={filteredItems} isFiltered={isFiltered} onEditItem={handleOpenForm}/>
       </div>
+
+      {/* Modal */}
+      {formOpen && (
+        <PackingForm itemToEdit={itemToEdit} onClose={handleCloseForm} />
+      )}
     </div>
   );
 }

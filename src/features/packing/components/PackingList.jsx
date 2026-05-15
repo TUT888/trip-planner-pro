@@ -1,7 +1,12 @@
 import { useDispatch } from "react-redux";
 import { PackingItem } from "./PackingItem";
 import { Luggage } from "lucide-react";
-import { cycleItemCategory, cycleItemRequired, removeFromCheckList, togglePacked } from "../packingSlice";
+import {
+  cycleItemCategory,
+  cycleItemRequired,
+  removeFromCheckList,
+  togglePacked,
+} from "../packingSlice";
 
 // Column header config
 const COLUMNS = [
@@ -47,7 +52,7 @@ function EmptyState({ isFiltered }) {
 }
 
 // Main component
-export function PackingList({ items = [], isFiltered = false }) {
+export function PackingList({ onEditItem, items = [], isFiltered = false }) {
   const dispatch = useDispatch();
 
   const handleTogglePacked = (id) => dispatch(togglePacked(id));
@@ -55,10 +60,8 @@ export function PackingList({ items = [], isFiltered = false }) {
   const handleCycleCategory = (id) => dispatch(cycleItemCategory(id));
   const handleCycleRequired = (id) => dispatch(cycleItemRequired(id));
 
-  // Edit opens a modal — local state is fine here (UI-only, not persisted)
   const handleEdit = (item) => {
-    // TODO (next task): open edit modal, dispatch(openEditModal(item))
-    console.log("Edit item:", item);
+    onEditItem(item);
   };
 
   return (
