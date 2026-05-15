@@ -2,6 +2,16 @@ import { CalendarDays } from "lucide-react";
 import { ItineraryCard } from "./ItineraryCard";
 import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
+
 
 
 function ItineraryEmptyState() {
@@ -25,14 +35,21 @@ function ItineraryEmptyState() {
     );
 }
 
+function isItineraryOverdue(item) {
+    const activityDateTime = new Date(`${item.date}T${item.time}`);
+    const now = new Date();
+
+    return activityDateTime < now && item.status !== "Done";
+}
+
+
 
 export function ItineraryList() {
     const [itineraryItems, setItineraryItems] = useState(
         loadData(TRIP_PROPERTIES.ITINERARY) || []
     );
-    if (itineraryItems.length === 0) {
-        return <ItineraryEmptyState />;
-    }
+    const [createOpen, setCreateOpen] = useState(false);
+
     function handleUpdateItinerary(updatedItem) {
         const nextItems = itineraryItems.map((item) => {
             if (item.id === updatedItem.id) {
@@ -45,25 +62,62 @@ export function ItineraryList() {
         setItineraryItems(nextItems);
         saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
     }
+    function handleCreateItinerary(formData) {
+        const newItem = {
+            id: Date.now(),
+            ...formData,
+        };
+
+        const nextItems = [...itineraryItems, newItem];
+
+        setItineraryItems(nextItems);
+        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
+        setCreateOpen(false);
+    }
+
 
 
     return (
         <div className="flex flex-col gap-4">
-            {itineraryItems.map((item) => (
-                <ItineraryCard
-                    key={item.id}
-                    id={item.id}
-                    activityTitle={item.activityTitle}
-                    location={item.location}
-                    date={item.date}
-                    time={item.time}
-                    category={item.category}
-                    priority={item.priority}
-                    status={item.status}
-                    isOverdue={item.isOverdue}
-                    onUpdate={handleUpdateItinerary}
-                />
-            ))}
+            <div className="flex justify-end">
+                <Button type="button" onClick={() => setCreateOpen(true)}>
+                    Add itinerary
+                </Button>
+            </div>
+            <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Create itinerary</DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Add a new itinerary activity.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <ItineraryForm onSubmit={handleCreateItinerary} />
+                </DialogContent>
+            </Dialog>
+
+            {itineraryItems.length === 0 ? (
+                <ItineraryEmptyState />) : (
+
+                itineraryItems.map((item) => (
+                    <ItineraryCard
+                        key={item.id}
+                        id={item.id}
+                        activityTitle={item.activityTitle}
+                        location={item.location}
+                        date={item.date}
+                        time={item.time}
+                        category={item.category}
+                        priority={item.priority}
+                        status={item.status}
+                        isOverdue={isItineraryOverdue(item)}
+                        onUpdate={handleUpdateItinerary}
+                    />
+                ))
+            )}
+
         </div>
-    );
+
+    )
 }

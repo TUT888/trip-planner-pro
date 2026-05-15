@@ -37,7 +37,7 @@ export function ItineraryCard(props) {
                     className={cn(
                         "activity_card flex flex-col gap-15 bg-[#c2f2e4] p-5 rounded-2xl shadow-lg shadow-[#299172]-700 border-2 border-[#cff5ea]",
                         isOverdue &&
-                        "border-red-500 bg-gradient-to-br from-red-50/95 to-pink-100/85 ring-2 ring-pink-400/60 shadow-[0_4px_20px_rgb(244_114_182/0.28)]"
+                        "border-4 border-red-800 bg-gradient-to-b from-red-800 via-30% to-red-800/50"
                     )}
                     data-overdue={isOverdue ? "true" : undefined}
                 >
