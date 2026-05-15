@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
-import { Camera, EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
+import { CalendarIcon, Camera, EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
 import {
     Dialog,
     DialogClose,
@@ -34,13 +34,25 @@ import {
     AlertDialogTitle,
 } from "@/features/itinerary/components/ui/alert-dialog";
 import { useState } from "react";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/features/itinerary/components/ui/popover";
 
+
+function parseDateString(dateString) {
+    if (!dateString) return undefined;
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
+}
 
 
 
 export function ItineraryCard(props) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(parseDateString(props.date));
     const isOverdue = Boolean(props.isOverdue);
     const formId = props.id != null ? String(props.id) : "new";
     return (
@@ -50,7 +62,7 @@ export function ItineraryCard(props) {
                     className={cn(
                         "activity_card flex flex-col gap-15 bg-[#c2f2e4] p-5 rounded-2xl shadow-lg shadow-[#299172]-700 border-2 border-[#cff5ea]",
                         isOverdue &&
-                            "border-red-500 bg-gradient-to-br from-red-50/95 to-pink-100/85 ring-2 ring-pink-400/60 shadow-[0_4px_20px_rgb(244_114_182/0.28)]"
+                        "border-red-500 bg-gradient-to-br from-red-50/95 to-pink-100/85 ring-2 ring-pink-400/60 shadow-[0_4px_20px_rgb(244_114_182/0.28)]"
                     )}
                     data-overdue={isOverdue ? "true" : undefined}
                 >
@@ -148,8 +160,30 @@ export function ItineraryCard(props) {
 
                         <div className="space-y-1.5">
                             <span className="text-sm font-medium">Date</span>
-                            <Calendar />
+
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        data-empty={!selectedDate}
+                                        className="w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
+                                    >
+                                        <CalendarIcon />
+                                        {selectedDate ? selectedDate.toLocaleDateString() : <span>Pick a date</span>}
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={selectedDate}
+                                        onSelect={setSelectedDate}
+                                    />
+                                </PopoverContent>
+                            </Popover>
                         </div>
+
 
                         <div className="space-y-1.5">
                             <span className="text-sm font-medium">Time</span>
