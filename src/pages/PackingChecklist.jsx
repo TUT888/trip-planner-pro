@@ -9,10 +9,10 @@ import { PackingProgressBar } from "@/features/packing/components/PackingProgres
 import { PackingFilterBar } from "@/features/packing/components/PackingFilterBar";
 import { PackingList } from "@/features/packing/components/PackingList";
 import { TripSelector } from "@/features/packing/components/TripSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PackingForm } from "@/features/packing/components/PackingForm";
 
-export default function PackingChecklist() {
+export function PackingChecklist() {
   const dispatch = useDispatch();
   const filters = useSelector(selectPackingFilter);
   const filteredItems = useSelector(selectFilteredItems);
@@ -37,6 +37,18 @@ export default function PackingChecklist() {
     setItemToEdit(null);
     setFormOpen(false);
   };
+
+  useEffect(() => {
+    if (formOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [formOpen]);
 
   return (
     <div className="flex flex-col h-full gap-3">
