@@ -14,7 +14,6 @@ export const packingSlice = createSlice({
   name: "packing",
   initialState,
   reducers: {
-    // Also included in update checklist
     addToChecklist: (state, action) => {
       let newId = 1;
       if (state.checklist.length > 0) {
@@ -45,7 +44,7 @@ export const packingSlice = createSlice({
       );
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
     },
-    togglePacked(state, action) {
+    togglePacked: (state, action) => {
       const item = state.checklist.find((i) => i.id === action.payload);
       if (item) {
         item.packedStatus = item.packedStatus === PACKING_STATUS.PACKED
@@ -54,7 +53,7 @@ export const packingSlice = createSlice({
         saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
       }
     },
-    cycleItemCategory(state, action) {
+    cycleItemCategory: (state, action) => {
       const item = state.checklist.find((i) => i.id === action.payload);
       if (item) {
         const values = Object.values(PACKING_CATEGORY);
@@ -63,8 +62,7 @@ export const packingSlice = createSlice({
         saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
       }
     },
-
-    cycleItemRequired(state, action) {
+    cycleItemRequired: (state, action) => {
       const item = state.checklist.find((i) => i.id === action.payload);
       if (item) {
         const values = Object.values(PACKING_PRIORITY);
@@ -73,9 +71,11 @@ export const packingSlice = createSlice({
         saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
       }
     },
-
-    // Filter action 
-    setFilter(state, action) {
+    clearAll: (state) => {
+      state.checklist = [];
+      saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
+    },
+    setFilter: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
   },
@@ -90,7 +90,7 @@ export const {
   cycleItemCategory,
   cycleItemRequired,
   clearAll,
-  setFilter,
+  setFilter
 } = packingSlice.actions;
 
 export default packingSlice.reducer;

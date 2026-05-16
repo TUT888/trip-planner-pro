@@ -7,6 +7,8 @@ import {
   removeFromCheckList,
   togglePacked,
 } from "../packingSlice";
+import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
+import { useModal } from "@/hooks/useModal";
 
 // Column header config
 const COLUMNS = [
@@ -56,13 +58,14 @@ export function PackingList({ onEditItem, items = [], isFiltered = false }) {
   const dispatch = useDispatch();
 
   const handleTogglePacked = (id) => dispatch(togglePacked(id));
-  const handleDelete = (id) => dispatch(removeFromCheckList(id));
   const handleCycleCategory = (id) => dispatch(cycleItemCategory(id));
   const handleCycleRequired = (id) => dispatch(cycleItemRequired(id));
+  
+  
+  const handleEdit = (item) => onEditItem(item);
 
-  const handleEdit = (item) => {
-    onEditItem(item);
-  };
+  const [isDeleteModalOpen, handleOpenDeleteModal, handleCloseDeleteModal, deleteItemId] = useModal(-1);
+  const handleConfirmDelete = () => dispatch(removeFromCheckList(deleteItemId));
 
   return (
     <div className="overflow-x-auto rounded-sm shadow-sm border border-gray-100">
@@ -95,12 +98,22 @@ export function PackingList({ onEditItem, items = [], isFiltered = false }) {
                 onCycleCategory={handleCycleCategory}
                 onCycleRequired={handleCycleRequired}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
+                onDelete={handleOpenDeleteModal}
               />
             ))
           )}
         </tbody>
       </table>
+
+      {isDeleteModalOpen && (
+        <DeleteConfirmationModal
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCloseDeleteModal}
+        >
+          <p>Are you sure you want to delete <span className="font-bold text-gray-900">{}</span>from checklist?</p>
+          <p>This action cannot be undone.</p>
+        </DeleteConfirmationModal>
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { PackingList } from "@/features/packing/components/PackingList";
 import { TripSelector } from "@/features/packing/components/TripSelector";
 import { useEffect, useState } from "react";
 import { PackingForm } from "@/features/packing/components/PackingForm";
+import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
 
 export function PackingChecklist() {
   const dispatch = useDispatch();
@@ -18,15 +19,18 @@ export function PackingChecklist() {
   const filteredItems = useSelector(selectFilteredItems);
 
   const [formOpen, setFormOpen] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState(null)
+  const [itemToEdit, setItemToEdit] = useState(null);
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   // Whether any filter is active (used for empty-state copy and "Clear filters" button)
   const isFiltered = filters.category !== "All" || filters.packedStatus !== "All";
 
   const handleFilterChange = (partial) => dispatch(setFilter(partial));
-  const handleClearAll = () => {
-    dispatch(clearAll());
-  };
+
+  const handleClearAll = () => setConfirmDeleteOpen(true)
+  const handleCancelClearAll = () => setConfirmDeleteOpen(false);
+  const handleConfirmClearAll = () => dispatch(clearAll());
 
   const handleOpenForm = (selectedItem = null) => {
     setItemToEdit(selectedItem);
@@ -39,16 +43,14 @@ export function PackingChecklist() {
   };
 
   useEffect(() => {
-    if (formOpen) {
+    if (formOpen || confirmDeleteOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [formOpen]);
+    return () => document.body.style.overflow = "auto";
+  }, [formOpen, confirmDeleteOpen]);
 
   return (
     <div className="flex flex-col h-full gap-3">
@@ -87,15 +89,32 @@ export function PackingChecklist() {
 
       <div className="flex flex-col gap-3">
         {/* Filter bar section */}
-        <PackingFilterBar filters={filters} onFilterChange={handleFilterChange} />
+        <PackingFilterBar
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
 
         {/* Packing list section */}
-        <PackingList items={filteredItems} isFiltered={isFiltered} onEditItem={handleOpenForm}/>
+        <PackingList
+          items={filteredItems}
+          isFiltered={isFiltered}
+          onEditItem={handleOpenForm}
+        />
       </div>
 
       {/* Modal */}
       {formOpen && (
         <PackingForm itemToEdit={itemToEdit} onClose={handleCloseForm} />
+      )}
+
+      {confirmDeleteOpen && (
+        <DeleteConfirmationModal
+          onConfirm={handleConfirmClearAll}
+          onCancel={handleCancelClearAll}
+        >
+          <p>Are you sure you want to <span className="font-bold text-gray-900">clear all packing checklist</span>?</p>
+          <p>This action cannot be undone.</p>
+        </DeleteConfirmationModal>
       )}
     </div>
   );

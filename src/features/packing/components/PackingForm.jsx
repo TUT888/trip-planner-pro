@@ -256,7 +256,7 @@ export function PackingForm({ itemToEdit, onClose }) {
               type="button"
               variant="outline"
               onClick={onClose}
-              className="px-6 py-5"
+              className="px-6 py-5 text-gray-800 hover:bg-gray-100"
             >
               Cancel
             </Button>
