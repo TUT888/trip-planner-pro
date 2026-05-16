@@ -71,12 +71,20 @@ export function PackingForm({ itemToEdit, onClose }) {
     updateFormValue(name, value);
   };
 
-  // For change value (shadcn's selector only provide value change without event object)
+  // Update value (shadcn's selector provide value directly instead of event object)
   const updateFormValue = (key, value) => {
     setForm((prev) => ({
       ...prev,
       [key]: value,
     }));
+    
+    if (errors[key] !== "") {
+      console.log("Reset key");
+      setErrors((prev) => ({
+        ...prev,
+        [key]: ""
+      }))
+    }
   };
 
   return (
