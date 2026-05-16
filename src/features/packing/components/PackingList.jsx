@@ -6,9 +6,11 @@ import {
   cycleItemRequired,
   removeFromCheckList,
   togglePacked,
+  updateCheckList,
 } from "../packingSlice";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
 import { useModal } from "@/hooks/useModal";
+import { PackingForm } from "./PackingForm";
 
 // Column header config
 const COLUMNS = [
@@ -54,15 +56,15 @@ function EmptyState({ isFiltered }) {
 }
 
 // Main component
-export function PackingList({ onEditItem, items = [], isFiltered = false }) {
+export function PackingList({ items = [], isFiltered = false }) {
   const dispatch = useDispatch();
 
   const handleTogglePacked = (id) => dispatch(togglePacked(id));
   const handleCycleCategory = (id) => dispatch(cycleItemCategory(id));
   const handleCycleRequired = (id) => dispatch(cycleItemRequired(id));
   
-  
-  const handleEdit = (item) => onEditItem(item);
+  const [isEditModalOpen, handleOpenEditModal, handleCloseEditModal, itemToEdit] = useModal(null);
+  const handleConfirmEdit = (updatedItem) => dispatch(updateCheckList(updatedItem));
 
   const [isDeleteModalOpen, handleOpenDeleteModal, handleCloseDeleteModal, deleteItemId] = useModal(-1);
   const handleConfirmDelete = () => dispatch(removeFromCheckList(deleteItemId));
@@ -97,13 +99,18 @@ export function PackingList({ onEditItem, items = [], isFiltered = false }) {
                 onTogglePacked={handleTogglePacked}
                 onCycleCategory={handleCycleCategory}
                 onCycleRequired={handleCycleRequired}
-                onEdit={handleEdit}
+                onEdit={handleOpenEditModal}
                 onDelete={handleOpenDeleteModal}
               />
             ))
           )}
         </tbody>
       </table>
+
+      {/* Modals */}
+      {isEditModalOpen && (
+        <PackingForm itemToEdit={itemToEdit} onSubmit={handleConfirmEdit} onClose={handleCloseEditModal} />
+      )}
 
       {isDeleteModalOpen && (
         <DeleteConfirmationModal

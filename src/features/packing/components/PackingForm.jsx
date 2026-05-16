@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS } from "../packingConstants";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { addToChecklist, updateCheckList } from "../packingSlice";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -24,9 +22,7 @@ const defaulterrors = {
   packedStatus: "",
 };
 
-export function PackingForm({ itemToEdit, onClose }) {
-  const dispatch = useDispatch();
-
+export function PackingForm({ itemToEdit, onSubmit, onClose }) {
   const [form, setForm] = useState(itemToEdit || defaultForm);
 
   const [errors, setErrors] = useState(defaulterrors);
@@ -46,19 +42,10 @@ export function PackingForm({ itemToEdit, onClose }) {
       newErrors.packedStatus = "Input packing status is invalid.";
 
     if (Object.keys(newErrors).length === 0) {
-      if (itemToEdit) {
-        dispatch(updateCheckList({
-          ...form,
-          name: form.name.trim(),
-        }),
-        );
-      } else {
-        dispatch(addToChecklist({
-          ...form,
-          name: form.name.trim(),
-        }),
-        );
-      }
+      onSubmit({
+        ...form,
+        name: form.name.trim(),
+      });
       onClose();
     } else {
       setErrors(newErrors);
