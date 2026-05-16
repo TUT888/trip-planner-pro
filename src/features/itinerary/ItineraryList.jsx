@@ -1,7 +1,12 @@
 import { CalendarDays } from "lucide-react";
 import { ItineraryCard } from "./ItineraryCard";
-import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
-import { useState } from "react";
+import {
+    loadData,
+    saveData,
+    TRIP_DATA_CHANGE_EVENT,
+    TRIP_PROPERTIES,
+} from "@/services/tripDataService";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -50,6 +55,20 @@ export function ItineraryList() {
     );
     const [createOpen, setCreateOpen] = useState(false);
 
+    useEffect(() => {
+        function syncItineraryItems() {
+            setItineraryItems(loadData(TRIP_PROPERTIES.ITINERARY) || []);
+        }
+
+        window.addEventListener(TRIP_DATA_CHANGE_EVENT, syncItineraryItems);
+        window.addEventListener("storage", syncItineraryItems);
+
+        return () => {
+            window.removeEventListener(TRIP_DATA_CHANGE_EVENT, syncItineraryItems);
+            window.removeEventListener("storage", syncItineraryItems);
+        };
+    }, []);
+
     function handleUpdateItinerary(updatedItem) {
         const nextItems = itineraryItems.map((item) => {
             if (item.id === updatedItem.id) {
@@ -73,6 +92,13 @@ export function ItineraryList() {
         setItineraryItems(nextItems);
         saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
         setCreateOpen(false);
+    }
+
+    function handleDeleteItinerary(itemId) {
+        const nextItems = itineraryItems.filter((item) => item.id !== itemId);
+
+        setItineraryItems(nextItems);
+        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
     }
 
 
@@ -113,6 +139,7 @@ export function ItineraryList() {
                         status={item.status}
                         isOverdue={isItineraryOverdue(item)}
                         onUpdate={handleUpdateItinerary}
+                        onDelete={handleDeleteItinerary}
                     />
                 ))
             )}
