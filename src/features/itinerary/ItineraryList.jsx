@@ -54,6 +54,12 @@ export function ItineraryList() {
         loadData(TRIP_PROPERTIES.ITINERARY) || []
     );
     const [createOpen, setCreateOpen] = useState(false);
+    const [filters, setFilters] = useState({
+        date: "",
+        category: "",
+        status: "",
+        priority: "",
+    });
 
     useEffect(() => {
         function syncItineraryItems() {
@@ -100,11 +106,83 @@ export function ItineraryList() {
         setItineraryItems(nextItems);
         saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
     }
+    function updateFilter(filterName, value) {
+    setFilters({
+        ...filters,
+        [filterName]: value,
+    });
+}
+
+function resetFilters() {
+    setFilters({
+        date: "",
+        category: "",
+        status: "",
+        priority: "",
+    });
+}
+
+const filteredItineraryItems = itineraryItems.filter((item) => {
+    const matchesDate = !filters.date || item.date === filters.date;
+    const matchesCategory = !filters.category || item.category === filters.category;
+    const matchesStatus = !filters.status || item.status === filters.status;
+    const matchesPriority = !filters.priority || item.priority === filters.priority;
+
+    return matchesDate && matchesCategory && matchesStatus && matchesPriority;
+});
 
 
 
     return (
         <div className="flex flex-col gap-4">
+            <div className="grid gap-3 rounded-2xl border border-[#cff5ea] bg-[#e8faf5] p-4 md:grid-cols-5">
+                <input
+                    type="date"
+                    value={filters.date}
+                    onChange={(event) => updateFilter("date", event.target.value)}
+                    className="rounded-lg border border-input px-2.5 py-2"
+                />
+
+                <select
+                    value={filters.category}
+                    onChange={(event) => updateFilter("category", event.target.value)}
+                    className="rounded-lg border border-input px-2.5 py-2"
+                >
+                    <option value="">All categories</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Food">Food</option>
+                    <option value="Sightseeing">Sightseeing</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <select
+                    value={filters.status}
+                    onChange={(event) => updateFilter("status", event.target.value)}
+                    className="rounded-lg border border-input px-2.5 py-2"
+                >
+                    <option value="">All statuses</option>
+                    <option value="Planned">Planned</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                </select>
+
+                <select
+                    value={filters.priority}
+                    onChange={(event) => updateFilter("priority", event.target.value)}
+                    className="rounded-lg border border-input px-2.5 py-2"
+                >
+                    <option value="">All priorities</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <Button type="button" variant="outline" onClick={resetFilters}>
+                    Reset
+                </Button>
+            </div>
             <div className="flex justify-end">
                 <Button type="button" onClick={() => setCreateOpen(true)}>
                     Add itinerary
@@ -123,10 +201,10 @@ export function ItineraryList() {
                 </DialogContent>
             </Dialog>
 
-            {itineraryItems.length === 0 ? (
+            {filteredItineraryItems.length === 0 ? (
                 <ItineraryEmptyState />) : (
 
-                itineraryItems.map((item) => (
+                filteredItineraryItems.map((item) => (
                     <ItineraryCard
                         key={item.id}
                         id={item.id}

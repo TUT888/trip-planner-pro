@@ -77,7 +77,8 @@ export function ItineraryCard(props) {
                 <DropdownMenuContent className="w-40" align="end">
                     <DropdownMenuGroup>
                         <DropdownMenuItem
-                            onSelect={() => {
+                            onSelect={(event) => {
+                                event.preventDefault();
                                 setEditOpen(true);
                             }}
                         >
@@ -89,7 +90,8 @@ export function ItineraryCard(props) {
                         <DropdownMenuItem
                             variant="destructive"
                             className="text-red-500 focus:text-red-500"
-                            onSelect={() => {
+                            onSelect={(event) => {
+                                event.preventDefault();
                                 setDeleteOpen(true);
                             }}
                         >
