@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { selectProgress } from "../packingSelector";
 
+// Styling variants
 const VARIANT = {
   full: { bar: "bg-green-500", track: "bg-green-100", label: "text-green-800" },
   half: { bar: "bg-primary/50", track: "bg-gray-100", label: "text-primary" },
   base: { bar: "bg-primary/30", track: "bg-gray-100", label: "text-primary" }
 }
 
+// Main component
 export function PackingProgressBar() {
   const { packed, total, percentage } = useSelector(selectProgress);
   const variant = percentage === 100 ? VARIANT.full : percentage >= 50 ? VARIANT.half : VARIANT.base;

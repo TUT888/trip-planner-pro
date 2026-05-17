@@ -7,12 +7,10 @@ export const selectPackingChecklist = (state) => state.packing.checklist;
 export const selectPackingFilter = (state) => state.packing.filters;
 
 // Function declaration for derived values
-/**
- * Returns items after applying category + packedStatus filters.
- * Progress bar always uses ALL items; this selector is for the table only.
- */
+// input selector must pass in the state as the first argument (state, ...extraArgs) => ...
+const selectFilter = (state, filters) => filters;
 export const selectFilteredItems = createSelector(
-  [selectPackingChecklist, selectPackingFilter],
+  [selectPackingChecklist, selectFilter],
   (checklist, filters) => {
     return checklist.filter((item) => {
       const categoryMatch = filters.category === "All" || item.category === filters.category;
@@ -24,10 +22,6 @@ export const selectFilteredItems = createSelector(
   }
 );
 
-/**
- * Returns packing progress derived from ALL items (not filtered).
- * Use this for the progress bar and summary stats.
- */
 export const selectProgress = createSelector(
   [selectPackingChecklist],
   (checklist) => {

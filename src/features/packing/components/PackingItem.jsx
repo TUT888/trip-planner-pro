@@ -1,9 +1,13 @@
-import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PACKING_STATUS, PACKING_CATEGORY_STYLES, PACKING_PRIORITY_STYLES } from "../packingConstants";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  PACKING_STATUS,
+  PACKING_CATEGORY_STYLES,
+  PACKING_PRIORITY_STYLES,
+} from "../packingConstants";
 
 // Main component 
 export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {

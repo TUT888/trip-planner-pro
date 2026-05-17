@@ -1,12 +1,12 @@
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { Plus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PackingProgressBar } from "./PackingProgressBar";
-import { Plus, RotateCcw } from "lucide-react";
 import { PackingForm } from "./PackingForm";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
 import { useModal } from "@/hooks/useModal";
 import { addToChecklist, clearAll } from "../packingSlice";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 
 export function PackingHeader() {
   const dispatch = useDispatch();

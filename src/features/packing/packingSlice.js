@@ -3,11 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PACKING_STATUS } from "./packingConstants";
 
 const initialState = {
-  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) ?? [],
-  filters: {
-    category: "All",
-    packedStatus: "All",
-  },
+  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) ?? []
 };
 
 export const packingSlice = createSlice({
@@ -56,10 +52,7 @@ export const packingSlice = createSlice({
     clearAll: (state) => {
       state.checklist = [];
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-    },
-    setFilter: (state, action) => {
-      state.filters = { ...state.filters, ...action.payload };
-    },
+    }
   },
 });
 
@@ -69,8 +62,7 @@ export const {
   updateCheckList,
   removeFromCheckList,
   togglePacked,
-  clearAll,
-  setFilter
+  clearAll
 } = packingSlice.actions;
 
 export default packingSlice.reducer;

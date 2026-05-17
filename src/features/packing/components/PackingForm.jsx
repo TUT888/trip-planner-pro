@@ -1,11 +1,30 @@
 import { useState } from "react";
-import { PACKING_CATEGORY_STYLES, PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS, PACKING_PRIORITY_STYLES } from "../packingConstants";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  PACKING_CATEGORY_STYLES,
+  PACKING_CATEGORY,
+  PACKING_PRIORITY,
+  PACKING_STATUS,
+  PACKING_PRIORITY_STYLES,
+} from "../packingConstants";
 
+// Default values
 const defaultForm = {
   name: "",
   category: PACKING_CATEGORY.OTHER,
@@ -22,6 +41,7 @@ const defaultErrors = {
   packedStatus: "",
 };
 
+// Main components
 export function PackingForm({ itemToEdit, onSubmit, onClose }) {
   const [form, setForm] = useState(itemToEdit || defaultForm);
   const [errors, setErrors] = useState(defaultErrors);
@@ -63,13 +83,13 @@ export function PackingForm({ itemToEdit, onSubmit, onClose }) {
       ...prev,
       [key]: value,
     }));
-    
+
     if (errors[key] !== "") {
       console.log("Reset key");
       setErrors((prev) => ({
         ...prev,
-        [key]: ""
-      }))
+        [key]: "",
+      }));
     }
   };
 
@@ -121,11 +141,12 @@ export function PackingForm({ itemToEdit, onSubmit, onClose }) {
                   id="input-category"
                   name="category"
                   value={form.category}
-                  onValueChange={(value) =>
-                    updateFormValue("category", value)
-                  }
+                  onValueChange={(value) => updateFormValue("category", value)}
                 >
-                  <SelectTrigger size="lg" className={PACKING_CATEGORY_STYLES[form.category]}>
+                  <SelectTrigger
+                    size="lg"
+                    className={PACKING_CATEGORY_STYLES[form.category]}
+                  >
                     <SelectValue placeholder="Select a Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -179,7 +200,10 @@ export function PackingForm({ itemToEdit, onSubmit, onClose }) {
                     updateFormValue("requiredStatus", value)
                   }
                 >
-                  <SelectTrigger size="lg" className={PACKING_PRIORITY_STYLES[form.requiredStatus]}>
+                  <SelectTrigger
+                    size="lg"
+                    className={PACKING_PRIORITY_STYLES[form.requiredStatus]}
+                  >
                     <SelectValue placeholder="Select a priority" />
                   </SelectTrigger>
                   <SelectContent>

@@ -1,14 +1,14 @@
 import { useDispatch } from "react-redux";
-import { PackingItem } from "./PackingItem";
 import { Luggage } from "lucide-react";
+import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
+import { PackingItem } from "./PackingItem";
+import { PackingForm } from "./PackingForm";
+import { useModal } from "@/hooks/useModal";
 import {
   removeFromCheckList,
   togglePacked,
   updateCheckList,
 } from "../packingSlice";
-import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
-import { useModal } from "@/hooks/useModal";
-import { PackingForm } from "./PackingForm";
 
 // Column header config
 const COLUMNS = [
