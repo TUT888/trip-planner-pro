@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { PackingProgressBar } from "./PackingProgressBar";
-import { TripSelector } from "./TripSelector";
 import { Plus, RotateCcw } from "lucide-react";
 import { PackingForm } from "./PackingForm";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
@@ -37,7 +36,6 @@ export function PackingHeader() {
       </div>
 
       <div className="flex flex-row items-center gap-2">
-        <TripSelector />
         <Button
           variant="outline"
           size="default"
@@ -50,10 +48,9 @@ export function PackingHeader() {
 
         {/* Clear all */}
         <Button
-          variant="outline"
+          variant="destructive"
           size="default"
           onClick={handleOpenDeleteModal}
-          className="border-pink-500 text-pink-700 hover:bg-pink-50 hover:text-pink-800 shrink-0"
         >
           <RotateCcw aria-hidden="true" />
           Clear

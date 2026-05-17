@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS } from "../packingConstants";
+import { PACKING_CATEGORY_STYLES, PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS, PACKING_PRIORITY_STYLES } from "../packingConstants";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -14,7 +14,7 @@ const defaultForm = {
   packedStatus: PACKING_STATUS.NOT_PACKED,
 };
 
-const defaulterrors = {
+const defaultErrors = {
   name: "",
   category: "",
   quantity: "",
@@ -24,8 +24,7 @@ const defaulterrors = {
 
 export function PackingForm({ itemToEdit, onSubmit, onClose }) {
   const [form, setForm] = useState(itemToEdit || defaultForm);
-
-  const [errors, setErrors] = useState(defaulterrors);
+  const [errors, setErrors] = useState(defaultErrors);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,7 +125,7 @@ export function PackingForm({ itemToEdit, onSubmit, onClose }) {
                     updateFormValue("category", value)
                   }
                 >
-                  <SelectTrigger size="lg">
+                  <SelectTrigger size="lg" className={PACKING_CATEGORY_STYLES[form.category]}>
                     <SelectValue placeholder="Select a Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -180,7 +179,7 @@ export function PackingForm({ itemToEdit, onSubmit, onClose }) {
                     updateFormValue("requiredStatus", value)
                   }
                 >
-                  <SelectTrigger size="lg">
+                  <SelectTrigger size="lg" className={PACKING_PRIORITY_STYLES[form.requiredStatus]}>
                     <SelectValue placeholder="Select a priority" />
                   </SelectTrigger>
                   <SelectContent>

@@ -2,8 +2,6 @@ import { useDispatch } from "react-redux";
 import { PackingItem } from "./PackingItem";
 import { Luggage } from "lucide-react";
 import {
-  cycleItemCategory,
-  cycleItemRequired,
   removeFromCheckList,
   togglePacked,
   updateCheckList,
@@ -14,13 +12,13 @@ import { PackingForm } from "./PackingForm";
 
 // Column header config
 const COLUMNS = [
-  { key: "index", label: "#", className: "w-10" },
-  { key: "name", label: "Item name", className: "min-w-[120px]" },
-  { key: "category", label: "Category", className: "w-36" },
+  { key: "index", label: "#", className: "w-10 text-center" },
+  { key: "name", label: "Item name", className: "min-w-[120px] text-left" },
+  { key: "category", label: "Category", className: "w-36 text-center" },
   { key: "quantity", label: "Quantity", className: "w-24 text-center" },
-  { key: "required", label: "Required Status", className: "w-36" },
-  { key: "packed", label: "Packed Status", className: "w-28 text-center" },
-  { key: "actions", label: "", className: "w-20" },
+  { key: "required", label: "Required", className: "w-36 text-center" },
+  { key: "packed", label: "Packed", className: "w-28 text-center" },
+  { key: "actions", label: "Action", className: "w-20 text-center" },
 ];
 
 // Empty states
@@ -60,8 +58,6 @@ export function PackingList({ items = [], isFiltered = false }) {
   const dispatch = useDispatch();
 
   const handleTogglePacked = (id) => dispatch(togglePacked(id));
-  const handleCycleCategory = (id) => dispatch(cycleItemCategory(id));
-  const handleCycleRequired = (id) => dispatch(cycleItemRequired(id));
   
   const [isEditModalOpen, handleOpenEditModal, handleCloseEditModal, itemToEdit] = useModal(null);
   const handleConfirmEdit = (updatedItem) => dispatch(updateCheckList(updatedItem));
@@ -78,7 +74,7 @@ export function PackingList({ items = [], isFiltered = false }) {
             {COLUMNS.map((col) => (
               <th
                 key={col.key}
-                className={`px-3 pb-3 pt-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 ${col.className}`}
+                className={`px-3 pb-3 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-500 ${col.className}`}
               >
                 {col.label}
               </th>
@@ -97,8 +93,6 @@ export function PackingList({ items = [], isFiltered = false }) {
                 item={item}
                 index={idx + 1}
                 onTogglePacked={handleTogglePacked}
-                onCycleCategory={handleCycleCategory}
-                onCycleRequired={handleCycleRequired}
                 onEdit={handleOpenEditModal}
                 onDelete={handleOpenDeleteModal}
               />

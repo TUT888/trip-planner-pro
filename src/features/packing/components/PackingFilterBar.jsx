@@ -18,8 +18,8 @@ function FilterPill({ label, active, onClick }) {
         "border transition-all duration-150 whitespace-nowrap",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
         active
-          ? "bg-pink-500 text-white border-pink-500 shadow-sm"
-          : "bg-white text-gray-600 border-gray-200 hover:border-pink-300 hover:text-pink-700",
+          ? "bg-primary text-white border-primary shadow-sm"
+          : "bg-white text-gray-600 border-gray-200 hover:border-primary/80 hover:text-primary/80",
       )}
     >
       {label}

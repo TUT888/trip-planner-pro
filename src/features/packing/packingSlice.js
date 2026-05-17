@@ -1,6 +1,6 @@
 import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
 import { createSlice } from "@reduxjs/toolkit";
-import { PACKING_CATEGORY, PACKING_PRIORITY, PACKING_STATUS } from "./packingConstants";
+import { PACKING_STATUS } from "./packingConstants";
 
 const initialState = {
   checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) ?? [],
@@ -53,24 +53,6 @@ export const packingSlice = createSlice({
         saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
       }
     },
-    cycleItemCategory: (state, action) => {
-      const item = state.checklist.find((i) => i.id === action.payload);
-      if (item) {
-        const values = Object.values(PACKING_CATEGORY);
-        const idx = values.indexOf(item.category);
-        item.category = values[(idx + 1) % values.length];
-        saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-      }
-    },
-    cycleItemRequired: (state, action) => {
-      const item = state.checklist.find((i) => i.id === action.payload);
-      if (item) {
-        const values = Object.values(PACKING_PRIORITY);
-        const idx = values.indexOf(item.required);
-        item.required = values[(idx + 1) % values.length];
-        saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-      }
-    },
     clearAll: (state) => {
       state.checklist = [];
       saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
@@ -87,8 +69,6 @@ export const {
   updateCheckList,
   removeFromCheckList,
   togglePacked,
-  cycleItemCategory,
-  cycleItemRequired,
   clearAll,
   setFilter
 } = packingSlice.actions;
