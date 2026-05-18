@@ -6,9 +6,9 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/features/itinerary/components/ui/popover";
-import { Field } from "@/features/itinerary/components/ui/field";
-import { InputGroup, InputGroupInput } from "@/features/itinerary/components/ui/input-group";
+} from "@/components/ui/popover";
+import { Field } from "@/components/ui/field";
+import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
 import {
     Select,
     SelectContent,
@@ -16,7 +16,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/features/itinerary/components/ui/select";
+} from "@/components/ui/select";
 
 
 function parseDateString(dateString) {

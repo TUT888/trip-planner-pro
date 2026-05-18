@@ -107,29 +107,29 @@ export function ItineraryList() {
         saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
     }
     function updateFilter(filterName, value) {
-    setFilters({
-        ...filters,
-        [filterName]: value,
+        setFilters({
+            ...filters,
+            [filterName]: value,
+        });
+    }
+
+    function resetFilters() {
+        setFilters({
+            date: "",
+            category: "",
+            status: "",
+            priority: "",
+        });
+    }
+
+    const filteredItineraryItems = itineraryItems.filter((item) => {
+        const matchesDate = !filters.date || item.date === filters.date;
+        const matchesCategory = !filters.category || item.category === filters.category;
+        const matchesStatus = !filters.status || item.status === filters.status;
+        const matchesPriority = !filters.priority || item.priority === filters.priority;
+
+        return matchesDate && matchesCategory && matchesStatus && matchesPriority;
     });
-}
-
-function resetFilters() {
-    setFilters({
-        date: "",
-        category: "",
-        status: "",
-        priority: "",
-    });
-}
-
-const filteredItineraryItems = itineraryItems.filter((item) => {
-    const matchesDate = !filters.date || item.date === filters.date;
-    const matchesCategory = !filters.category || item.category === filters.category;
-    const matchesStatus = !filters.status || item.status === filters.status;
-    const matchesPriority = !filters.priority || item.priority === filters.priority;
-
-    return matchesDate && matchesCategory && matchesStatus && matchesPriority;
-});
 
 
 

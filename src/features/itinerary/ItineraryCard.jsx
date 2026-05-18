@@ -20,7 +20,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from "@/features/itinerary/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
 
