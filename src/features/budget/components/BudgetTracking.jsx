@@ -84,8 +84,8 @@ const BudgetTracking = () => {
               </div>
             </div>
             <div className="flex w-full justify-between text-[9px] font-black uppercase tracking-[0.12em] text-[#9f90a5]">
-              <span>Safe Zone</span>
               <span>Critical</span>
+              <span>Safe Zone</span>
             </div>
           </div>
         </div>
