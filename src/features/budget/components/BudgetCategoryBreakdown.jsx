@@ -22,8 +22,8 @@ export function BudgetCategoryBreakdown({ selectedCategory, onSelectCategory }) 
 
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Category Breakdown</h3>
-      <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+      <h3 className="text-[11px] font-black text-[#a08fa6] uppercase tracking-[0.28em]">Category Breakdown</h3>
+      <div className="flex gap-3 overflow-x-auto pb-2">
         {categoriesList.map((category) => {
           const isSelected = selectedCategory === category;
           const cost = category === 'All' ? totalActual : breakdown[category];
@@ -32,16 +32,16 @@ export function BudgetCategoryBreakdown({ selectedCategory, onSelectCategory }) 
             <button
               key={category}
               onClick={() => onSelectCategory(category)}
-              className={`flex-none text-left px-4 py-3 rounded-lg border min-w-[140px] transition-all
+              className={`flex-none rounded-full border px-4 py-2.5 min-w-[110px] transition-all
                 ${isSelected 
-                  ? 'bg-purple-100 border-purple-300 shadow-sm ring-1 ring-purple-300' 
-                  : 'bg-gray-50 border-gray-200 hover:border-pink-300'
+                  ? 'bg-[#ef11aa] border-[#ef11aa] text-white shadow-sm' 
+                  : 'bg-[#f2eef2] border-[#e3dbe5] text-[#6f5d76] hover:border-[#d2bfd9]'
                 }`}
             >
-              <p className={`text-[10px] font-bold uppercase ${isSelected ? 'text-purple-800' : 'text-purple-700'}`}>
+              <p className="text-[10px] font-black uppercase tracking-[0.16em]">
                 {category}
               </p>
-              <p className="text-lg font-black text-gray-900">{formatCurrency(cost)}</p>
+              <p className={`text-xs font-black ${isSelected ? 'text-white' : 'text-[#b4a7ba]'}`}>{formatCurrency(cost)}</p>
             </button>
           );
         })}

@@ -77,7 +77,7 @@ export function BudgetForm({ itemToEdit, onClose }) {
 
     const estimated = Number(formData.estimatedCost);
     const remaining = totals.remainingBudget;
-    if (!itemToEdit && !isNaN(estimated) && estimated >= remaining) {
+    if (!itemToEdit && !isNaN(estimated) && estimated > remaining) {
       newErrors.estimatedCost = `Estimated cost must be less than remaining budget ($${remaining.toFixed(2)}).`;
     }
 
@@ -89,7 +89,7 @@ export function BudgetForm({ itemToEdit, onClose }) {
     e.preventDefault();
     if (validate()) {
       const payload = {
-        id: itemToEdit ? itemToEdit.id : Date.now(), // Generate ID
+        id: itemToEdit ? itemToEdit.id : Date.now(), 
         name: formData.name.trim(),
         category: formData.category,
         estimatedCost: Number(formData.estimatedCost),

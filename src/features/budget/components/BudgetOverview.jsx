@@ -4,32 +4,33 @@ import { formatCurrency } from '../../../utils/formatUtils';
 
 export function BudgetOverview() {
   const totals = useSelector(selectBudgetTotals);
+  const totalEstimated = Number(totals?.totalEstimated) || 0;
+  const totalActual = Number(totals?.totalActual) || 0;
+  const diffPercentage = Number(totals?.diffPercentage) || 0;
+  const isUnder = Number(totals?.diff) > 0;
 
   return (
-    <div className="space-y-4">
-      {/* Dashboard Summary Grid (Full Width) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:scale-[1.01] transition-all">
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Estimated</p>
-          <p className="text-2xl font-black text-gray-900">{formatCurrency(totals.totalEstimated)}</p>
+    <div className="rounded-full border border-[#e7d9e8] bg-[#f8f4f7] px-10 py-5">
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="border-b border-[#eaddea] pb-4 md:border-b-0 md:border-r md:pb-0 md:pr-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#a493a9]">Total Estimated</p>
+          <p className="text-[36px] leading-none font-black text-[#5f4a68]">{formatCurrency(totalEstimated)}</p>
         </div>
-        
-        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:scale-[1.01] transition-all border-l-4 border-l-pink-500">
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Actual</p>
-          <p className="text-2xl font-black text-pink-600">{formatCurrency(totals.totalActual)}</p>
+
+        <div className="border-b border-[#eaddea] pb-4 md:border-b-0 md:border-r md:pb-0 md:pr-6">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#a493a9]">Total Actual</p>
+          <p className="text-[36px] leading-none font-black text-[#ef1ca7]">{formatCurrency(totalActual)}</p>
         </div>
-        
-        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:scale-[1.01] transition-all border-l-4 border-l-red-500">
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Remaining Budget</p>
-          <p className="text-2xl font-black text-red-600">
-            {totals.remainingBudget < 0 ? '-' : ''}{formatCurrency(Math.abs(totals.remainingBudget))}
-          </p>
-        </div>
-        
-        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm hover:scale-[1.01] transition-all border-l-4 border-l-blue-500">
-          <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Est. vs Actual Diff</p>
-          <p className="text-2xl font-black text-blue-500">
-            {totals.diff > 0 ? '+' : ''}{totals.diffPercentage.toFixed(1)}% {totals.diff > 0 ? 'Over' : 'Under'}
+
+        <div>
+          <div className="mb-1 flex items-center gap-2">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#a493a9]">Est. VS Actual</p>
+            <span className="rounded-full bg-[#f9d7f2] px-2 py-0.5 text-[8px] font-black uppercase text-[#df0ea3]">
+              {isUnder ? 'On Track' : 'Over'}
+            </span>
+          </div>
+          <p className="text-[36px] leading-none font-black text-[#2c1a30]">
+            {diffPercentage.toFixed(1)}% {isUnder ? 'Under' : 'Over'}
           </p>
         </div>
       </div>
