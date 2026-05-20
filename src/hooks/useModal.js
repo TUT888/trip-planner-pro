@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export function useModal(defaultItem) {
-  
   const [isOpen, setIsOpen] = useState(false);
   const [targetItem, setTargetItem] = useState(defaultItem);
 
