@@ -4,6 +4,7 @@ import { PackingList } from "./PackingList";
 import { selectFilteredItems } from "../packingSelector";
 import { PACKING_CATEGORY, PACKING_STATUS } from "../packingConstants";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function PackingFilterBar({ filters, onFilterChange }) {
   const categoryOptions = ["All", ...Object.values(PACKING_CATEGORY)];
@@ -11,46 +12,42 @@ export function PackingFilterBar({ filters, onFilterChange }) {
   const isAnyFilterActive = filters.category !== "All" || filters.packedStatus !== "All";
 
   return (
-    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-3">
-      {/* Category group */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
-          Category
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {categoryOptions.map((cat) => (
-            <Button
-              key={cat} 
-              variant={filters.category === cat ? "default" : "outline"}
-              onClick={() => onFilterChange({ category: cat })}
-            >
-              {cat}
-            </Button>
-          ))}
+    <div className="flex gap-x-5 gap-y-3 py-3 w-full">
+      <div className="space-y-3">
+        {/* Category group */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
+            Category
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {categoryOptions.map((cat) => (
+              <Button
+                key={cat} 
+                variant={filters.category === cat ? "default" : "outline"}
+                onClick={() => onFilterChange({ category: cat })}
+              >
+                {cat}
+              </Button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Divider */}
-      <div
-        className="hidden sm:block h-5 w-px bg-gray-200 shrink-0"
-        aria-hidden="true"
-      />
-
-      {/* Packed status group */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
-          Status
-        </span>
-        <div className="flex flex-wrap gap-1">
-          {statusOptions.map((status) => (
-            <Button 
-              key={status} 
-              variant={filters.packedStatus === status ? "default" : "outline"}
-              onClick={() => onFilterChange({ packedStatus: status })}
-            >
-              {status}
-            </Button>
-          ))}
+        {/* Packed status group */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide shrink-0">
+            Status
+          </span>
+          <div className="flex flex-wrap gap-1">
+            {statusOptions.map((status) => (
+              <Button 
+                key={status} 
+                variant={filters.packedStatus === status ? "default" : "outline"}
+                onClick={() => onFilterChange({ packedStatus: status })}
+              >
+                {status}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -77,18 +74,20 @@ export function PackingPanel() {
   const filteredItems = useSelector((state) => selectFilteredItems(state, filters));
 
   return (
-    <div className="flex flex-col gap-3">
-      {/* Filter bar section */}
-      <PackingFilterBar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-      />
+    <Card className="w-full">
+      <CardContent>
+        {/* Filter bar section */}
+        <PackingFilterBar
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
 
-      {/* Packing list section */}
-      <PackingList
-        items={filteredItems}
-        isFiltered={isFiltered}
-      />
-    </div>
+        {/* Packing list section */}
+        <PackingList
+          items={filteredItems}
+          isFiltered={isFiltered}
+        />
+      </CardContent>
+    </Card>
   )
 }

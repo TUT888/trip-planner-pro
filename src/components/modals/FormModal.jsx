@@ -43,7 +43,7 @@ export function FormModal({
               </Button>
             </DialogClose>
 
-            <Button type="submit">{submitLabel || "Save"}</Button>
+            <Button variant="default" type="submit" className="hover:bg-primary/80">{submitLabel || "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
