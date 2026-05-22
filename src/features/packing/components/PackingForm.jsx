@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -15,14 +13,14 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
-  PACKING_CATEGORY_STYLES,
   PACKING_CATEGORY,
   PACKING_PRIORITY,
   PACKING_STATUS,
-  PACKING_PRIORITY_STYLES,
 } from "../packingConstants";
+import { FormModal } from "@/components/modals/FormModal";
+import { packingListStyle } from "../packingStyles";
+import { useForm } from "@/hooks/useForm";
 
 // Default values
 const defaultForm = {
@@ -33,253 +31,183 @@ const defaultForm = {
   packedStatus: PACKING_STATUS.NOT_PACKED,
 };
 
-const defaultErrors = {
-  name: "",
-  category: "",
-  quantity: "",
-  requiredStatus: "",
-  packedStatus: "",
-};
-
 // Main components
-export function PackingForm({ itemToEdit, onSubmit, onClose }) {
-  const [form, setForm] = useState(itemToEdit || defaultForm);
-  const [errors, setErrors] = useState(defaultErrors);
+export function PackingForm({
+  isOpen,
+  onClose,
+  onSubmit,
+  itemToEdit
+}) {
+  const form = useForm({
+    defaultData: itemToEdit || defaultForm,
+    validator: (formData) => {
+      const newErrors = {};
+      if (!formData.name.trim()) newErrors.name = "Item name can not be empty.";
+      if (formData.quantity < 1)
+        newErrors.quantity = "Quantity can not be lower than 1.";
+      if (!Object.values(PACKING_CATEGORY).includes(formData.category))
+        newErrors.category = "Input category is invalid.";
+      if (!Object.values(PACKING_PRIORITY).includes(formData.requiredStatus))
+        newErrors.requiredStatus = "Input required status is invalid.";
+      if (!Object.values(PACKING_STATUS).includes(formData.packedStatus))
+        newErrors.packedStatus = "Input packing status is invalid.";
+
+      return newErrors;
+    }
+  });
+
+  const handleClose = () => {
+    onClose();
+    form.reset();
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!form.validate()) return;
 
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Item name can not be empty.";
-    if (form.quantity < 1)
-      newErrors.quantity = "Quantity can not be lower than 1.";
-    if (!Object.values(PACKING_CATEGORY).includes(form.category))
-      newErrors.category = "Input category is invalid.";
-    if (!Object.values(PACKING_PRIORITY).includes(form.requiredStatus))
-      newErrors.requiredStatus = "Input required status is invalid.";
-    if (!Object.values(PACKING_STATUS).includes(form.packedStatus))
-      newErrors.packedStatus = "Input packing status is invalid.";
-
-    if (Object.keys(newErrors).length === 0) {
-      onSubmit({
-        ...form,
-        name: form.name.trim(),
-      });
-      onClose();
-    } else {
-      setErrors(newErrors);
-    }
+    onSubmit({
+      ...form.data,
+      name: form.data.name.trim(),
+    });
+    form.reset();
   };
 
-  // For change event (normal input text and number)
   const handleChangeEvent = (e) => {
-    const { name, value } = e.target;
-    updateFormValue(name, value);
-  };
-
-  // Update value (shadcn's selector provide value directly instead of event object)
-  const updateFormValue = (key, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-
-    if (errors[key] !== "") {
-      console.log("Reset key");
-      setErrors((prev) => ({
-        ...prev,
-        [key]: "",
-      }));
+    if (e.target.name === "quantity") {
+      form.update(e.target.name, Number(e.target.value));
+    } else {
+      form.update(e.target.name, e.target.value);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
-      <div className="bg-white rounded-3xl shadow-xl max-w-md w-full overflow-hidden">
-        {/* Header */}
-        <div className="flex justify-between items-center p-5 bg-primary text-white">
-          <h2 className="text-xl font-bold">
-            {itemToEdit ? "Edit Packing Item" : "Add Packing Item"}
-          </h2>
-          <Button onClick={onClose} className="hover:bg-secondary/50 rounded">
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
+    <FormModal
+      isOpen={isOpen}
+      onClose={handleClose}
+      onSubmit={handleSubmit}
+      title={itemToEdit ? "Edit Packing Item" : "Add Packing Item"}
+    >
+      <Field data-invalid={form.errors.name ? true : false}>
+        <FieldLabel htmlFor="input-name" className="text-gray-500">
+          Item Name
+        </FieldLabel>
+        <Input
+          id="input-name"
+          type="text"
+          name="name"
+          value={form.data.name}
+          onChange={handleChangeEvent}
+          placeholder="e.g. Passport"
+        />
+        {form.errors.name && <FieldError>{form.errors.name}</FieldError>}
+      </Field>
 
-        {/* Form content */}
-        <form onSubmit={handleSubmit}>
-          {/* Input section */}
-          <div className="p-6 space-y-6 bg-white">
-            <Field data-invalid={errors.name ? true : false}>
-              <FieldLabel
-                htmlFor="input-name"
-                className="uppercase text-gray-500"
-              >
-                Item Name
-              </FieldLabel>
-              <Input
-                id="input-name"
-                type="text"
-                name="name"
-                value={form.name}
-                onChange={handleChangeEvent}
-                placeholder="e.g. Passport"
-                className="h-10"
-              />
-              {errors.name && <FieldError>{errors.name}</FieldError>}
-            </Field>
-
-            <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Field data-invalid={errors.category ? true : false}>
-                <FieldLabel
-                  htmlFor="input-category"
-                  className="uppercase text-gray-500"
-                >
-                  Category
-                </FieldLabel>
-                <Select
-                  id="input-category"
-                  name="category"
-                  value={form.category}
-                  onValueChange={(value) => updateFormValue("category", value)}
-                >
-                  <SelectTrigger
-                    size="lg"
-                    className={PACKING_CATEGORY_STYLES[form.category]}
-                  >
-                    <SelectValue placeholder="Select a Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.values(PACKING_CATEGORY).map(
-                        (category, index) => (
-                          <SelectItem key={index} value={category}>
-                            {category}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.category && <FieldError>{errors.category}</FieldError>}
-              </Field>
-
-              <Field data-invalid={errors.quantity ? true : false}>
-                <FieldLabel
-                  htmlFor="input-quantity"
-                  className="uppercase text-gray-500"
-                >
-                  Quantity
-                </FieldLabel>
-                <Input
-                  id="input-quantity"
-                  type="number"
-                  min="1"
-                  name="quantity"
-                  value={form.quantity}
-                  onChange={handleChangeEvent}
-                  className="h-10"
-                />
-                {errors.quantity && <FieldError>{errors.quantity}</FieldError>}
-              </Field>
-            </FieldGroup>
-
-            <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Field data-invalid={errors.requiredStatus ? true : false}>
-                <FieldLabel
-                  id="input-required-status"
-                  className="uppercase text-gray-500"
-                >
-                  Required Status
-                </FieldLabel>
-                <Select
-                  id="input-required-status"
-                  name="requiredStatus"
-                  value={form.requiredStatus}
-                  onValueChange={(value) =>
-                    updateFormValue("requiredStatus", value)
-                  }
-                >
-                  <SelectTrigger
-                    size="lg"
-                    className={PACKING_PRIORITY_STYLES[form.requiredStatus]}
-                  >
-                    <SelectValue placeholder="Select a priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.values(PACKING_PRIORITY).map(
-                        (reqStatus, index) => (
-                          <SelectItem key={index} value={reqStatus}>
-                            {reqStatus}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.requiredStatus && (
-                  <FieldError>{errors.requiredStatus}</FieldError>
-                )}
-              </Field>
-
-              <Field data-invalid={errors.packedStatus ? true : false}>
-                <FieldLabel
-                  htmlFor="input-packed-status"
-                  className="uppercase text-gray-500"
-                >
-                  Packed Status
-                </FieldLabel>
-                <Select
-                  id="input-packed-status"
-                  name="packedStatus"
-                  value={form.packedStatus}
-                  onValueChange={(value) =>
-                    updateFormValue("packedStatus", value)
-                  }
-                >
-                  <SelectTrigger size="lg">
-                    <SelectValue placeholder="Select a status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.values(PACKING_STATUS).map(
-                        (packStatus, index) => (
-                          <SelectItem key={index} value={packStatus}>
-                            {packStatus}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.packedStatus && (
-                  <FieldError>{errors.packedStatus}</FieldError>
-                )}
-              </Field>
-            </FieldGroup>
-          </div>
-
-          {/* Button section */}
-          <div className="bg-gray-50 border-t p-6 grid grid-cols-2 gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="px-6 py-5 text-gray-800 hover:bg-gray-100"
+      <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field data-invalid={form.errors.category ? true : false}>
+          <FieldLabel htmlFor="input-category" className="text-gray-500">
+            Category
+          </FieldLabel>
+          <Select
+            id="input-category"
+            name="category"
+            value={form.data.category}
+            onValueChange={(value) => form.update("category", value)}
+          >
+            <SelectTrigger
+              className={packingListStyle.category[form.data.category]}
             >
-              Cancel
-            </Button>
+              <SelectValue placeholder="Select a Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {Object.values(PACKING_CATEGORY).map((category, index) => (
+                  <SelectItem key={index} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {form.errors.category && <FieldError>{form.errors.category}</FieldError>}
+        </Field>
 
-            <Button
-              type="submit"
-              className="px-6 py-5 bg-primary hover:bg-primary/80"
+        <Field data-invalid={form.errors.quantity ? true : false}>
+          <FieldLabel htmlFor="input-quantity" className="text-gray-500">
+            Quantity
+          </FieldLabel>
+          <Input
+            id="input-quantity"
+            type="number"
+            min="1"
+            name="quantity"
+            value={form.data.quantity}
+            onChange={handleChangeEvent}
+          />
+          {form.errors.quantity && <FieldError>{form.errors.quantity}</FieldError>}
+        </Field>
+      </FieldGroup>
+
+      <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <Field data-invalid={form.errors.requiredStatus ? true : false}>
+          <FieldLabel id="input-required-status" className="text-gray-500">
+            Required Status
+          </FieldLabel>
+          <Select
+            id="input-required-status"
+            name="requiredStatus"
+            value={form.data.requiredStatus}
+            onValueChange={(value) =>
+              form.update("requiredStatus", value)
+            }
+          >
+            <SelectTrigger
+              className={packingListStyle.priority[form.data.requiredStatus]}
             >
-              Save
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+              <SelectValue placeholder="Select a priority" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {Object.values(PACKING_PRIORITY).map((reqStatus, index) => (
+                  <SelectItem key={index} value={reqStatus}>
+                    {reqStatus}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {form.errors.requiredStatus && (
+            <FieldError>{form.errors.requiredStatus}</FieldError>
+          )}
+        </Field>
+
+        <Field data-invalid={form.errors.packedStatus ? true : false}>
+          <FieldLabel htmlFor="input-packed-status" className="text-gray-500">
+            Packed Status
+          </FieldLabel>
+          <Select
+            id="input-packed-status"
+            name="packedStatus"
+            value={form.data.packedStatus}
+            onValueChange={(value) => form.update("packedStatus", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select a status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {Object.values(PACKING_STATUS).map((packStatus, index) => (
+                  <SelectItem key={index} value={packStatus}>
+                    {packStatus}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {form.errors.packedStatus && (
+            <FieldError>{form.errors.packedStatus}</FieldError>
+          )}
+        </Field>
+      </FieldGroup>
+    </FormModal>
   );
 }

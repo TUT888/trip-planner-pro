@@ -59,11 +59,18 @@ export function PackingList({ items = [], isFiltered = false }) {
 
   const handleTogglePacked = (id) => dispatch(togglePacked(id));
   
-  const [isEditModalOpen, handleOpenEditModal, handleCloseEditModal, itemToEdit] = useModal(null);
-  const handleConfirmEdit = (updatedItem) => dispatch(updateCheckList(updatedItem));
+  const editModal = useModal(null);
+  const handleConfirmEdit = (updatedItem) => {
+    editModal.handleClose();
+    dispatch(updateCheckList(updatedItem));
+  }
 
-  const [isDeleteModalOpen, handleOpenDeleteModal, handleCloseDeleteModal, deleteItemId] = useModal(-1);
-  const handleConfirmDelete = () => dispatch(removeFromCheckList(deleteItemId));
+  const deleteModal = useModal({ id: "", name: "" });
+  const handleConfirmDelete = () => {
+    if (!deleteModal.targetItem) return;
+    deleteModal.handleClose();
+    dispatch(removeFromCheckList(deleteModal.targetItem.id));
+  }
 
   return (
     <div className="overflow-x-auto rounded-sm shadow-sm border border-gray-100">
@@ -93,25 +100,33 @@ export function PackingList({ items = [], isFiltered = false }) {
                 item={item}
                 index={idx + 1}
                 onTogglePacked={handleTogglePacked}
-                onEdit={handleOpenEditModal}
-                onDelete={handleOpenDeleteModal}
+                onEdit={editModal.handleOpen}
+                onDelete={deleteModal.handleOpen}
               />
             ))
           )}
         </tbody>
       </table>
 
-      {/* Modals */}
-      {isEditModalOpen && (
-        <PackingForm itemToEdit={itemToEdit} onSubmit={handleConfirmEdit} onClose={handleCloseEditModal} />
+      {/* Form Modal */}
+      {editModal.isOpen && (
+        <PackingForm 
+          isOpen={editModal.isOpen} 
+          onClose={editModal.handleClose}
+          onSubmit={handleConfirmEdit}
+          itemToEdit={editModal.targetItem}
+        />
       )}
 
-      {isDeleteModalOpen && (
+      {/* Delete Modal */}
+      {deleteModal.isOpen && (
         <DeleteConfirmationModal
+          isOpen={deleteModal.isOpen}
+          onClose={deleteModal.handleClose}
           onConfirm={handleConfirmDelete}
-          onCancel={handleCloseDeleteModal}
+          title="Delete Packing Item"
         >
-          <p>Are you sure you want to delete <span className="font-bold text-gray-900">{}</span>from checklist?</p>
+          <p>Are you sure you want to delete <span className="font-bold text-gray-900">{deleteModal.targetItem.name}</span> from checklist?</p>
           <p>This action cannot be undone.</p>
         </DeleteConfirmationModal>
       )}

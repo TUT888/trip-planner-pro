@@ -7,6 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TripForm } from "./TripForm";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function TripSelector() {
   const [trips, setTrips] = useState([
@@ -43,6 +45,11 @@ export function TripSelector() {
         </Select>
       </div>
 
+      <Button size="icon" variant="outline" onClick={() => setNewTripOpen(true)}>
+        <Plus className="h-4 w-4" />
+      </Button>
+
+      {/* Form Modal */}
       <TripForm
         open={newTripOpen}
         onOpenChange={setNewTripOpen}

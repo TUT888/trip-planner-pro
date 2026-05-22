@@ -3,16 +3,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-  PACKING_STATUS,
-  PACKING_CATEGORY_STYLES,
-  PACKING_PRIORITY_STYLES,
-} from "../packingConstants";
+import { PACKING_STATUS } from "../packingConstants";
+import { packingListStyle } from "../packingStyles";
 
 // Main component 
 export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
-  const categoryStyle = PACKING_CATEGORY_STYLES[item.category] ?? PACKING_CATEGORY_STYLES.Other;
-  const requiredStyle = PACKING_PRIORITY_STYLES[item.requiredStatus];
+  const categoryStyle = packingListStyle.category[item.category];
+  const requiredStyle = packingListStyle.priority[item.requiredStatus];
 
   const isPacked = item.packedStatus === PACKING_STATUS.PACKED;
 
@@ -48,7 +45,7 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
         <Badge className={requiredStyle}>{item.requiredStatus}</Badge>
       </td>
 
-      <td className="px-3 py-3 flex justify-center">
+      <td className="px-3 py-3 text-center">
         <Input
           type="checkbox"
           checked={isPacked}
@@ -64,7 +61,7 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={() => onDelete(item.id)}
+            onClick={() => onDelete(item)}
             aria-label={`Delete "${item.name}"`}
             className="text-gray-400 hover:text-red-600 hover:bg-red-50"
           >

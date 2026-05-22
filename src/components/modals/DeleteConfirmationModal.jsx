@@ -1,50 +1,58 @@
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { Trash } from "lucide-react";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 
-export function DeleteConfirmationModal({ onConfirm, onCancel, modalTitle = "Delete Confirmation", children }) {
-  const handleConfirmDelete = () => {
-    onConfirm();
-    onCancel();
-  }
-
+export function DeleteConfirmationModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title, // Optional, it is "Delete Confirmation" by default
+  children, // Optional, but you SHOULD add a specific message as its CHILDREN
+}) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
-      <div className="bg-white rounded-3xl shadow-xl max-w-md w-full overflow-hidden">
-          {/* Header */}
-          <div className="flex justify-between items-center p-5 bg-red-600 text-white">
-            <h2 className="text-xl font-bold">
-              {modalTitle}
-            </h2>
-            <Button onClick={onCancel} className="bg-red-600 hover:bg-red-400 rounded">
-              <X className="w-5 h-5" />
-            </Button>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        {/* Header */}
+        <DialogHeader>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50">
+              <Trash className="h-5 w-5 text-destructive" />
+            </div>
+            <div>
+              <DialogTitle className="text-destructive font-bold">
+                {title || "Delete Confirmation"}
+              </DialogTitle>
+            </div>
           </div>
+        </DialogHeader>
 
-          {/* Content */}
-          <div className="p-6">
-            {children}
-          </div>
+        {/* Content */}
+        <div className="p-1">
+          {children || (
+            <span>
+              Are you sure you want to delete this? This action can not be
+              undone.
+            </span>
+          )}
+        </div>
 
-          {/* Footer */}
-          <div className="bg-gray-50 border-t p-6 grid grid-cols-2 gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              className="px-6 py-5 text-gray-800 hover:bg-gray-100"
-            >
+        {/* Footer */}
+        <DialogFooter className="grid grid-cols-2">
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
               Cancel
             </Button>
+          </DialogClose>
 
-            <Button
-              type="button"
-              onClick={handleConfirmDelete}
-              className="px-6 py-5 bg-red-600 hover:bg-red-700"
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
-      </div>
-  )
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => onConfirm()}
+          >
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }
