@@ -6,7 +6,8 @@ import { AppLogo } from "./Logo";
 import { DesktopNav, MobileNav } from "./Navbar";
 import { UserMenu } from "@/features/auth/UserMenu";
 import { TripSelector } from "@/features/trip/components/TripSelector";
-import { AuthForm } from "@/features/auth/AuthForm";
+import { LoginForm } from "@/features/auth/LoginForm";
+import { RegisterForm } from "@/features/auth/RegisterForm";
 
 export function Header() {
   const user = {
@@ -14,7 +15,18 @@ export function Header() {
     email: "abc@gmail.com",
   };
   const [navMenuOpen, setnavMenuOpen] = useState(false);
-  const [authFormOpen, setAuthFormOpen] = useState(false);
+  const [loginFormOpen, setLoginFormOpen] = useState(false);
+  const [registerFormOpen, setRegisterFormOpen] = useState(false);
+
+  const handleLogin = (loginData) => {
+    console.log(loginData);
+    setLoginFormOpen(false);
+  }
+
+  const handleRegister = (registerData) => {
+    console.log(registerData);
+    setRegisterFormOpen(false);
+  }
 
   // Return Login/Register if user not existed
   if (!user) {
@@ -22,11 +34,31 @@ export function Header() {
       <header className="sticky top-0 z-50 bg-gray-50 shadow-md">
         <div className="flex justify-between items-center px-4 py-3">
           <AppLogo />
-          <Button onClick={() => setAuthFormOpen(true)} variant="outline">
-            Account
-          </Button>
-          <AuthForm open={authFormOpen} onOpenChange={setAuthFormOpen} />
+          <div className="space-x-2">
+            <Button onClick={() => setLoginFormOpen(true)} variant="outline">
+              Login
+            </Button>
+            <Button onClick={() => setRegisterFormOpen(true)} variant="outline">
+              Register
+            </Button>
+          </div>
         </div>
+
+        {loginFormOpen && (
+          <LoginForm
+            isOpen={loginFormOpen}
+            onClose={() => setLoginFormOpen(false)}
+            onSubmit={handleLogin}
+          />
+        )}
+
+        {registerFormOpen && (
+          <RegisterForm
+            isOpen={registerFormOpen}
+            onClose={() => setRegisterFormOpen(false)}
+            onSubmit={handleRegister}
+          />
+        )}
       </header>
     );
   }
@@ -59,7 +91,9 @@ export function Header() {
       </div>
 
       {/* Open mobile menu */}
-      {navMenuOpen && <MobileNav onClose={() => setnavMenuOpen(false)} />}
+      {navMenuOpen && (
+        <MobileNav onClose={() => setnavMenuOpen(false)} />
+      )}
     </header>
   );
 }

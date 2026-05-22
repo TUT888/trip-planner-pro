@@ -56,12 +56,7 @@ export function PackingForm({
     }
   });
 
-  const handleClose = () => {
-    onClose();
-    form.reset();
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (!form.validate()) return;
 
@@ -69,7 +64,6 @@ export function PackingForm({
       ...form.data,
       name: form.data.name.trim(),
     });
-    form.reset();
   };
 
   const handleChangeEvent = (e) => {
@@ -83,8 +77,8 @@ export function PackingForm({
   return (
     <FormModal
       isOpen={isOpen}
-      onClose={handleClose}
-      onSubmit={handleSubmit}
+      onClose={onClose}
+      onSubmit={handleSubmitEvent}
       title={itemToEdit ? "Edit Packing Item" : "Add Packing Item"}
     >
       <Field data-invalid={form.errors.name ? true : false}>

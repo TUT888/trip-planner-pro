@@ -7,16 +7,14 @@ import { Field } from "@/components/ui/field";
 export function TripForm({ isOpen, onClose, onSubmit }) {
   const [newTripName, setNewTripName] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmitEvent = (e) => {
+    e.preventDefault();
     if (newTripName.trim()) {
       const newTrip = {
         id: `trip${Date.now()}`,
         name: newTripName,
       };
       onSubmit(newTrip);
-
-      setNewTripName("");
-      onClose();
     }
   };
 
@@ -24,7 +22,7 @@ export function TripForm({ isOpen, onClose, onSubmit }) {
     <FormModal
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmitEvent}
       title="Create New Trip"
     >
       <Field>
@@ -36,7 +34,7 @@ export function TripForm({ isOpen, onClose, onSubmit }) {
           onChange={(e) => setNewTripName(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              handleSubmit();
+              handleSubmitEvent();
             }
           }}
         />

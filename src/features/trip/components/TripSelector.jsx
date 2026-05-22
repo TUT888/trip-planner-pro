@@ -15,7 +15,7 @@ export function TripSelector() {
     { id: "1", name: "Da Nang Trip" },
     { id: "2", name: "Ha Noi Trip" },
   ]);
-  const [newTripOpen, setNewTripOpen] = useState(false);
+  const [isTripFormOpen, setTripFormOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState("1");
 
   const handleSelectTrip = (tripId) => {
@@ -26,6 +26,8 @@ export function TripSelector() {
   const handleCreateTrip = (newTrip) => {
     setTrips([...trips, newTrip]);
     handleSelectTrip(newTrip.id);
+
+    setTripFormOpen(false);
   };
 
   return (
@@ -45,16 +47,18 @@ export function TripSelector() {
         </Select>
       </div>
 
-      <Button size="icon" variant="outline" onClick={() => setNewTripOpen(true)}>
+      <Button size="icon" variant="outline" onClick={() => setTripFormOpen(true)}>
         <Plus className="h-4 w-4" />
       </Button>
 
       {/* Form Modal */}
-      <TripForm
-        open={newTripOpen}
-        onOpenChange={setNewTripOpen}
-        onSubmitTrip={handleCreateTrip}
-      />
+      {isTripFormOpen && (
+        <TripForm
+          isOpen={isTripFormOpen}
+          onClose={() => setTripFormOpen(false)}
+          onSubmit={handleCreateTrip}
+        />
+      )}
     </div>
   );
 }

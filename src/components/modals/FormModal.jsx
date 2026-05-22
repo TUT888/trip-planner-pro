@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -13,16 +14,21 @@ export function FormModal({
   onClose,
   onSubmit,
   title, // Provide a suitable title for this form
+  description, // Optional, provide description for this form
+  submitLabel, // Optional, it will be used as button's name
   children, // Add your form elements here as the CHILDREN
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         {/* Header */}
-        <DialogHeader>
-          <DialogTitle className="text-primary uppercase text-xl text-center font-bold pb-2 border-b-2">
+        <DialogHeader className="pb-2 border-b-2 text-center">
+          <DialogTitle className="text-primary uppercase text-xl font-bold">
             {title}
           </DialogTitle>
+          <DialogDescription className="text-xs">
+            {description}
+          </DialogDescription>
         </DialogHeader>
 
         {/* Form content */}
@@ -37,7 +43,7 @@ export function FormModal({
               </Button>
             </DialogClose>
 
-            <Button type="submit">Save</Button>
+            <Button type="submit">{submitLabel || "Save"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
