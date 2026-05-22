@@ -4,7 +4,6 @@ import { calculatePackingProgress } from "./packingUtils";
 
 // Arrow function, direct lookup
 export const selectPackingChecklist = (state) => state.packing.checklist;
-export const selectPackingFilter = (state) => state.packing.filters;
 
 // Function declaration for derived values
 // input selector must pass in the state as the first argument (state, ...extraArgs) => ...
