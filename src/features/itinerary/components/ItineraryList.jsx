@@ -36,6 +36,8 @@ import {
 import { ItineraryCategoryIcon } from "@/features/itinerary/components/ItineraryCategoryIcon";
 
 
+const FILTER_ALL_VALUE = "all";
+
 
 function ItineraryEmptyState() {
     return (
@@ -59,11 +61,36 @@ function ItineraryEmptyState() {
 }
 
 function isItineraryOverdue(item) {
-    const activityDateTime = new Date(`${item.date}T${item.time}`);
+    const activityDateTime = getItineraryDateTime(item);
     const now = new Date();
     const status = normalizeItineraryStatus(item.status);
 
-    return activityDateTime < now && status !== ITINERARY_STATUS.DONE;
+    return Boolean(activityDateTime) && activityDateTime < now && status !== ITINERARY_STATUS.DONE;
+}
+
+function getItineraryDateTime(item) {
+    const dateTime = new Date(`${item.date}T${item.time || "00:00"}`);
+
+    return Number.isNaN(dateTime.getTime()) ? null : dateTime;
+}
+
+function compareItineraryDateTime(firstItem, secondItem) {
+    const firstDateTime = getItineraryDateTime(firstItem);
+    const secondDateTime = getItineraryDateTime(secondItem);
+    const now = Date.now();
+
+    if (!firstDateTime && !secondDateTime) return 0;
+    if (!firstDateTime) return 1;
+    if (!secondDateTime) return -1;
+
+    const firstDistance = Math.abs(firstDateTime.getTime() - now);
+    const secondDistance = Math.abs(secondDateTime.getTime() - now);
+
+    if (firstDistance !== secondDistance) {
+        return firstDistance - secondDistance;
+    }
+
+    return firstDateTime.getTime() - secondDateTime.getTime();
 }
 
 
@@ -141,17 +168,23 @@ export function ItineraryList() {
         });
     }
 
-    const filteredItineraryItems = itineraryItems.filter((item) => {
-        const matchesDate = !filters.date || item.date === filters.date;
-        const matchesCategory =
-            !filters.category || normalizeItineraryCategory(item.category) === filters.category;
-        const matchesStatus =
-            !filters.status || normalizeItineraryStatus(item.status) === filters.status;
-        const matchesPriority =
-            !filters.priority || normalizeItineraryPriority(item.priority) === filters.priority;
+    const filteredItineraryItems = itineraryItems
+        .filter((item) => {
+            const matchesDate = !filters.date || item.date === filters.date;
+            const matchesCategory =
+                !filters.category || normalizeItineraryCategory(item.category) === filters.category;
+            const matchesStatus =
+                !filters.status || normalizeItineraryStatus(item.status) === filters.status;
+            const matchesPriority =
+                !filters.priority || normalizeItineraryPriority(item.priority) === filters.priority;
 
-        return matchesDate && matchesCategory && matchesStatus && matchesPriority;
-    });
+            return matchesDate && matchesCategory && matchesStatus && matchesPriority;
+        })
+        .sort(compareItineraryDateTime);
+
+    function updateSelectFilter(filterName, value) {
+        updateFilter(filterName, value === FILTER_ALL_VALUE ? "" : value);
+    }
 
 
 
@@ -166,15 +199,16 @@ export function ItineraryList() {
                 />
 
                 <Select
-                    value={filters.category}
-                    onValueChange={(value) => updateFilter("category", value)}
+                    value={filters.category || FILTER_ALL_VALUE}
+                    onValueChange={(value) => updateSelectFilter("category", value)}
                 >
                     <SelectTrigger className="h-auto w-full max-w-full rounded-lg border-input bg-white px-2.5 py-2">
-                        <SelectValue placeholder="All categories" />
+                        <SelectValue />
                     </SelectTrigger>
 
                     <SelectContent>
                         <SelectGroup>
+                            <SelectItem value={FILTER_ALL_VALUE}>All categories</SelectItem>
                             {ITINERARY_CATEGORY_OPTIONS.map((category) => (
                                 <SelectItem key={category} value={category} textValue={category}>
                                     <CategoryOption category={category} />
@@ -184,31 +218,45 @@ export function ItineraryList() {
                     </SelectContent>
                 </Select>
 
-                <select
-                    value={filters.status}
-                    onChange={(event) => updateFilter("status", event.target.value)}
-                    className="rounded-lg border border-input px-2.5 py-2"
+                <Select
+                    value={filters.status || FILTER_ALL_VALUE}
+                    onValueChange={(value) => updateSelectFilter("status", value)}
                 >
-                    <option value="">All statuses</option>
-                    {ITINERARY_STATUS_OPTIONS.map((status) => (
-                        <option key={status} value={status}>
-                            {status}
-                        </option>
-                    ))}
-                </select>
+                    <SelectTrigger className="h-auto w-full max-w-full rounded-lg border-input bg-white px-2.5 py-2">
+                        <SelectValue />
+                    </SelectTrigger>
 
-                <select
-                    value={filters.priority}
-                    onChange={(event) => updateFilter("priority", event.target.value)}
-                    className="rounded-lg border border-input px-2.5 py-2"
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value={FILTER_ALL_VALUE}>All statuses</SelectItem>
+                            {ITINERARY_STATUS_OPTIONS.map((status) => (
+                                <SelectItem key={status} value={status}>
+                                    {status}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+
+                <Select
+                    value={filters.priority || FILTER_ALL_VALUE}
+                    onValueChange={(value) => updateSelectFilter("priority", value)}
                 >
-                    <option value="">All priorities</option>
-                    {ITINERARY_PRIORITY_OPTIONS.map((priority) => (
-                        <option key={priority} value={priority}>
-                            {priority}
-                        </option>
-                    ))}
-                </select>
+                    <SelectTrigger className="h-auto w-full max-w-full rounded-lg border-input bg-white px-2.5 py-2">
+                        <SelectValue />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value={FILTER_ALL_VALUE}>All priorities</SelectItem>
+                            {ITINERARY_PRIORITY_OPTIONS.map((priority) => (
+                                <SelectItem key={priority} value={priority}>
+                                    {priority}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
 
                 <Button type="button" variant="outline" onClick={resetFilters}>
                     Reset

@@ -22,6 +22,8 @@ import {
 import { useState } from "react";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
 import {
+    getItineraryPriorityClassName,
+    ITINERARY_STATUS_OPTIONS,
     normalizeItineraryCategory,
     normalizeItineraryPriority,
     normalizeItineraryStatus,
@@ -36,7 +38,21 @@ export function ItineraryCard(props) {
     const isOverdue = Boolean(props.isOverdue);
     const category = normalizeItineraryCategory(props.category) || props.category;
     const priority = normalizeItineraryPriority(props.priority) || props.priority;
+    const priorityClassName = getItineraryPriorityClassName(priority);
     const status = normalizeItineraryStatus(props.status) || props.status;
+
+    function handleStatusChange(nextStatus) {
+        props.onUpdate?.({
+            id: props.id,
+            activityTitle: props.activityTitle,
+            location: props.location,
+            date: props.date,
+            time: props.time,
+            category,
+            priority,
+            status: nextStatus,
+        });
+    }
 
     return (
         <>
@@ -84,8 +100,34 @@ export function ItineraryCard(props) {
                                 Overdue
                             </Badge>
                         )}
-                        <Badge className="bg-[#3DC59D] text-xs">{priority}</Badge>
-                        <Badge className="bg-[#3DC59D] text-xs">{status}</Badge>
+                        <Badge className={cn("text-xs", priorityClassName)}>{priority}</Badge>
+                        <div
+                            className="flex flex-wrap gap-1 rounded-full bg-white/65 p-1"
+                            role="group"
+                            aria-label={`Change status for ${props.activityTitle}`}
+                        >
+                            {ITINERARY_STATUS_OPTIONS.map((statusOption) => {
+                                const isSelected = statusOption === status;
+
+                                return (
+                                    <button
+                                        key={statusOption}
+                                        type="button"
+                                        aria-pressed={isSelected}
+                                        onClick={() => handleStatusChange(statusOption)}
+                                        className={cn(
+                                            "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3DC59D]/40",
+                                            isSelected
+                                                ? "bg-[#3DC59D] text-white shadow-sm"
+                                                : "text-gray-700 hover:bg-[#dff8f0] hover:text-gray-950"
+                                        )}
+                                    >
+                                        {statusOption}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
 

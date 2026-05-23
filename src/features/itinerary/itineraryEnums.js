@@ -45,6 +45,20 @@ export function normalizeItineraryPriority(value) {
     return normalizeEnumValue(value, ITINERARY_PRIORITY_OPTIONS);
 }
 
+export function getItineraryPriorityClassName(value) {
+    const priority = normalizeItineraryPriority(value);
+
+    switch (priority) {
+        case ITINERARY_PRIORITY.MEDIUM:
+            return "bg-yellow-100 text-yellow-900 border border-yellow-300";
+        case ITINERARY_PRIORITY.HIGH:
+            return "bg-red-100 text-red-900 border border-red-300";
+        case ITINERARY_PRIORITY.LOW:
+        default:
+            return "bg-[#3DC59D] text-white";
+    }
+}
+
 export function normalizeItineraryStatus(value) {
     return normalizeEnumValue(value, ITINERARY_STATUS_OPTIONS);
 }
