@@ -17,6 +17,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    ITINERARY_CATEGORY_OPTIONS,
+    ITINERARY_PRIORITY_OPTIONS,
+    ITINERARY_STATUS_OPTIONS,
+    normalizeItineraryCategory,
+    normalizeItineraryPriority,
+    normalizeItineraryStatus,
+} from "@/features/itinerary/itineraryEnums";
 
 
 function parseDateString(dateString) {
@@ -42,9 +50,9 @@ export function ItineraryForm({ initialValues, onSubmit }) {
         location: initialValues?.location || "",
         date: initialValues?.date || "",
         time: initialValues?.time || "12:30:00",
-        category: initialValues?.category?.toLowerCase() || "",
-        priority: initialValues?.priority?.toLowerCase() || "",
-        status: initialValues?.status?.toLowerCase().replace(" ", "_") || "",
+        category: normalizeItineraryCategory(initialValues?.category),
+        priority: normalizeItineraryPriority(initialValues?.priority),
+        status: normalizeItineraryStatus(initialValues?.status),
     });
     const [errors, setErrors] = useState({});
 
@@ -200,12 +208,11 @@ export function ItineraryForm({ initialValues, onSubmit }) {
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="transport">Transport</SelectItem>
-                            <SelectItem value="food">Food</SelectItem>
-                            <SelectItem value="sightseeing">Sightseeing</SelectItem>
-                            <SelectItem value="shopping">Shopping</SelectItem>
-                            <SelectItem value="hotel">Hotel</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
+                            {ITINERARY_CATEGORY_OPTIONS.map((category) => (
+                                <SelectItem key={category} value={category}>
+                                    {category}
+                                </SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -228,9 +235,11 @@ export function ItineraryForm({ initialValues, onSubmit }) {
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="low">Low</SelectItem>
-                            <SelectItem value="medium">Medium</SelectItem>
-                            <SelectItem value="high">High</SelectItem>
+                            {ITINERARY_PRIORITY_OPTIONS.map((priority) => (
+                                <SelectItem key={priority} value={priority}>
+                                    {priority}
+                                </SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -253,9 +262,11 @@ export function ItineraryForm({ initialValues, onSubmit }) {
 
                     <SelectContent>
                         <SelectGroup>
-                            <SelectItem value="planned">Planned</SelectItem>
-                            <SelectItem value="in_progress">In Progress</SelectItem>
-                            <SelectItem value="done">Done</SelectItem>
+                            {ITINERARY_STATUS_OPTIONS.map((status) => (
+                                <SelectItem key={status} value={status}>
+                                    {status}
+                                </SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>

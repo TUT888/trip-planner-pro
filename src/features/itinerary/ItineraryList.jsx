@@ -16,6 +16,15 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
+import {
+    ITINERARY_CATEGORY_OPTIONS,
+    ITINERARY_PRIORITY_OPTIONS,
+    ITINERARY_STATUS,
+    ITINERARY_STATUS_OPTIONS,
+    normalizeItineraryCategory,
+    normalizeItineraryPriority,
+    normalizeItineraryStatus,
+} from "@/features/itinerary/itineraryEnums";
 
 
 
@@ -43,8 +52,9 @@ function ItineraryEmptyState() {
 function isItineraryOverdue(item) {
     const activityDateTime = new Date(`${item.date}T${item.time}`);
     const now = new Date();
+    const status = normalizeItineraryStatus(item.status);
 
-    return activityDateTime < now && item.status !== "Done";
+    return activityDateTime < now && status !== ITINERARY_STATUS.DONE;
 }
 
 
@@ -124,9 +134,12 @@ export function ItineraryList() {
 
     const filteredItineraryItems = itineraryItems.filter((item) => {
         const matchesDate = !filters.date || item.date === filters.date;
-        const matchesCategory = !filters.category || item.category === filters.category;
-        const matchesStatus = !filters.status || item.status === filters.status;
-        const matchesPriority = !filters.priority || item.priority === filters.priority;
+        const matchesCategory =
+            !filters.category || normalizeItineraryCategory(item.category) === filters.category;
+        const matchesStatus =
+            !filters.status || normalizeItineraryStatus(item.status) === filters.status;
+        const matchesPriority =
+            !filters.priority || normalizeItineraryPriority(item.priority) === filters.priority;
 
         return matchesDate && matchesCategory && matchesStatus && matchesPriority;
     });
@@ -149,12 +162,11 @@ export function ItineraryList() {
                     className="rounded-lg border border-input px-2.5 py-2"
                 >
                     <option value="">All categories</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Food">Food</option>
-                    <option value="Sightseeing">Sightseeing</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Hotel">Hotel</option>
-                    <option value="Other">Other</option>
+                    {ITINERARY_CATEGORY_OPTIONS.map((category) => (
+                        <option key={category} value={category}>
+                            {category}
+                        </option>
+                    ))}
                 </select>
 
                 <select
@@ -163,9 +175,11 @@ export function ItineraryList() {
                     className="rounded-lg border border-input px-2.5 py-2"
                 >
                     <option value="">All statuses</option>
-                    <option value="Planned">Planned</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
+                    {ITINERARY_STATUS_OPTIONS.map((status) => (
+                        <option key={status} value={status}>
+                            {status}
+                        </option>
+                    ))}
                 </select>
 
                 <select
@@ -174,9 +188,11 @@ export function ItineraryList() {
                     className="rounded-lg border border-input px-2.5 py-2"
                 >
                     <option value="">All priorities</option>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
+                    {ITINERARY_PRIORITY_OPTIONS.map((priority) => (
+                        <option key={priority} value={priority}>
+                            {priority}
+                        </option>
+                    ))}
                 </select>
 
                 <Button type="button" variant="outline" onClick={resetFilters}>

@@ -23,6 +23,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
+import {
+    normalizeItineraryPriority,
+    normalizeItineraryStatus,
+} from "@/features/itinerary/itineraryEnums";
 
 
 
@@ -30,6 +34,9 @@ export function ItineraryCard(props) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const isOverdue = Boolean(props.isOverdue);
+    const priority = normalizeItineraryPriority(props.priority) || props.priority;
+    const status = normalizeItineraryStatus(props.status) || props.status;
+
     return (
         <>
             <DropdownMenu>
@@ -69,8 +76,8 @@ export function ItineraryCard(props) {
                                 Overdue
                             </Badge>
                         )}
-                        <Badge className="bg-[#3DC59D] text-xs">{props.priority}</Badge>
-                        <Badge className="bg-[#3DC59D] text-xs">{props.status}</Badge>
+                        <Badge className="bg-[#3DC59D] text-xs">{priority}</Badge>
+                        <Badge className="bg-[#3DC59D] text-xs">{status}</Badge>
                     </div>
                 </div>
 
