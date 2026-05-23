@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 
 export function DeleteConfirmationModal({
   isOpen,
@@ -22,6 +22,8 @@ export function DeleteConfirmationModal({
               <DialogTitle className="text-destructive font-bold">
                 {title || "Delete Confirmation"}
               </DialogTitle>
+              <DialogDescription className="text-center">
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>

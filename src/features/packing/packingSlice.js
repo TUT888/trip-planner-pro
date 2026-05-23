@@ -1,68 +1,69 @@
-import { loadData, saveData, TRIP_PROPERTIES } from "@/services/tripDataService";
 import { createSlice } from "@reduxjs/toolkit";
-import { PACKING_STATUS } from "./packingConstants";
+import { addToChecklist, clearAll, fetchPackingItems, removeFromCheckList, togglePacked, updateCheckList } from "./packingThunks";
 
 const initialState = {
-  checklist: loadData(TRIP_PROPERTIES.PACKING_LIST) ?? []
+  checklist: [],
+  status: "idle",
+  error: null,
 };
 
 export const packingSlice = createSlice({
   name: "packing",
   initialState,
-  reducers: {
-    addToChecklist: (state, action) => {
-      let newId = 1;
-      if (state.checklist.length > 0) {
-        newId = state.checklist[state.checklist.length-1].id + 1;
-      }
-      state.checklist.push({
-        id: newId,
-        ...action.payload
-      });
-      saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-    },
-    updateCheckList: (state, action) => {
-      const itemIdx = state.checklist.findIndex(
-        (item) => item.id === action.payload.id,
-      );
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // Handle fetch
+      .addCase(fetchPackingItems.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchPackingItems.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.checklist = action.payload;
+      })
+      .addCase(fetchPackingItems.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      
+      // Handle add
+      .addCase(addToChecklist.fulfilled, (state, action) => {
+        state.checklist.push(action.payload);
+      })
+      
+      // Handle update
+      .addCase(updateCheckList.fulfilled, (state, action) => {
+        const itemIdx = state.checklist.findIndex(
+          (item) => item.id === action.payload.id,
+        );
 
-      if (itemIdx !== -1) {
-        state.checklist[itemIdx] = {
-          ...state.checklist[itemIdx],
-          ...action.payload,
-        };
-      }
-      saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-    },
-    removeFromCheckList: (state, action) => {
-      state.checklist = state.checklist.filter(
-        (item) => item.id !== action.payload,
-      );
-      saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-    },
-    togglePacked: (state, action) => {
-      const item = state.checklist.find((i) => i.id === action.payload);
-      if (item) {
-        item.packedStatus = item.packedStatus === PACKING_STATUS.PACKED
-            ? PACKING_STATUS.NOT_PACKED
-            : PACKING_STATUS.PACKED;
-        saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-      }
-    },
-    clearAll: (state) => {
-      state.checklist = [];
-      saveData(TRIP_PROPERTIES.PACKING_LIST, state.checklist);
-    }
+        if (itemIdx !== -1) state.checklist[itemIdx] = action.payload;
+      })
+      
+      // Handle remove
+      .addCase(removeFromCheckList.fulfilled, (state, action) => {
+        state.checklist = state.checklist.filter(
+          (item) => item.id !== action.payload,
+        );
+      })
+      
+      // Handle toggle checklist
+      .addCase(togglePacked.fulfilled, (state, action) => {
+        const itemIdx = state.checklist.findIndex(
+          (item) => item.id === action.payload.id,
+        );
+
+        if (itemIdx !== -1) state.checklist[itemIdx] = action.payload;
+      })
+      
+      // Handle clear all
+      .addCase(clearAll.fulfilled, (state, action) => {
+        state.checklist = state.checklist.filter(
+          (item) => item.tripId !== action.payload,
+        );
+      });
   },
 });
-
-// Actions 
-export const {
-  addToChecklist,
-  updateCheckList,
-  removeFromCheckList,
-  togglePacked,
-  clearAll
-} = packingSlice.actions;
 
 export default packingSlice.reducer;

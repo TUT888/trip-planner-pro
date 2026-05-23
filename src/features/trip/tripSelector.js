@@ -1,0 +1,1 @@
+export const selectSelectedTripId = (state) => state.trips.selectedTripId;

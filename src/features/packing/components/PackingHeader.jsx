@@ -1,25 +1,26 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Plus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PackingForm } from "./PackingForm";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
 import { useModal } from "@/hooks/useModal";
 
-import { addToChecklist, clearAll } from "../packingSlice";
+import { addToChecklist, clearAll } from "../packingThunks";
 
 export function PackingHeader() {
   const dispatch = useDispatch();
+  const selectedTripId = useSelector((state) => state.trips.selectedTripId);
 
   const formModal = useModal(null);
   const handleSubmitForm = (newItem) => {
     formModal.handleClose();
-    dispatch(addToChecklist(newItem));
+    dispatch(addToChecklist({ tripId: selectedTripId, item: newItem }));
   };
 
   const deleteModal = useModal({ id: "", name: "" });
   const handleConfirmClearAll = () => {
     deleteModal.handleClose();
-    dispatch(clearAll());
+    dispatch(clearAll(selectedTripId));
   };
 
   return (
@@ -38,6 +39,7 @@ export function PackingHeader() {
           variant="ghost"
           size="default"
           onClick={() => formModal.handleOpen()}
+          disabled={!selectedTripId}
           className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
         >
           <Plus aria-hidden="true" />
@@ -49,6 +51,7 @@ export function PackingHeader() {
           variant="destructive"
           size="default"
           onClick={() => deleteModal.handleOpen()}
+          disabled={!selectedTripId}
         >
           <RotateCcw aria-hidden="true" />
           Clear

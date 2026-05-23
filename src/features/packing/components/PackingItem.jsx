@@ -45,7 +45,7 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
         <Input
           type="checkbox"
           checked={isPacked}
-          onChange={() => onTogglePacked(item.id)}
+          onChange={onTogglePacked}
           aria-label={`Mark "${item.name}" as ${item.packedStatus}`}
           className="w-5 h-5 cursor-pointer accent-primary rounded"
         />
