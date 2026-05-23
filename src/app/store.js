@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import budgetReducer from '../features/budget/budgetSlice';
 import packingReducer from "@/features/packing/packingSlice";
 import tripReducer from "@/features/trip/tripSlice";
 import itineraryReducer from "@/features/itinerary/itinerarySlice";
