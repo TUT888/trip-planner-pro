@@ -1,5 +1,5 @@
 import { CalendarDays } from "lucide-react";
-import { ItineraryCard } from "./ItineraryCard";
+import { ItineraryCard } from "./components/ItineraryCard";
 import {
     loadData,
     saveData,
@@ -33,7 +33,7 @@ import {
     normalizeItineraryPriority,
     normalizeItineraryStatus,
 } from "@/features/itinerary/itineraryEnums";
-import { ItineraryCategoryIcon } from "@/features/itinerary/ItineraryCategoryIcon";
+import { ItineraryCategoryIcon } from "@/features/itinerary/components/ItineraryCategoryIcon";
 
 
 

@@ -28,7 +28,7 @@ import {
     normalizeItineraryPriority,
     normalizeItineraryStatus,
 } from "@/features/itinerary/itineraryEnums";
-import { ItineraryCategoryIcon } from "@/features/itinerary/ItineraryCategoryIcon";
+import { ItineraryCategoryIcon } from "@/features/itinerary/components/ItineraryCategoryIcon";
 
 
 
