@@ -6,6 +6,7 @@ import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationM
 import { useModal } from "@/hooks/useModal";
 
 import { addToChecklist, clearAll } from "../packingSlice";
+import { PageTitle } from "@/components/PageTitle";
 
 export function PackingHeader() {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export function PackingHeader() {
     dispatch(addToChecklist(newItem));
   };
 
-  const deleteModal = useModal({ id: "", name: "" });
+  const deleteModal = useModal(null);
   const handleConfirmClearAll = () => {
     deleteModal.handleClose();
     dispatch(clearAll());
@@ -25,12 +26,10 @@ export function PackingHeader() {
   return (
     <div className="flex flex-row justify-between items-center">
       {/* Title */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-4xl font-semibold text-gray-800">
-          Packing Checklist
-        </h1>
-        <p className="text-sm text-gray-500">Manage your packing progress</p>
-      </div>
+      <PageTitle 
+        title="Packing Checklist"
+        subtitle="Manage your packing progress"
+      />
 
       {/* Button */}
       <div className="flex flex-row items-center gap-2">

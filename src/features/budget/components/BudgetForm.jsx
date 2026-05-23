@@ -133,13 +133,6 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">Status</label>
-          <Input type="text" value={formData.status} disabled className="uppercase" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">Estimated Cost ($)</label>
           <Input
             type="number"
@@ -153,7 +146,9 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
           />
           {errors.estimatedCost && <p className="text-xs text-destructive">{errors.estimatedCost}</p>}
         </div>
+      </div>
 
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">Actual Cost ($)</label>
           <Input
@@ -167,6 +162,11 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
             className={errors.actualCost ? 'border-destructive' : ''}
           />
           {errors.actualCost && <p className="text-xs text-destructive">{errors.actualCost}</p>}
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-700">Status</label>
+          <Input type="text" value={formData.status} disabled className="uppercase" />
         </div>
       </div>
     </FormModal>

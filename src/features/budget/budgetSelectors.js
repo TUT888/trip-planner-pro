@@ -21,7 +21,7 @@ export const selectBudgetTotals = createSelector(
       }
     });
 
-    const diff = totalActual - totalEstimated;
+    const diff = totalEstimated - totalActual;
     const diffPercentage = totalEstimated > 0 ? (diff / totalEstimated) * 100 : 0;
     const remainingBudget = initialBudget - totalPaidActual;
     const usagePercentage = initialBudget > 0 ? (totalPaidActual / initialBudget) * 100 : 0;

@@ -10,21 +10,21 @@ export function BudgetItem({ item, onEdit, onDelete }) {
 
   return (
     <TableRow>
-      <TableCell className="font-medium text-gray-800">{item.name}</TableCell>
-      <TableCell>
+      <TableCell className="text-center font-medium text-gray-800">{item.name}</TableCell>
+      <TableCell className="text-center">
         <Badge className="border-primary/30 bg-primary/10 text-primary">{item.category}</Badge>
       </TableCell>
-      <TableCell className="text-gray-700">{formatCurrency(item.estimatedCost)}</TableCell>
-      <TableCell className="font-semibold text-primary">
+      <TableCell className="text-center text-gray-700">{formatCurrency(item.estimatedCost)}</TableCell>
+      <TableCell className="text-center font-semibold text-primary">
         {item.actualCost || item.actualCost === 0 ? formatCurrency(item.actualCost) : <span className="text-gray-400">--</span>}
       </TableCell>
-      <TableCell>
+      <TableCell className="text-center">
         <Badge className={isPaid ? 'border-primary/20 bg-primary text-primary-foreground' : 'border-border bg-muted text-gray-700'}>
           {isPaid ? 'Paid' : 'Unpaid'}
         </Badge>
       </TableCell>
       <TableCell>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center justify-center gap-1">
           <Button variant="ghost" size="icon-sm" onClick={() => onEdit(item)} title="Edit" aria-label="Edit item">
             <Edit2 className="h-4 w-4" />
           </Button>

@@ -4,11 +4,10 @@ import { selectBudgetItems, selectBudgetTotals } from '../budgetSelectors';
 import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from '../budgetSlice';
 import { BudgetItem } from './BudgetItem';
 import { BudgetForm } from './BudgetForm';
-import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
 export function BudgetList({ selectedCategory }) {
   const allItems = useSelector(selectBudgetItems);
@@ -65,54 +64,49 @@ export function BudgetList({ selectedCategory }) {
     <div className="mt-8 space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
-          <h1 className="text-4xl font-semibold text-gray-800">Budget Details</h1>
+          <h3 className="text-2xl font-semibold text-gray-800">Budget Details</h3>
           <p className="text-sm text-gray-500">
-            Manage your spending plan {selectedCategory && selectedCategory !== 'All' ? `for ${selectedCategory}` : ''}
+            Manage spending plan {selectedCategory && selectedCategory !== 'All' ? `for ${selectedCategory.toLowerCase()}` : 'for entire trip'}
           </p>
         </div>
 
-        <Button onClick={() => handleOpenForm()}>
+        <Button variant="ghost" onClick={() => handleOpenForm()} className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary">
           <Plus className="h-4 w-4" />
           Add Item
         </Button>
       </div>
 
-      <Card className="w-full">
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Item Name</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Estimated</TableHead>
-                <TableHead>Actual</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+      <Table className="w-full min-w-190 table-fixed border-collapse">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-gray-500 text-center">Item Name</TableHead>
+            <TableHead className="text-gray-500 text-center">Category</TableHead>
+            <TableHead className="text-gray-500 text-center">Estimated</TableHead>
+            <TableHead className="text-gray-500 text-center">Actual</TableHead>
+            <TableHead className="text-gray-500 text-center">Status</TableHead>
+            <TableHead className="text-gray-500 text-center">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
 
-            <TableBody>
-              {items.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-gray-500">
-                    No budget items found. {selectedCategory !== 'All' ? 'Try selecting a different category.' : 'Add one to get started!'}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                items.map((item) => (
-                  <BudgetItem
-                    key={item.id}
-                    item={item}
-                    onEdit={handleOpenForm}
-                    onDelete={handleOpenDelete}
-                  />
-                ))
-              )}
-            </TableBody>
-          </Table>
-
-        </CardContent>
-      </Card>
+        <TableBody>
+          {items.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} className="py-10 text-center text-gray-500">
+                No budget items found. {selectedCategory !== 'All' ? 'Try selecting a different category.' : 'Add one to get started!'}
+              </TableCell>
+            </TableRow>
+          ) : (
+            items.map((item) => (
+              <BudgetItem
+                key={item.id}
+                item={item}
+                onEdit={handleOpenForm}
+                onDelete={handleOpenDelete}
+              />
+            ))
+          )}
+        </TableBody>
+      </Table>
 
       {isFormOpen && (
         <BudgetForm
@@ -124,12 +118,18 @@ export function BudgetList({ selectedCategory }) {
         />
       )}
 
-      <ConfirmDeleteModal
-        isOpen={isDeleteModalOpen && Boolean(itemToDelete)}
-        itemName={itemToDelete?.name}
-        onConfirm={handleConfirmDelete}
-        onClose={handleCloseDelete}
-      />
+      {isDeleteModalOpen && (
+        <DeleteConfirmationModal 
+          isOpen={isDeleteModalOpen && Boolean(itemToDelete)}
+          title="Delete Budget Item"
+          onClose={handleCloseDelete}
+          onConfirm={handleConfirmDelete}
+        >
+          Are you sure you want to delete{' '}
+          <span className="font-semibold text-gray-800">{itemToDelete?.name}</span>? 
+          This action cannot be undone.
+        </DeleteConfirmationModal>
+      )}
     </div>
   );
 }
