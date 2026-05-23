@@ -1,5 +1,5 @@
 import './Itinerary.css';
-import { ItineraryList } from "@/features/itinerary/ItineraryList";
+import { ItineraryList } from "@/features/itinerary/components/ItineraryList";
 
 export function Itinerary() {
   return (

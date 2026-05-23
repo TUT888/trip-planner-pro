@@ -3,13 +3,11 @@ import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuGro
 import { EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
     AlertDialog,
@@ -123,50 +121,32 @@ export function ItineraryCard(props) {
 
             {/* DialogContent is a sibling of DropdownMenu so portals/focus behave correctly */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent
-                    showCloseButton
-                    className={cn(
-                        "top-0 right-0 bottom-0 left-auto h-full max-h-dvh w-full max-w-md translate-x-0 translate-y-0 rounded-none border-l sm:max-w-lg",
-                        "flex flex-col gap-0 overflow-hidden p-0 data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right"
-                    )}
-                >
-                    <DialogHeader className="border-b px-6 py-4 text-left">
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
                         <DialogTitle>Update itinerary</DialogTitle>
                         <DialogDescription className="sr-only">
                             Edit activity details for this itinerary item.
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="flex flex-col gap-5 overflow-y-auto px-6 py-4">
-                        <ItineraryForm
-                            initialValues={{
-                                activityTitle: props.activityTitle,
-                                location: props.location,
-                                date: props.date,
-                                time: props.time,
-                                category: props.category,
-                                priority: props.priority,
-                                status: props.status,
-                            }}
-                            onSubmit={(formData) => {
-                                props.onUpdate?.({
-                                    id: props.id,
-                                    ...formData,
-                                });
-                                setEditOpen(false);
-                            }}
-
-                        />
-                    </div>
-
-                    <div className="mt-auto flex justify-end gap-2 border-t px-6 py-4">
-                        <DialogClose asChild>
-                            <Button type="button" variant="outline">
-                                Cancel
-                            </Button>
-                        </DialogClose>
-                        <Button type="button">Update</Button>
-                    </div>
+                    <ItineraryForm
+                        initialValues={{
+                            activityTitle: props.activityTitle,
+                            location: props.location,
+                            date: props.date,
+                            time: props.time,
+                            category: props.category,
+                            priority: props.priority,
+                            status: props.status,
+                        }}
+                        onSubmit={(formData) => {
+                            props.onUpdate?.({
+                                id: props.id,
+                                ...formData,
+                            });
+                            setEditOpen(false);
+                        }}
+                    />
                 </DialogContent>
             </Dialog>
 

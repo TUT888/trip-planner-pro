@@ -1,5 +1,5 @@
 import { CalendarDays } from "lucide-react";
-import { ItineraryCard } from "./components/ItineraryCard";
+import { ItineraryCard } from "./ItineraryCard";
 import {
     loadData,
     saveData,
@@ -220,7 +220,7 @@ export function ItineraryList() {
                 </Button>
             </div>
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-2xl">
                     <DialogHeader>
                         <DialogTitle>Create itinerary</DialogTitle>
                         <DialogDescription className="sr-only">

@@ -142,8 +142,9 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                     <p className="text-sm text-red-500">{errors.location}</p>
                 )}
             </div>
-            <div className="flex flex-col gap-2">
-                <span className="text-sm font-medium">Date</span>
+            <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex min-w-0 flex-col gap-2">
+                    <span className="text-sm font-medium">Date</span>
 
                 <Popover>
                     <PopoverTrigger asChild>
@@ -175,7 +176,7 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                 )}
 
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex min-w-0 flex-col gap-2">
                 <span className="text-sm font-medium">Time</span>
 
                 <Field>
@@ -195,8 +196,10 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                 )}
 
             </div>
-            <div className="flex flex-col gap-2">
-                <span className="text-sm font-medium">Category</span>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+                <div className="flex min-w-0 flex-col gap-2">
+                    <span className="text-sm font-medium">Category</span>
 
                 <Select
                     value={formData.category}
@@ -222,7 +225,7 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                 )}
 
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex min-w-0 flex-col gap-2">
                 <span className="text-sm font-medium">Priority</span>
 
                 <Select
@@ -249,7 +252,7 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                 )}
 
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex min-w-0 flex-col gap-2">
                 <span className="text-sm font-medium">Status</span>
 
                 <Select
@@ -275,6 +278,7 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                     <p className="text-sm text-red-500">{errors.status}</p>
                 )}
 
+            </div>
             </div>
 
 
