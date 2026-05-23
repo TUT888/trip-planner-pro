@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBudgetItems, selectBudgetTotals } from '../budgetSelectors';
-import { deleteBudgetItem } from '../budgetSlice';
+import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from '../budgetSlice';
 import { BudgetItem } from './BudgetItem';
-import { formatCurrency } from '../../../utils/formatUtils';
 import { BudgetForm } from './BudgetForm';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export function BudgetList({ selectedCategory }) {
   const allItems = useSelector(selectBudgetItems);
@@ -15,10 +17,10 @@ export function BudgetList({ selectedCategory }) {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
-  
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const filteredByCategory = selectedCategory && selectedCategory !== 'All' 
+  const filteredByCategory = selectedCategory && selectedCategory !== 'All'
     ? allItems.filter(item => item.category === selectedCategory)
     : allItems;
   const items = filteredByCategory;
@@ -50,72 +52,84 @@ export function BudgetList({ selectedCategory }) {
     }
   };
 
+  const handleFormSubmit = (formValues) => {
+    if (itemToEdit) {
+      dispatch(updateBudgetItem({ ...formValues, id: itemToEdit.id }));
+      return;
+    }
+
+    dispatch(addBudgetItem({ ...formValues, id: Date.now() }));
+  };
+
   return (
-    <div className="mt-8">
-      <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <h3 className="font-black text-[38px] text-[#2d1a31]">
-          Budget Details {selectedCategory && selectedCategory !== 'All' && <span className="text-pink-500 font-medium">({selectedCategory})</span>}
-        </h3>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => handleOpenForm()}
-            className="inline-flex items-center gap-2 rounded-full bg-[#ef11aa] px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-white"
-          >
-            <Plus className="h-4 w-4" />
-            Add Item
-          </button>
+    <div className="mt-8 space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-4xl font-semibold text-gray-800">Budget Details</h1>
+          <p className="text-sm text-gray-500">
+            Manage your spending plan {selectedCategory && selectedCategory !== 'All' ? `for ${selectedCategory}` : ''}
+          </p>
         </div>
+
+        <Button onClick={() => handleOpenForm()}>
+          <Plus className="h-4 w-4" />
+          Add Item
+        </Button>
       </div>
 
-      <div className="overflow-hidden rounded-[24px] border border-[#eadfec] bg-[#f8f3f8]">
-        <div className="grid grid-cols-12 gap-3 border-b border-[#e8dbe9] px-8 py-6 text-[10px] font-black uppercase tracking-[0.24em] text-[#ac9bb1]">
-          <div className="col-span-4 text-left">Item Name</div>
-          <div className="col-span-2 text-left">Category</div>
-          <div className="col-span-2 text-left">Estimated</div>
-          <div className="col-span-2 text-left">Actual</div>
-          <div className="col-span-1 text-left">Status</div>
-          <div className="col-span-1 text-left">Actions</div>
-        </div>
+      <Card className="w-full">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Item Name</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Estimated</TableHead>
+                <TableHead>Actual</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
 
-        <div className="divide-y divide-[#ece0ee]">
-          {items.length === 0 ? (
-            <div className="py-12 text-center text-gray-500">
-              <p>No budget items found. {selectedCategory !== 'All' ? 'Try selecting a different category.' : 'Add one to get started!'}</p>
-            </div>
-          ) : (
-            items.map(item => (
-              <BudgetItem 
-                key={item.id} 
-                item={item} 
-                onEdit={handleOpenForm} 
-                onDelete={handleOpenDelete} 
-              />
-            ))
-          )}
-        </div>
+            <TableBody>
+              {items.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="py-10 text-center text-gray-500">
+                    No budget items found. {selectedCategory !== 'All' ? 'Try selecting a different category.' : 'Add one to get started!'}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                items.map((item) => (
+                  <BudgetItem
+                    key={item.id}
+                    item={item}
+                    onEdit={handleOpenForm}
+                    onDelete={handleOpenDelete}
+                  />
+                ))
+              )}
+            </TableBody>
+          </Table>
 
-        <div className="grid grid-cols-12 gap-3 border-t border-[#e8dbe9] bg-[#f5edf5] px-8 py-5 font-black">
-          <div className="col-span-8 text-sm uppercase tracking-wider text-[#7f6a87]">Total Summary</div>
-          <div className="col-span-2 text-[#7f6a87]">{formatCurrency(totals.totalEstimated)}</div>
-          <div className="col-span-2 text-[#ef11aa]">{formatCurrency(totals.totalActual)}</div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {isFormOpen && (
-        <BudgetForm 
-          itemToEdit={itemToEdit} 
-          onClose={handleCloseForm} 
+        <BudgetForm
+          isOpen={isFormOpen}
+          initialValues={itemToEdit}
+          remainingBudget={totals.remainingBudget}
+          onSubmit={handleFormSubmit}
+          onClose={handleCloseForm}
         />
       )}
 
-      {isDeleteModalOpen && itemToDelete && (
-        <ConfirmDeleteModal 
-          itemName={itemToDelete.name} 
-          onConfirm={handleConfirmDelete} 
-          onClose={handleCloseDelete} 
-        />
-      )}
+      <ConfirmDeleteModal
+        isOpen={isDeleteModalOpen && Boolean(itemToDelete)}
+        itemName={itemToDelete?.name}
+        onConfirm={handleConfirmDelete}
+        onClose={handleCloseDelete}
+      />
     </div>
   );
 }

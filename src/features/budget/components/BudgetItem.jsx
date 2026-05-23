@@ -1,44 +1,38 @@
 import { Edit2, Trash2 } from 'lucide-react';
 import { formatCurrency } from '../../../utils/formatUtils';
 import { BUDGET_STATUS } from '../budgetConstants';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { TableCell, TableRow } from '@/components/ui/table';
 
 export function BudgetItem({ item, onEdit, onDelete }) {
   const isPaid = item.status === BUDGET_STATUS.PAID;
-  
-  return (
-    <div className="grid grid-cols-12 gap-3 px-8 py-6 items-center transition-colors hover:bg-[#f6ecf6]">
-      <div className="col-span-4 font-bold text-[#2f1b34]">
-        {item.name}
-      </div>
-      
-      <div className="col-span-2">
-        <span className="inline-flex items-center rounded-full border border-[#dac8df] bg-[#f0e9f3] px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#9d6ab0]">
-          {item.category}
-        </span>
-      </div>
-      
-      <div className="col-span-2 font-black text-[#a18da8]">
-        {formatCurrency(item.estimatedCost)}
-      </div>
-      
-      <div className="col-span-2 font-black text-[#ef11aa]">
-        {item.actualCost || item.actualCost === 0 ? formatCurrency(item.actualCost) : <span className="italic text-gray-300">--</span>}
-      </div>
-      
-      <div className="col-span-1">
-        <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] ${isPaid ? 'bg-[#ef11aa] text-white' : 'bg-[#f9d7f0] text-[#df169f]'}`}>
-          {isPaid ? 'Paid' : 'Unpaid'}
-        </span>
-      </div>
 
-      <div className="col-span-1 flex items-center gap-2 text-[#94849b]">
-        <button onClick={() => onEdit(item)} className="rounded-full p-2 hover:bg-[#efe2ef] hover:text-[#d81ca2]" title="Edit">
-          <Edit2 className="w-4 h-4" />
-        </button>
-        <button onClick={() => onDelete(item)} className="rounded-full p-2 hover:bg-[#efe2ef] hover:text-[#cf3a72]" title="Delete">
-          <Trash2 className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
+  return (
+    <TableRow>
+      <TableCell className="font-medium text-gray-800">{item.name}</TableCell>
+      <TableCell>
+        <Badge className="border-primary/30 bg-primary/10 text-primary">{item.category}</Badge>
+      </TableCell>
+      <TableCell className="text-gray-700">{formatCurrency(item.estimatedCost)}</TableCell>
+      <TableCell className="font-semibold text-primary">
+        {item.actualCost || item.actualCost === 0 ? formatCurrency(item.actualCost) : <span className="text-gray-400">--</span>}
+      </TableCell>
+      <TableCell>
+        <Badge className={isPaid ? 'border-primary/20 bg-primary text-primary-foreground' : 'border-border bg-muted text-gray-700'}>
+          {isPaid ? 'Paid' : 'Unpaid'}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon-sm" onClick={() => onEdit(item)} title="Edit" aria-label="Edit item">
+            <Edit2 className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon-sm" onClick={() => onDelete(item)} title="Delete" aria-label="Delete item">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
   );
 }
