@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { PACKING_STATUS } from "../packingConstants";
 import { packingListStyle } from "../packingStyles";
+import { TableCell, TableRow } from "@/components/ui/table";
 
 // Main component 
 export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
@@ -14,38 +15,33 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
   const isPacked = item.packedStatus === PACKING_STATUS.PACKED;
 
   return (
-    <tr
-      className={cn(
-        "border-b border-gray-100 transition-colors",
-        isPacked ? "bg-gray-100" : "hover:bg-gray-50",
-      )}
-    >
-      <td className="px-3 py-3 text-sm text-gray-400 w-10 select-none">
+    <TableRow>
+      <TableCell className="text-center">
         {index}
-      </td>
+      </TableCell>
 
-      <td
+      <TableCell
         className={cn(
-          "px-3 py-3 text-sm font-medium transition-colors",
+          "font-medium",
           isPacked ? "line-through text-gray-400" : "text-gray-800",
         )}
       >
         {item.name}
-      </td>
+      </TableCell>
 
-      <td className="px-3 py-3 text-center">
+      <TableCell className="text-center">
         <Badge className={categoryStyle}>{item.category}</Badge>
-      </td>
+      </TableCell>
 
-      <td className="px-3 py-3 text-center">
+      <TableCell className="text-center">
         {item.quantity}
-      </td>
+      </TableCell>
 
-      <td className="px-3 py-3 text-center">
+      <TableCell className="text-center">
         <Badge className={requiredStyle}>{item.requiredStatus}</Badge>
-      </td>
+      </TableCell>
 
-      <td className="px-3 py-3 text-center">
+      <TableCell className="text-center">
         <Input
           type="checkbox"
           checked={isPacked}
@@ -53,10 +49,10 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
           aria-label={`Mark "${item.name}" as ${item.packedStatus}`}
           className="w-5 h-5 cursor-pointer accent-primary rounded"
         />
-      </td>
+      </TableCell>
       
       {/* Buttons */}
-      <td className="px-3 py-3">
+      <TableCell>
         <div className="flex items-center justify-center gap-1">
           <Button
             variant="ghost"
@@ -78,7 +74,7 @@ export function PackingItem({ item, index, onTogglePacked, onEdit, onDelete }) {
             <Pencil aria-hidden="true" />
           </Button>
         </div>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
