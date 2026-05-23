@@ -7,7 +7,7 @@ export function TravelBudget() {
   return (
     <div className="flex flex-col h-full gap-3">
       <BudgetHeader />
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 items-stretch">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-stretch">
         <div className="h-full"><BudgetTracking /></div>
         <div className="h-full"><BudgetOverview /></div>
       </div>

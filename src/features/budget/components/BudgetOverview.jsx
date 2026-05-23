@@ -18,14 +18,14 @@ export function BudgetOverview() {
       <CardContent className="grid h-full grid-cols-1 gap-6 sm:grid-cols-2">
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-lg leading-tight text-gray-600 uppercase font-semibold">Total Estimated</p>
-          <p className="text-3xl font-black tracking-tight text-gray-600">
+          <p className="text-2xl font-black tracking-tight text-gray-600">
             {formatCurrency(totalEstimated)}
           </p>
         </div>
 
         <div className="flex flex-col items-center justify-center text-center">
           <p className="text-lg leading-tight text-gray-600 uppercase font-semibold">Total Actual</p>
-          <p className="text-3xl font-black tracking-tight text-primary">
+          <p className="text-2xl font-black tracking-tight text-primary">
             {formatCurrency(totalActual)}
           </p>
         </div>
@@ -43,14 +43,14 @@ export function BudgetOverview() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col items-center justify-center text-center">
               <p className="text-sm tracking-tight text-gray-600">Difference</p>
-              <p className="text-3xl font-black tracking-tight text-primary">
+              <p className="text-2xl font-black tracking-tight text-primary">
                 {formatCurrency(diff)}
               </p>
             </div>
 
             <div className="flex flex-col items-center justify-center text-center">
               <p className="text-sm tracking-tight text-gray-600">Status</p>
-              <p className="text-3xl font-black tracking-tight text-gray-600">
+              <p className="text-2xl font-black tracking-tight text-gray-600">
                 {diffPercentage.toFixed(1)}% {isUnder ? 'Under' : 'Over'}
               </p>
             </div>

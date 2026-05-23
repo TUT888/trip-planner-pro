@@ -7,6 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { formatCurrency } from '@/utils/formatUtils';
 
 export function BudgetTracking() {
   const dispatch = useDispatch();
@@ -52,10 +53,10 @@ export function BudgetTracking() {
                       type="number"
                       value={newBalance}
                       onChange={(e) => setNewBalance(e.target.value)}
-                      className="text-3xl"
+                      className="text-2xl"
                     />
                   ) : (
-                    <span className="text-3xl font-black tracking-tight text-gray-600">${initialBudget.toFixed(2)}</span>
+                    <span className="text-2xl font-black tracking-tight text-gray-600">{formatCurrency(initialBudget.toFixed(2))}</span>
                   )}
                   <Button
                     variant="ghost"
@@ -71,7 +72,7 @@ export function BudgetTracking() {
               {/* Remaining */}
               <div>
                 <p className="text-lg leading-tight text-gray-600 uppercase font-semibold">Remaining Wallet</p>
-                <p className="text-3xl font-black tracking-tight text-primary">${totals.remainingBudget.toFixed(2)}</p>
+                <p className="text-2xl font-black tracking-tight text-primary">{formatCurrency(totals.remainingBudget.toFixed(2))}</p>
               </div>
             </div>
           </div>
@@ -97,7 +98,7 @@ export function BudgetTracking() {
                 </defs>
               </svg>
               <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center">
-                <div className="text-5xl leading-none font-black text-[#29162f]">{Math.round(Number(progressPercentage))}%</div>
+                <div className="text-4xl leading-none font-black text-[#29162f]">{Math.round(Number(progressPercentage))}%</div>
                 <div className="mt-1 text-xs font-black uppercase text-gray-600">Funds Remaining</div>
               </div>
             </div>

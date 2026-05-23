@@ -17,7 +17,7 @@ function BudgetCategoryBreakdown({ selectedCategory, onSelectCategory }) {
   return (
     <div className="space-y-3">
       <h3 className="text-2xl leading-tight font-semibold">Category Breakdown</h3>
-      <div className="flex justify-between pb-2">
+      <div className="flex flex-wrap gap-2 pb-2">
         {categoriesList.map((category) => {
           const isSelected = selectedCategory === category;
           const cost = category === 'All' ? totalActual : breakdown[category];
@@ -27,9 +27,10 @@ function BudgetCategoryBreakdown({ selectedCategory, onSelectCategory }) {
               key={category}
               variant={isSelected ? 'default' : 'outline'}
               onClick={() => onSelectCategory(category)}
+              className="h-auto min-w-32 justify-between gap-3 px-3 py-2"
             >
-              <span>{category}</span>
-              <span className={`${isSelected ? 'text-primary-foreground/90' : 'text-gray-600'}`}>{formatCurrency(cost)}</span>
+              <span className="truncate">{category}</span>
+              <span className={`shrink-0 ${isSelected ? 'text-primary-foreground/90' : 'text-gray-600'}`}>{formatCurrency(cost)}</span>
             </Button>
           );
         })}
