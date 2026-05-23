@@ -15,6 +15,14 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
 import {
     ITINERARY_CATEGORY_OPTIONS,
@@ -25,6 +33,7 @@ import {
     normalizeItineraryPriority,
     normalizeItineraryStatus,
 } from "@/features/itinerary/itineraryEnums";
+import { ItineraryCategoryIcon } from "@/features/itinerary/ItineraryCategoryIcon";
 
 
 
@@ -156,18 +165,24 @@ export function ItineraryList() {
                     className="rounded-lg border border-input px-2.5 py-2"
                 />
 
-                <select
+                <Select
                     value={filters.category}
-                    onChange={(event) => updateFilter("category", event.target.value)}
-                    className="rounded-lg border border-input px-2.5 py-2"
+                    onValueChange={(value) => updateFilter("category", value)}
                 >
-                    <option value="">All categories</option>
-                    {ITINERARY_CATEGORY_OPTIONS.map((category) => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
+                    <SelectTrigger className="h-auto w-full max-w-full rounded-lg border-input bg-white px-2.5 py-2">
+                        <SelectValue placeholder="All categories" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                        <SelectGroup>
+                            {ITINERARY_CATEGORY_OPTIONS.map((category) => (
+                                <SelectItem key={category} value={category} textValue={category}>
+                                    <CategoryOption category={category} />
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
 
                 <select
                     value={filters.status}
@@ -241,4 +256,17 @@ export function ItineraryList() {
         </div>
 
     )
+}
+
+function CategoryOption({ category }) {
+    return (
+        <span className="flex items-center gap-2">
+            <ItineraryCategoryIcon
+                category={category}
+                className="size-4 text-[#3DC59D]"
+                aria-hidden
+            />
+            <span>{category}</span>
+        </span>
+    );
 }

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenuTrigger, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
-import { Camera, EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
+import { EllipsisVertical, MapPin, Pencil, Trash2 } from "lucide-react";
 import {
     Dialog,
     DialogClose,
@@ -24,9 +24,11 @@ import {
 import { useState } from "react";
 import { ItineraryForm } from "@/features/itinerary/components/ItineraryForm";
 import {
+    normalizeItineraryCategory,
     normalizeItineraryPriority,
     normalizeItineraryStatus,
 } from "@/features/itinerary/itineraryEnums";
+import { ItineraryCategoryIcon } from "@/features/itinerary/ItineraryCategoryIcon";
 
 
 
@@ -34,6 +36,7 @@ export function ItineraryCard(props) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const isOverdue = Boolean(props.isOverdue);
+    const category = normalizeItineraryCategory(props.category) || props.category;
     const priority = normalizeItineraryPriority(props.priority) || props.priority;
     const status = normalizeItineraryStatus(props.status) || props.status;
 
@@ -67,7 +70,14 @@ export function ItineraryCard(props) {
                         </div>
                     </div>
                     <div className="itinerary_bottom flex flex-wrap gap-2 items-center">
-                        <Camera className="text-[#3DC59D]" />
+                        <Badge className="gap-1.5 bg-[#3DC59D] text-xs">
+                            <ItineraryCategoryIcon
+                                category={category}
+                                className="size-3.5"
+                                aria-hidden
+                            />
+                            {category}
+                        </Badge>
                         {isOverdue && (
                             <Badge
                                 variant="outline"

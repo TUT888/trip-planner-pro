@@ -25,6 +25,7 @@ import {
     normalizeItineraryPriority,
     normalizeItineraryStatus,
 } from "@/features/itinerary/itineraryEnums";
+import { ItineraryCategoryIcon } from "@/features/itinerary/ItineraryCategoryIcon";
 
 
 function parseDateString(dateString) {
@@ -209,8 +210,8 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                     <SelectContent>
                         <SelectGroup>
                             {ITINERARY_CATEGORY_OPTIONS.map((category) => (
-                                <SelectItem key={category} value={category}>
-                                    {category}
+                                <SelectItem key={category} value={category} textValue={category}>
+                                    <CategoryOption category={category} />
                                 </SelectItem>
                             ))}
                         </SelectGroup>
@@ -288,5 +289,18 @@ export function ItineraryForm({ initialValues, onSubmit }) {
                 Save
             </button>
         </form>
+    );
+}
+
+function CategoryOption({ category }) {
+    return (
+        <span className="flex items-center gap-2">
+            <ItineraryCategoryIcon
+                category={category}
+                className="size-4 text-[#3DC59D]"
+                aria-hidden
+            />
+            <span>{category}</span>
+        </span>
     );
 }
