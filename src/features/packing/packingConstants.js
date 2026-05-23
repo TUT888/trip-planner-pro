@@ -1,3 +1,4 @@
+// Options
 export const PACKING_CATEGORY = Object.freeze({
   CLOTHES: "Clothes",
   DOCUMENTS: "Documents",

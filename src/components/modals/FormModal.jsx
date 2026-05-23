@@ -1,34 +1,52 @@
-import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
 export function FormModal({
   isOpen,
   onClose,
   onSubmit,
-  title,
-  submitLabel = 'Save',
-  children
+  title, // Provide a suitable title for this form
+  description, // Optional, provide description for this form
+  submitLabel, // Optional, it will be used as button's name
+  children, // Add your form elements here as the CHILDREN
 }) {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="w-full max-w-xl rounded-2xl bg-background shadow-xl">
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-          <Button type="button" variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close form">
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        {/* Header */}
+        <DialogHeader className="pb-2 border-b-2 text-center">
+          <DialogTitle className="text-primary uppercase text-xl font-bold">
+            {title}
+          </DialogTitle>
+          <DialogDescription className="text-xs">
+            {description}
+          </DialogDescription>
+        </DialogHeader>
 
-        <form onSubmit={onSubmit} className="space-y-4 px-6 py-5">
-          {children}
-          <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
-            <Button type="submit">{submitLabel}</Button>
-          </div>
+        {/* Form content */}
+        <form onSubmit={onSubmit}>
+          {/* Input section */}
+          <div className="px-1 pb-5 space-y-3">{children}</div>
+
+          <DialogFooter className="grid grid-cols-2">
+            <DialogClose asChild>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+            </DialogClose>
+
+            <Button variant="default" type="submit" className="hover:bg-primary/80">{submitLabel || "Save"}</Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
