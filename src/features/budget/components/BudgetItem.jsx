@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 
 export function BudgetItem({ item, onEdit, onDelete }) {
-  const isPaid = item.status === BUDGET_STATUS.PAID;
+  const isPaid = item.paymentStatus === BUDGET_STATUS.PAID;
 
   return (
     <TableRow>

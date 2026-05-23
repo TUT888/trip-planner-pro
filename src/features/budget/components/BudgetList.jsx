@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBudgetItems, selectBudgetTotals } from '../budgetSelectors';
-import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from '../budgetSlice';
+import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from '../budgetThunks';
+import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { BudgetItem } from './BudgetItem';
 import { BudgetForm } from './BudgetForm';
 import { Plus } from 'lucide-react';
@@ -12,6 +13,7 @@ import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationM
 export function BudgetList({ selectedCategory }) {
   const allItems = useSelector(selectBudgetItems);
   const totals = useSelector(selectBudgetTotals);
+  const selectedTripId = useSelector(selectSelectedTripId);
   const dispatch = useDispatch();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -53,11 +55,17 @@ export function BudgetList({ selectedCategory }) {
 
   const handleFormSubmit = (formValues) => {
     if (itemToEdit) {
-      dispatch(updateBudgetItem({ ...formValues, id: itemToEdit.id }));
+      dispatch(updateBudgetItem({
+        itemId: itemToEdit.id,
+        changes: formValues,
+      }));
       return;
     }
 
-    dispatch(addBudgetItem({ ...formValues, id: Date.now() }));
+    dispatch(addBudgetItem({
+      tripId: selectedTripId,
+      item: formValues,
+    }));
   };
 
   return (
@@ -70,7 +78,12 @@ export function BudgetList({ selectedCategory }) {
           </p>
         </div>
 
-        <Button variant="ghost" onClick={() => handleOpenForm()} className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary">
+        <Button
+          variant="ghost"
+          onClick={() => handleOpenForm()}
+          disabled={!selectedTripId}
+          className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
+        >
           <Plus className="h-4 w-4" />
           Add Item
         </Button>

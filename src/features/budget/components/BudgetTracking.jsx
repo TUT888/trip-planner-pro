@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AlertTriangle, Check, Pencil } from 'lucide-react';
-import { setInitialBudget } from '../budgetSlice';
+import { setInitialBudget } from '../budgetThunks';
 import { selectBudgetTotals, selectInitialBudget, selectBudgetAlerts } from '../budgetSelectors';
+import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,12 +15,21 @@ export function BudgetTracking() {
   const totals = useSelector(selectBudgetTotals);
   const initialBudget = useSelector(selectInitialBudget);
   const alerts = useSelector(selectBudgetAlerts);
+  const selectedTripId = useSelector(selectSelectedTripId);
   const [isEditing, setIsEditing] = useState(false);
   const [newBalance, setNewBalance] = useState(initialBudget);
 
   const handleSaveClick = () => {
-    dispatch(setInitialBudget(Number(newBalance) || 0));
+    dispatch(setInitialBudget({
+      tripId: selectedTripId,
+      budget: Number(newBalance) || 0,
+    }));
     setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    setNewBalance(initialBudget);
+    setIsEditing(true);
   };
 
   const progressPercentage = (initialBudget > 0 ? ((totals.remainingBudget / initialBudget) * 100) : 0).toFixed(1);
@@ -60,7 +70,8 @@ export function BudgetTracking() {
                   )}
                   <Button
                     variant="ghost"
-                    onClick={isEditing ? handleSaveClick : () => setIsEditing(true)}
+                    onClick={isEditing ? handleSaveClick : handleEditClick}
+                    disabled={!selectedTripId}
                     className="rounded-full p-1 text-primary hover:bg-primary/20"
                     aria-label={isEditing ? 'Save starting balance' : 'Edit starting balance'}
                   >

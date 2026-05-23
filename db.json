@@ -7,7 +7,7 @@
     },
     {
       "name": "Summer Vacation",
-      "budget": 0,
+      "budget": 10000,
       "id": "oYHS_i0"
     },
     {
@@ -17,7 +17,7 @@
     },
     {
       "name": "Test",
-      "budget": 0,
+      "budget": 111110,
       "id": "SUHcjPP"
     }
   ],
@@ -43,6 +43,24 @@
       "packedStatus": "Not Packed",
       "tripId": "oYHS_i0",
       "id": "yQZmsOD"
+    },
+    {
+      "name": "Passport",
+      "category": "Documents",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "1",
+      "id": "NmD0K-Y"
+    },
+    {
+      "name": "Something new",
+      "category": "Other",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "SUHcjPP",
+      "id": "5I4vN-T"
     }
   ],
   "budgetItems": [
