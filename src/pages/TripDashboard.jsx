@@ -1,9 +1,9 @@
 
-import { PackingChecklistSection } from "@/features/dashboard/PackingChecklistSection.jsx"
-import { TravelBudgetSection } from "@/features/dashboard/TravelBudgetSection"
-import { SummaryCard } from "@/features/dashboard/SummaryCard.jsx"
+import { PackingChecklistSection } from "@/features/dashboard/components/PackingChecklistSection.jsx"
+import { TravelBudgetSection } from "@/features/dashboard/components/TravelBudgetSection"
+import { SummaryCard } from "@/features/dashboard/components/SummaryCard.jsx"
 import { MOCK_TRIP_DATA } from "@/data/mockDataDashboard.js"
-import { ActivitiesSection } from "@/features/dashboard/AllActivitesSection"
+import { ActivitiesSection } from "@/features/dashboard/components/AllActivitesSection"
 import { useState } from "react";
 
 
@@ -14,7 +14,7 @@ import {
   calculateUnpaidItems,
   calculateOverdueActivities
   
-} from "@/utils/dashboardSummaryUtils";
+} from "@/features/dashboard/dashboardSummaryUtils";
 
 
 export const TripDashboard = () => {
@@ -71,7 +71,7 @@ export const TripDashboard = () => {
       </div>
 
       {/* Hiện thị 3 ô lớn hàng ngang thứ 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
       {/* Ô 1: All acitvities */}
       <ActivitiesSection activities={tripData.itinerary}/>
       {/* Ô 2: Travel budget */}      

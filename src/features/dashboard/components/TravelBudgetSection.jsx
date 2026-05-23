@@ -1,11 +1,12 @@
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { BudgetBar } from "../../components/dashboard/BudgetBar"
+import { BudgetBar } from "../../../components/dashboard/BudgetBar"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
     budgetAll,
     getStatusBadge
-}from "@/utils/dashboardBudgetUtils";
+}from "@/features/dashboard/dashboardBudgetUtils";
 import { useNavigate } from "react-router-dom"
 
 
@@ -17,26 +18,28 @@ export const TravelBudgetSection = ({ budget = [] }) => {
     
     return (
         <div>
-            <Card className="border-2 border-black rounded-xl overflow-hidden shadow-none p-0 bg-white">
-                <CardHeader className="bg-primary flex flex-row items-center justify-between py-2 px-4 text-white space-y-0">
-                    <CardTitle className="text-md font-bold tracking-wide">Travel Budget</CardTitle>
-                    <button 
+            <Card className="bg-white shadow-sm overflow-hidden">
+                <CardHeader className=" flex flex-row items-center justify-between py-4 px-6 space-y-0 border-b border-gray-100">
+                    <CardTitle className="text-md font-semibold text-gray-800">Travel Budget</CardTitle>
+                    <Button 
+                    variant="default"
+                    size = "sm"
                     onClick={()=>navigate("/budget")}
-                    className="text-xs border border-black bg-transparent text-white px-3 py-0.5 rounded-sm hover:bg-white/10 transition-colors">
+                    className="text-xs bg-primary hover:bg-primary/80 transition-colors">
                         View more
-                    </button>
+                    </Button>
                 </CardHeader>
 
-                <CardContent className="px-4 space-y-2 ">
+                <CardContent className="p-5 space-y-2 ">
                     {/* 2 Số tiền hiển thị ở đầu và ở cuối*/}
                     <div className="flex justify-between items-start">
                         <div>
-                            <div className="text-xl font-black ">${budgetObject.actual.toLocaleString()}</div>
-                            <div className="text-[11px] text-gray-500 font-medium">actual</div>
+                            <div className="text-xl font-semibold text-gray-800 ">${budgetObject.actual.toLocaleString()}</div>
+                            <div className="text-[11px] text-gray-500 font-medium uppercase tracking-wider">actual</div>
                         </div>
                         <div className="right">
-                            <div className="text-xl font-black text-right">${budgetObject.remaining.toLocaleString()}</div>
-                            <div className="text-[11px] text-gray-500 font-medium text-right">remaining</div>
+                            <div className="text-xl font-semibold text-gray-800">${budgetObject.remaining.toLocaleString()}</div>
+                            <div className="text-[11px] text-gray-500 font-medium text-right uppercase tracking-wider">remaining</div>
                         </div>
                     </div>
 
@@ -73,7 +76,7 @@ export const TravelBudgetSection = ({ budget = [] }) => {
 
                                     <div className="w-24 flex justify-end">
                                         <Badge 
-                                            className={badge.className}>
+                                            className={`${badge.className} font-medium`}>
                                             {badge.text}
                                         </Badge>
                                                                                     

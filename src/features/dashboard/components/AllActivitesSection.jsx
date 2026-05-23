@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 import {
     renderStatusBadge,
     setFilteredTimeline
-} from "@/utils/dashboardAllActivitesUtils";
+} from "@/features/dashboard/dashboardAllActivitesUtils";
 import { Itinerary } from "@/pages/Itinerary";
 
 export function ActivitiesSection({ activities }) {
@@ -18,32 +19,36 @@ export function ActivitiesSection({ activities }) {
 
   
   return (
-    <Card className="border-2 border-black rounded-xl overflow-hidden shadow-none flex flex-col h-full p-0">
+    <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 flex flex-col max-h-[500px]">
       
-      <CardHeader className="bg-primary flex flex-row items-center justify-between py-2 px-4  text-white space-y-0">
-        <CardTitle className="text-md font-bold tracking-wide" onClick={Itinerary}>All Activities</CardTitle>
-        <button 
+      <CardHeader className="flex flex-row items-center justify-between py-3.5 px-5  border-b border-gray-100 bg-white space-y-0">
+        <CardTitle className="text-md font-semibold text-gray-800">All Activities</CardTitle>
+        <Button 
+        variant="default"
+        size="sm"
         onClick={() => navigate("/itinerary")}
-        className="text-xs border border-black bg-transparent text-white px-3 py-0.5 rounded-sm hover:bg-white/10 transition-colors">
+        className="text-xs h-7 px-3 bg-primary hover:bg-primary/80 transition-colors font-medium text-white">
           View all
-        </button>
+        </Button>
       </CardHeader>
 
-      <CardContent className="px-4 py-0.5 space-y-4 flex-1 overflow-y-auto">
+      <CardContent className="px-5 py-0.5 space-y-4 flex-1 overflow-y-auto">
         {/* Hàng chọn Tabs*/}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
           {uniqueDate.map((day) => (
-            <button
+            <Button
               key={day}
+              variant={activeTab === day ? "default" : "outline"}
+              size="sm"
               onClick={() => setActiveTab(day)}
-              className={`text-xs px-3 py-1 rounded-md border font-medium transition-all ${
+              className={`text-xs h-7 px-3 transition-all ${
                 activeTab === day
-                  ? "bg-primary text-white border-white"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                  ? "bg-primary hover:bg-primary/80 text-white border-transparent"
+                  : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 font-medium"
               }`}
             >
               {day}
-            </button>
+            </Button>
           ))}
           <button className="text-xs px-2 py-1 rounded-md border border-gray-300 font-bold">···</button>
         </div>
@@ -54,7 +59,7 @@ export function ActivitiesSection({ activities }) {
         {filteredTimeline.map((dayGroup, groupIndex) => (
             <div key={groupIndex} className="space-y-3">
             {/* Tiêu đề ngày */}
-            <div className="text-xs font-bold text-gray-800 underline underline-offset-4">
+            <div className="text-xs font-bold text-primary upercase tracking-wider">
                 {dayGroup.selectedDate}
             </div>
 

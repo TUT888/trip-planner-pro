@@ -1,10 +1,11 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import GeneralProgressBar from "../../components/dashboard/GeneralProgressBar"; 
+import GeneralProgressBar from "../../../components/dashboard/GeneralProgressBar"; 
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import {
   calculatePackingSummaryCards,
   calculatePackingCategoriesProgress
-} from "@/utils/dashboardPackingSummaryUtils";
+} from "@/features/dashboard/dashboardPackingSummaryUtils";
 
 //  prop 
 export function PackingChecklistSection({ packingList = [] }) {
@@ -16,25 +17,27 @@ export function PackingChecklistSection({ packingList = [] }) {
   
 
   return (
-    <Card className="border-2 border-black rounded-xl overflow-hidden shadow-none flex flex-col h-full p-0 bg-white">
+    <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 ">
       
-      <CardHeader className="bg-primary flex flex-row items-center justify-between py-2 px-4 text-white space-y-0">
-        <CardTitle className="text-md font-bold tracking-wide">Packing checklist</CardTitle>
-        <button 
+      <CardHeader className="flex flex-row items-center justify-between py-3.5 px-5 space-y-0 border-b border-gray-100 bg-white">
+        <CardTitle className="text-md font-semibold text-gray-800">Packing checklist</CardTitle>
+        <Button 
+        variant="default"
+        size="sm"
         onClick={()=>navigate("/packing")}
-        className="text-xs border border-black bg-transparent text-white px-3 py-0.5 rounded-sm hover:bg-white/10 transition-colors">
+        className="text-xs h-7 px-3 bg-primary hover:bg-primary/80 transition-colors font-medium text-white">
           View more
-        </button>
+        </Button>
       </CardHeader>
 
-      <CardContent className="p-3 space-y-3 flex-1">
+      <CardContent className="p-5 space-y-5 flex-1">
         
         {/* 4 ô thống kê */}
         <div className="grid grid-cols-2 gap-2">
           {packing.map((card, i) => (
-            <div key={i} className="bg-gray-100 border border-gray-200 rounded-lg p-3 text-center">
-              <div className="font-black text-2xl text-gray-900">{card.value}</div>
-              <div className="text-[11px] text-gray-500 font-bold mt-0.5 whitespace-nowrap">
+            <div key={i} className="bg-gray-50/50 border border-gray-100 rounded-lg p-3 text-center">
+              <div className="font-semibold text-2xl text-gray-800">{card.value}</div>
+              <div className="text-[11px] text-gray-400 font-medium mt-0.5 whitespace-nowrap uppercase tracking-wider">
                 {card.label}
               </div>
             </div>
@@ -51,7 +54,7 @@ export function PackingChecklistSection({ packingList = [] }) {
               
             return (
               <div key={index} className="space-y-1.5">
-                <div className="flex flex-row justify-between text-xs font-bold text-gray-700">
+                <div className="flex flex-row justify-between text-xs font-medium text-gray-500">
                     <div className="font-semibold">{cat.name}</div>
                     <div>
                       {cat.isPercent ? `${cat.current}%` : `${cat.current}/${cat.total}`}

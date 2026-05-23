@@ -3,7 +3,7 @@ import GeneralProgressBar from "@/components/dashboard/GeneralProgressBar"
 export const SummaryCard = ({title, value,  progress}) => {
   return (
     <div className="w-full h-full">
-      <div className={`bg-gradient-to-r from-white to-primary p-4 rounded-xl flex flex-col justify-between items-center text-center shadow-sm min-h-[145px] h-full `}>
+      <div className={`bg-gray-50 border-primary border-2 p-4 rounded-xl flex flex-col justify-between items-center text-center shadow-sm min-h-[145px] h-full `}>
         
         <div className="w-full flex-1 flex items-center justify-center">
           <div className="text-3xl font-bold">{value}</div>
