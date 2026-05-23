@@ -6,7 +6,7 @@ import { PACKING_CATEGORY, PACKING_STATUS } from "../packingConstants";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-export function PackingFilterBar({ filters, onFilterChange }) {
+function PackingFilterBar({ filters, onFilterChange }) {
   const categoryOptions = ["All", ...Object.values(PACKING_CATEGORY)];
   const statusOptions = ["All", ...Object.values(PACKING_STATUS)];
   const isAnyFilterActive = filters.category !== "All" || filters.packedStatus !== "All";

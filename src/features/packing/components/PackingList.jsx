@@ -9,6 +9,7 @@ import {
   togglePacked,
   updateCheckList,
 } from "../packingSlice";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 // Column header config
 const COLUMNS = [
@@ -24,8 +25,8 @@ const COLUMNS = [
 // Empty states
 function EmptyState({ isFiltered }) {
   return (
-    <tr>
-      <td colSpan={COLUMNS.length} className="py-16 text-center">
+    <TableRow>
+      <TableCell colSpan={COLUMNS.length} className="py-16 text-center">
         <div className="flex flex-col items-center gap-3 text-gray-400">
           <Luggage className="size-10 stroke-1" aria-hidden="true" />
           {isFiltered ? (
@@ -48,8 +49,8 @@ function EmptyState({ isFiltered }) {
             </>
           )}
         </div>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }
 
@@ -74,23 +75,23 @@ export function PackingList({ items = [], isFiltered = false }) {
 
   return (
     <div className="w-full overflow-x-auto rounded-sm shadow-sm border border-gray-100">
-      <table className="w-full min-w-190 table-fixed border-collapse">
+      <Table className="w-full min-w-190 table-fixed border-collapse">
         {/* Table head */}
-        <thead>
-          <tr className="border-b border-gray-200 bg-white">
+        <TableHeader>
+          <TableRow>
             {COLUMNS.map((col) => (
-              <th
+              <TableHead
                 key={col.key}
-                className={`px-3 pb-3 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-500 ${col.className}`}
+                className={`text-gray-500 ${col.className}`}
               >
                 {col.label}
-              </th>
+              </TableHead>
             ))}
-          </tr>
-        </thead>
+          </TableRow>
+        </TableHeader>
 
         {/* Table body */}
-        <tbody className="bg-white divide-y divide-gray-50">
+        <TableBody>
           {items.length === 0 ? (
             <EmptyState isFiltered={isFiltered} />
           ) : (
@@ -105,8 +106,8 @@ export function PackingList({ items = [], isFiltered = false }) {
               />
             ))
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
 
       {/* Form Modal */}
       {editModal.isOpen && (
