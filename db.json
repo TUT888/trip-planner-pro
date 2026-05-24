@@ -1,4 +1,24 @@
 {
+  "users": [
+    {
+      "id": "u1",
+      "name": "Nguyen Van A",
+      "email": "abc@gmail.com",
+      "password": "password123"
+    },
+    {
+      "id": "u2",
+      "name": "Demo Traveler",
+      "email": "demo@example.com",
+      "password": "demo123"
+    },
+    {
+      "name": "New User",
+      "email": "new@gmail.com",
+      "password": "new123",
+      "id": "AwrYOEc"
+    }
+  ],
   "trips": [
     {
       "id": "1",

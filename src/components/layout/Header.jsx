@@ -1,32 +1,62 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/button";
 
 import { AppLogo } from "./Logo";
 import { DesktopNav, MobileNav } from "./Navbar";
-import { UserMenu } from "@/features/auth/UserMenu";
+import { UserMenu } from "@/features/auth/components/UserMenu";
 import { TripSelector } from "@/features/trip/components/TripSelector";
-import { LoginForm } from "@/features/auth/LoginForm";
-import { RegisterForm } from "@/features/auth/RegisterForm";
+import { LoginForm } from "@/features/auth/components/LoginForm";
+import { RegisterForm } from "@/features/auth/components/RegisterForm";
+import { clearAuthError, logout } from "@/features/auth/authSlice";
+import { loginUser, registerUser } from "@/features/auth/authThunks";
+import { selectAuthError, selectCurrentUser, selectIsAuthLoading } from "@/features/auth/authSelector";
 
 export function Header() {
-  const user = {
-    name: "Nguyen Van A",
-    email: "abc@gmail.com",
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const user = useSelector(selectCurrentUser);
+  const isAuthLoading = useSelector(selectIsAuthLoading);
+  const authError = useSelector(selectAuthError);
+  
   const [navMenuOpen, setnavMenuOpen] = useState(false);
   const [loginFormOpen, setLoginFormOpen] = useState(false);
   const [registerFormOpen, setRegisterFormOpen] = useState(false);
 
+  const openLoginForm = () => {
+    dispatch(clearAuthError());
+    setLoginFormOpen(true);
+  };
+
+  const openRegisterForm = () => {
+    dispatch(clearAuthError());
+    setRegisterFormOpen(true);
+  };
+
   const handleLogin = (loginData) => {
-    console.log(loginData);
-    setLoginFormOpen(false);
-  }
+    // unwrap allows us to extract the payload on success, 
+    // or throw error if rejected
+    dispatch(loginUser(loginData))
+      .unwrap()
+      .then(() => navigate("/"))
+      .catch(() => {});
+  };
 
   const handleRegister = (registerData) => {
-    console.log(registerData);
-    setRegisterFormOpen(false);
-  }
+    // unwrap allows us to extract the payload on success, 
+    // or throw error if rejected
+    dispatch(registerUser(registerData))
+      .unwrap()
+      .then(() => navigate("/"))
+      .catch(() => {});
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   // Return Login/Register if user not existed
   if (!user) {
@@ -35,10 +65,10 @@ export function Header() {
         <div className="flex justify-between items-center px-4 py-3">
           <AppLogo />
           <div className="space-x-2">
-            <Button onClick={() => setLoginFormOpen(true)} variant="outline">
+            <Button onClick={openLoginForm} variant="outline">
               Login
             </Button>
-            <Button onClick={() => setRegisterFormOpen(true)} variant="outline">
+            <Button onClick={openRegisterForm} variant="outline">
               Register
             </Button>
           </div>
@@ -49,6 +79,8 @@ export function Header() {
             isOpen={loginFormOpen}
             onClose={() => setLoginFormOpen(false)}
             onSubmit={handleLogin}
+            isSubmitting={isAuthLoading}
+            error={authError}
           />
         )}
 
@@ -57,6 +89,8 @@ export function Header() {
             isOpen={registerFormOpen}
             onClose={() => setRegisterFormOpen(false)}
             onSubmit={handleRegister}
+            isSubmitting={isAuthLoading}
+            error={authError}
           />
         )}
       </header>
@@ -86,7 +120,7 @@ export function Header() {
         {/* Trips and User Menu */}
         <div className="flex items-center gap-1">
           <TripSelector />
-          <UserMenu user={user} />
+          <UserMenu user={user} onLogout={handleLogout} />
         </div>
       </div>
 

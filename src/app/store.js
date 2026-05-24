@@ -3,9 +3,11 @@ import packingReducer from "@/features/packing/packingSlice";
 import tripReducer from "@/features/trip/tripSlice";
 import itineraryReducer from "@/features/itinerary/itinerarySlice";
 import budgetReducer from "@/features/budget/budgetSlice";
+import authReducer from "@/features/auth/authSlice";
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer,
     trips: tripReducer,
     packing: packingReducer,
     itinerary: itineraryReducer,

@@ -2,17 +2,20 @@ import { useForm } from '@/hooks/useForm';
 import { FormModal } from '@/components/modals/FormModal';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const defaultForm = {
+  name: "",
   email: "",
   password: ""
 };
 
-export function LoginForm({ isOpen, onClose, onSubmit }) {
+export function RegisterForm({ isOpen, onClose, onSubmit, isSubmitting = false, error }) {
   const form = useForm({
     defaultData: defaultForm,
     validator: (formData) => {
       const newErrors = {};
+      if (!formData.name.trim()) newErrors.name = "Name can not be empty.";
       if (!formData.email.trim()) newErrors.email = "Email can not be empty.";
       if (!formData.password) newErrors.password = "Password can not be empty.";
       return newErrors;
@@ -21,9 +24,13 @@ export function LoginForm({ isOpen, onClose, onSubmit }) {
 
   const handleSubmitEvent = (e) => {
     e.preventDefault();
+
     if (!form.validate()) return;
 
-    onSubmit(form.data);
+    onSubmit({
+      ...form.data,
+      name: form.data.name.trim(),
+    });
   }
 
   const handleChangeEvent = (e) => {
@@ -35,9 +42,32 @@ export function LoginForm({ isOpen, onClose, onSubmit }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmitEvent}
-      title="Login Form"
-      submitLabel="Login"
+      title="Register Form"
+      submitLabel={isSubmitting ? "Registering..." : "Register"}
+      submitDisabled={isSubmitting}
     >
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <Field data-invalid={form.errors.name ? true : false}>
+        <FieldLabel htmlFor="input-name" className="text-gray-500">
+          Name
+        </FieldLabel>
+        <Input
+          id="input-name"
+          type="text"
+          name="name"
+          value={form.data.name}
+          onChange={handleChangeEvent}
+          placeholder="Enter your name"
+          disabled={isSubmitting}
+        />
+        {form.errors.name && <FieldError>{form.errors.name}</FieldError>}
+      </Field>
+
       <Field data-invalid={form.errors.email ? true : false}>
         <FieldLabel htmlFor="input-email" className="text-gray-500">
           Email
@@ -49,6 +79,7 @@ export function LoginForm({ isOpen, onClose, onSubmit }) {
           value={form.data.email}
           onChange={handleChangeEvent}
           placeholder="Enter your email"
+          disabled={isSubmitting}
         />
         {form.errors.email && <FieldError>{form.errors.email}</FieldError>}
       </Field>
@@ -64,6 +95,7 @@ export function LoginForm({ isOpen, onClose, onSubmit }) {
           value={form.data.password}
           onChange={handleChangeEvent}
           placeholder="Enter your password"
+          disabled={isSubmitting}
         />
         {form.errors.password && <FieldError>{form.errors.password}</FieldError>}
       </Field>
