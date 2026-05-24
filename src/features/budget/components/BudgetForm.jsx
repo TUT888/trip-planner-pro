@@ -8,7 +8,7 @@ const DEFAULT_FORM_DATA = {
   category: BUDGET_CATEGORIES.TRANSPORT,
   estimatedCost: '',
   actualCost: '',
-  status: BUDGET_STATUS.UNPAID
+  paymentStatus: BUDGET_STATUS.UNPAID
 };
 
 const normalizeInitialValues = (initialValues) => ({
@@ -16,7 +16,7 @@ const normalizeInitialValues = (initialValues) => ({
   category: initialValues?.category || BUDGET_CATEGORIES.TRANSPORT,
   estimatedCost: initialValues?.estimatedCost ?? '',
   actualCost: initialValues?.actualCost ?? '',
-  status: initialValues?.status || BUDGET_STATUS.UNPAID
+  paymentStatus: initialValues?.paymentStatus || BUDGET_STATUS.UNPAID
 });
 
 export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, onClose }) {
@@ -34,7 +34,7 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
       if (name === 'actualCost') {
         const numericActual = Number(value);
         const isPaid = value !== '' && !isNaN(numericActual) && numericActual > 0;
-        nextState.status = isPaid ? BUDGET_STATUS.PAID : BUDGET_STATUS.UNPAID;
+        nextState.paymentStatus = isPaid ? BUDGET_STATUS.PAID : BUDGET_STATUS.UNPAID;
       }
 
       return nextState;
@@ -80,7 +80,7 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
         category: formData.category,
         estimatedCost: Number(formData.estimatedCost),
         actualCost: isPaid ? actual : '',
-        status: isPaid ? BUDGET_STATUS.PAID : BUDGET_STATUS.UNPAID
+        paymentStatus: isPaid ? BUDGET_STATUS.PAID : BUDGET_STATUS.UNPAID
       };
 
       onSubmit(payload);
@@ -166,7 +166,7 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-gray-700">Status</label>
-          <Input type="text" value={formData.status} disabled className="uppercase" />
+          <Input type="text" value={formData.paymentStatus} disabled className="uppercase" />
         </div>
       </div>
     </FormModal>

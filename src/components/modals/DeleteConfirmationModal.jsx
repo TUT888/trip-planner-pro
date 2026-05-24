@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 
 export function DeleteConfirmationModal({
   isOpen,
   onClose,
   onConfirm,
   title, // Optional, it is "Delete Confirmation" by default
+  confirmLabel = "Delete",
   children, // Optional, but you SHOULD add a specific message as its CHILDREN
 }) {
   return (
@@ -22,6 +23,8 @@ export function DeleteConfirmationModal({
               <DialogTitle className="text-destructive font-bold">
                 {title || "Delete Confirmation"}
               </DialogTitle>
+              <DialogDescription className="text-center">
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>
@@ -49,7 +52,7 @@ export function DeleteConfirmationModal({
             variant="destructive"
             onClick={() => onConfirm()}
           >
-            Delete
+            {confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

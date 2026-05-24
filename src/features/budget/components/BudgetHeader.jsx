@@ -1,18 +1,20 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PageTitle } from "@/components/PageTitle";
-import { resetBudget } from '../budgetSlice';
+import { resetBudget } from '../budgetThunks';
+import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { useState } from 'react';
 
-export function BudgetHeader() {
+export function BudgetHeader({ canEdit = true }) {
   const dispatch = useDispatch();
+  const selectedTripId = useSelector(selectSelectedTripId);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleConfirmReset = () => {
-    dispatch(resetBudget());
+    dispatch(resetBudget(selectedTripId));
     setIsDeleteModalOpen(false);
   };
 
@@ -25,14 +27,17 @@ export function BudgetHeader() {
       />
 
       {/* Clear all */}
-      <Button
-        variant="destructive"
-        size="default"
-        onClick={() => setIsDeleteModalOpen(true)}
-      >
-        <RotateCcw aria-hidden="true" />
-        Reset Planning Data
-      </Button>
+      {canEdit && (
+        <Button
+          variant="destructive"
+          size="default"
+          onClick={() => setIsDeleteModalOpen(true)}
+          disabled={!selectedTripId || !canEdit}
+        >
+          <RotateCcw aria-hidden="true" />
+          Reset Planning Data
+        </Button>
+      )}
 
       {isDeleteModalOpen && (
         <DeleteConfirmationModal

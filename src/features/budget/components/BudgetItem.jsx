@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-export function BudgetItem({ item, onEdit, onDelete }) {
-  const isPaid = item.status === BUDGET_STATUS.PAID;
+export function BudgetItem({ item, onEdit, onDelete, canEdit = true }) {
+  const isPaid = item.paymentStatus === BUDGET_STATUS.PAID;
 
   return (
     <TableRow>
@@ -25,10 +25,10 @@ export function BudgetItem({ item, onEdit, onDelete }) {
       </TableCell>
       <TableCell>
         <div className="flex items-center justify-center gap-1">
-          <Button variant="ghost" size="icon-sm" onClick={() => onEdit(item)} title="Edit" aria-label="Edit item">
+          <Button variant="ghost" size="icon-sm" onClick={() => onEdit(item)} disabled={!canEdit} title="Edit" aria-label="Edit item">
             <Edit2 className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon-sm" onClick={() => onDelete(item)} title="Delete" aria-label="Delete item">
+          <Button variant="ghost" size="icon-sm" onClick={() => onDelete(item)} disabled={!canEdit} title="Delete" aria-label="Delete item">
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
