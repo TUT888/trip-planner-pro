@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addToChecklist, clearAll, fetchPackingItems, removeFromCheckList, togglePacked, updateCheckList } from "./packingThunks";
 import { clearTripData, deleteTrip } from "@/features/trip/tripThunks";
+import { logout } from "../auth/authSlice";
 
 const initialState = {
   checklist: [],
@@ -60,7 +61,11 @@ export const packingSlice = createSlice({
         state.checklist = state.checklist.filter(
           (item) => item.tripId !== action.payload,
         );
-      });
+      })
+      // Listen to logout -> clear all data when logout
+      .addCase(logout, (state) => {
+        state.items = [];
+      });;
   },
 });
 

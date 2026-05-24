@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBudgetItems, selectBudgetTotals } from '../budgetSelectors';
 import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from '../budgetThunks';
-import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { BudgetItem } from './BudgetItem';
 import { BudgetForm } from './BudgetForm';
 import { Plus } from 'lucide-react';
@@ -10,10 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
-export function BudgetList({ selectedCategory, canEdit = true }) {
+export function BudgetList({ selectedCategory, canEdit = true, selectedTripId }) {
   const allItems = useSelector(selectBudgetItems);
   const totals = useSelector(selectBudgetTotals);
-  const selectedTripId = useSelector(selectSelectedTripId);
   const dispatch = useDispatch();
 
   const [isFormOpen, setIsFormOpen] = useState(false);

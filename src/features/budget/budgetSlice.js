@@ -7,6 +7,7 @@ import {
   updateBudgetItem,
 } from './budgetThunks';
 import { clearTripData, deleteTrip } from '@/features/trip/tripThunks';
+import { logout } from '../auth/authSlice';
 
 const initialState = {
   items: [],
@@ -47,7 +48,11 @@ const budgetSlice = createSlice({
       // Listen to delete trip thunk -> returned data from thunk is action.payload
       .addCase(deleteTrip.fulfilled, (state, action) => {
         state.items = state.items.filter((item) => item.tripId !== action.payload);
-      });
+      })
+      // Listen to logout -> clear all data when logout
+      .addCase(logout, (state) => {
+        state.items = [];
+      });;
   },
 });
 

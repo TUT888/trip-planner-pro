@@ -3,6 +3,7 @@ import { clearTripData, deleteTrip } from "@/features/trip/tripThunks";
 import {
   fetchItineraryItems,
 } from "./itineraryThunks";
+import { logout } from "../auth/authSlice";
 
 const initialState = {
   items: [],
@@ -27,6 +28,9 @@ export const itinerarySlice = createSlice({
       })
       .addCase(deleteTrip.fulfilled, (state, action) => {
         state.items = state.items.filter((item) => item.tripId !== action.payload);
+      })
+      .addCase(logout, (state) => {
+        state.items = [];
       });
   },
 });

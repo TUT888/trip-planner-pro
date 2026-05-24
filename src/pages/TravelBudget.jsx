@@ -20,12 +20,12 @@ export function TravelBudget() {
 
   return (
     <div className="flex flex-col h-full gap-3">
-      <BudgetHeader canEdit={canEdit} />
+      <BudgetHeader canEdit={canEdit} selectedTripId={selectedTripId} />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 items-stretch">
-        <div className="h-full"><BudgetTracking canEdit={canEdit} /></div>
+        <div className="h-full"><BudgetTracking canEdit={canEdit} selectedTripId={selectedTripId} /></div>
         <div className="h-full"><BudgetOverview /></div>
       </div>
-      <BudgetPanel canEdit={canEdit} />
+      <BudgetPanel canEdit={canEdit} selectedTripId={selectedTripId} />
     </div>
   )
 }

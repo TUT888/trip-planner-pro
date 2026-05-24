@@ -3,19 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AlertTriangle, Check, Pencil } from 'lucide-react';
 import { setInitialBudget } from '../budgetThunks';
 import { selectBudgetTotals, selectInitialBudget, selectBudgetAlerts } from '../budgetSelectors';
-import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { formatCurrency } from '@/utils/formatUtils';
 
-export function BudgetTracking({ canEdit = true }) {
+export function BudgetTracking({ canEdit = true, selectedTripId }) {
   const dispatch = useDispatch();
   const totals = useSelector(selectBudgetTotals);
   const initialBudget = useSelector(selectInitialBudget);
   const alerts = useSelector(selectBudgetAlerts);
-  const selectedTripId = useSelector(selectSelectedTripId);
+
   const [isEditing, setIsEditing] = useState(false);
   const [newBalance, setNewBalance] = useState(initialBudget);
 
