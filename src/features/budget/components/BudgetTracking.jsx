@@ -1,25 +1,35 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AlertTriangle, Check, Pencil } from 'lucide-react';
-import { setInitialBudget } from '../budgetSlice';
+import { setInitialBudget } from '../budgetThunks';
 import { selectBudgetTotals, selectInitialBudget, selectBudgetAlerts } from '../budgetSelectors';
+import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { formatCurrency } from '@/utils/formatUtils';
 
-export function BudgetTracking() {
+export function BudgetTracking({ canEdit = true }) {
   const dispatch = useDispatch();
   const totals = useSelector(selectBudgetTotals);
   const initialBudget = useSelector(selectInitialBudget);
   const alerts = useSelector(selectBudgetAlerts);
+  const selectedTripId = useSelector(selectSelectedTripId);
   const [isEditing, setIsEditing] = useState(false);
   const [newBalance, setNewBalance] = useState(initialBudget);
 
   const handleSaveClick = () => {
-    dispatch(setInitialBudget(Number(newBalance) || 0));
+    dispatch(setInitialBudget({
+      tripId: selectedTripId,
+      budget: Number(newBalance) || 0,
+    }));
     setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    setNewBalance(initialBudget);
+    setIsEditing(true);
   };
 
   const progressPercentage = (initialBudget > 0 ? ((totals.remainingBudget / initialBudget) * 100) : 0).toFixed(1);
@@ -48,6 +58,7 @@ export function BudgetTracking() {
               <div>
                 <p className="text-lg leading-tight text-gray-600 uppercase font-semibold">Starting Balance</p>
                 <div className="flex items-center gap-2">
+                  {/* Edit field */}
                   {isEditing ? (
                     <Input
                       type="number"
@@ -58,14 +69,19 @@ export function BudgetTracking() {
                   ) : (
                     <span className="text-2xl font-black tracking-tight text-gray-600">{formatCurrency(initialBudget.toFixed(2))}</span>
                   )}
-                  <Button
-                    variant="ghost"
-                    onClick={isEditing ? handleSaveClick : () => setIsEditing(true)}
-                    className="rounded-full p-1 text-primary hover:bg-primary/20"
-                    aria-label={isEditing ? 'Save starting balance' : 'Edit starting balance'}
-                  >
-                    {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
-                  </Button>
+
+                  {/* Edit button */}
+                  {canEdit && (
+                    <Button
+                      variant="ghost"
+                      onClick={isEditing ? handleSaveClick : handleEditClick}
+                      disabled={!selectedTripId || !canEdit}
+                      className="rounded-full p-1 text-primary hover:bg-primary/20"
+                      aria-label={isEditing ? 'Save starting balance' : 'Edit starting balance'}
+                    >
+                      {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
+                    </Button>
+                  )}
                 </div>
               </div>
               

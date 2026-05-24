@@ -8,7 +8,7 @@ import {
   removeFromCheckList,
   togglePacked,
   updateCheckList,
-} from "../packingSlice";
+} from "../packingThunks";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 // Column header config
@@ -55,15 +55,18 @@ function EmptyState({ isFiltered }) {
 }
 
 // Main component
-export function PackingList({ items = [], isFiltered = false }) {
+export function PackingList({ items = [], isFiltered = false, canEdit = true }) {
   const dispatch = useDispatch();
 
-  const handleTogglePacked = (id) => dispatch(togglePacked(id));
+  const handleTogglePacked = (item) => dispatch(togglePacked(item));
   
   const editModal = useModal(null);
   const handleConfirmEdit = (updatedItem) => {
     editModal.handleClose();
-    dispatch(updateCheckList(updatedItem));
+    dispatch(updateCheckList({
+      itemId: updatedItem.id,
+      changes: updatedItem,
+    }));
   }
 
   const deleteModal = useModal({ id: "", name: "" });
@@ -100,9 +103,10 @@ export function PackingList({ items = [], isFiltered = false }) {
                 key={item.id}
                 item={item}
                 index={idx + 1}
-                onTogglePacked={handleTogglePacked}
+                onTogglePacked={() => handleTogglePacked(item)}
                 onEdit={editModal.handleOpen}
                 onDelete={deleteModal.handleOpen}
+                canEdit={canEdit}
               />
             ))
           )}

@@ -1,26 +1,28 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Plus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PackingForm } from "./PackingForm";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
 import { useModal } from "@/hooks/useModal";
 
-import { addToChecklist, clearAll } from "../packingSlice";
+import { addToChecklist, clearAll } from "../packingThunks";
 import { PageTitle } from "@/components/PageTitle";
+import { selectSelectedTripId } from "@/features/trip/tripSelector";
 
-export function PackingHeader() {
+export function PackingHeader({ canEdit = true }) {
   const dispatch = useDispatch();
+  const selectedTripId = useSelector(selectSelectedTripId);
 
   const formModal = useModal(null);
   const handleSubmitForm = (newItem) => {
     formModal.handleClose();
-    dispatch(addToChecklist(newItem));
+    dispatch(addToChecklist({ tripId: selectedTripId, item: newItem }));
   };
 
   const deleteModal = useModal(null);
   const handleConfirmClearAll = () => {
     deleteModal.handleClose();
-    dispatch(clearAll());
+    dispatch(clearAll(selectedTripId));
   };
 
   return (
@@ -32,27 +34,31 @@ export function PackingHeader() {
       />
 
       {/* Button */}
-      <div className="flex flex-row items-center gap-2">
-        <Button
-          variant="ghost"
-          size="default"
-          onClick={() => formModal.handleOpen()}
-          className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
-        >
-          <Plus aria-hidden="true" />
-          Add new item
-        </Button>
+      {canEdit && (
+        <div className="flex flex-row items-center gap-2">
+          <Button
+            variant="ghost"
+            size="default"
+            onClick={() => formModal.handleOpen()}
+            disabled={!selectedTripId || !canEdit}
+            className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
+          >
+            <Plus aria-hidden="true" />
+            Add new item
+          </Button>
 
-        {/* Clear all */}
-        <Button
-          variant="destructive"
-          size="default"
-          onClick={() => deleteModal.handleOpen()}
-        >
-          <RotateCcw aria-hidden="true" />
-          Clear
-        </Button>
-      </div>
+          {/* Clear all */}
+          <Button
+            variant="destructive"
+            size="default"
+            onClick={() => deleteModal.handleOpen()}
+            disabled={!selectedTripId || !canEdit}
+          >
+            <RotateCcw aria-hidden="true" />
+            Clear
+          </Button>
+        </div>
+      )}
 
       {/* Form Modal */}
       {formModal.isOpen && (

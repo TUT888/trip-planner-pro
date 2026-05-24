@@ -9,9 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { LogOut, User } from 'lucide-react'
 
-export function UserMenu({ user }) {
-  const logout = () => { alert("logout") };
-  
+export function UserMenu({ user, onLogout }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,7 +28,7 @@ export function UserMenu({ user }) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
+        <DropdownMenuItem onClick={onLogout} className="text-destructive focus:text-destructive">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign Out</span>
         </DropdownMenuItem>

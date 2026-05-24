@@ -16,6 +16,7 @@ export function FormModal({
   title, // Provide a suitable title for this form
   description, // Optional, provide description for this form
   submitLabel, // Optional, it will be used as button's name
+  submitDisabled = false, // Avoid multiple submit
   children, // Add your form elements here as the CHILDREN
 }) {
   return (
@@ -43,7 +44,14 @@ export function FormModal({
               </Button>
             </DialogClose>
 
-            <Button variant="default" type="submit" className="hover:bg-primary/80">{submitLabel || "Save"}</Button>
+            <Button
+              variant="default"
+              type="submit"
+              className="hover:bg-primary/80"
+              disabled={submitDisabled}
+            >
+              {submitLabel || "Save"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -66,7 +66,7 @@ function PackingFilterBar({ filters, onFilterChange }) {
   );
 }
 
-export function PackingPanel() {
+export function PackingPanel({ canEdit = true }) {
   const [filters, handleFilterChange, isFiltered] = useFilters({
     category: "All",
     packedStatus: "All",
@@ -86,6 +86,7 @@ export function PackingPanel() {
         <PackingList
           items={filteredItems}
           isFiltered={isFiltered}
+          canEdit={canEdit}
         />
       </CardContent>
     </Card>

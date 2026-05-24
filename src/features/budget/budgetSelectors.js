@@ -1,8 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { BUDGET_CATEGORIES, BUDGET_STATUS } from './budgetConstants';
+import { selectSelectedTripBudget } from '@/features/trip/tripSelector';
 
 export const selectBudgetItems = (state) => state.budget.items;
-export const selectInitialBudget = (state) => Number(state.budget.initialBudget) || 0;
+export const selectInitialBudget = selectSelectedTripBudget;
 
 export const selectBudgetTotals = createSelector(
   [selectBudgetItems, selectInitialBudget],
@@ -16,7 +17,7 @@ export const selectBudgetTotals = createSelector(
       const actualCost = Number(item.actualCost) || 0;
       totalEstimated += estimatedCost;
       totalActual += actualCost;
-      if (item.status === BUDGET_STATUS.PAID) {
+      if (item.paymentStatus === BUDGET_STATUS.PAID) {
         totalPaidActual += actualCost;
       }
     });
