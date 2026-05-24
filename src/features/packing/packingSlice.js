@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addToChecklist, clearAll, fetchPackingItems, removeFromCheckList, togglePacked, updateCheckList } from "./packingThunks";
+import { clearTripData, deleteTrip } from "@/features/trip/tripThunks";
 
 const initialState = {
   checklist: [],
-  status: "idle",
-  error: null,
 };
 
 export const packingSlice = createSlice({
@@ -14,24 +13,13 @@ export const packingSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Handle fetch
-      .addCase(fetchPackingItems.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
       .addCase(fetchPackingItems.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.checklist = action.payload;
       })
-      .addCase(fetchPackingItems.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
-      })
-      
       // Handle add
       .addCase(addToChecklist.fulfilled, (state, action) => {
         state.checklist.push(action.payload);
       })
-      
       // Handle update
       .addCase(updateCheckList.fulfilled, (state, action) => {
         const itemIdx = state.checklist.findIndex(
@@ -40,14 +28,12 @@ export const packingSlice = createSlice({
 
         if (itemIdx !== -1) state.checklist[itemIdx] = action.payload;
       })
-      
       // Handle remove
       .addCase(removeFromCheckList.fulfilled, (state, action) => {
         state.checklist = state.checklist.filter(
           (item) => item.id !== action.payload,
         );
       })
-      
       // Handle toggle checklist
       .addCase(togglePacked.fulfilled, (state, action) => {
         const itemIdx = state.checklist.findIndex(
@@ -56,9 +42,21 @@ export const packingSlice = createSlice({
 
         if (itemIdx !== -1) state.checklist[itemIdx] = action.payload;
       })
-      
       // Handle clear all
       .addCase(clearAll.fulfilled, (state, action) => {
+        state.checklist = state.checklist.filter(
+          (item) => item.tripId !== action.payload,
+        );
+      })
+
+      // Listen to clear trip thunk -> returned data from thunk is action.payload
+      .addCase(clearTripData.fulfilled, (state, action) => {
+        state.checklist = state.checklist.filter(
+          (item) => item.tripId !== action.payload.tripId,
+        );
+      })
+      // Listen to delete trip thunk -> returned data from thunk is action.payload
+      .addCase(deleteTrip.fulfilled, (state, action) => {
         state.checklist = state.checklist.filter(
           (item) => item.tripId !== action.payload,
         );

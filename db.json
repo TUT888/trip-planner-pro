@@ -16,24 +16,28 @@
   "trips": [
     {
       "name": "Some New Trip",
-      "budget": 10,
+      "budget": 0,
       "ownerId": "AwrYOEc",
-      "sharedWith": [],
+      "sharedWith": [
+        "iimq7Ap"
+      ],
       "id": "GLCPvkf"
     },
     {
       "name": "Test Trip",
       "budget": 20,
       "ownerId": "iimq7Ap",
-      "sharedWith": ["AwrYOEc"],
+      "sharedWith": [
+        "AwrYOEc"
+      ],
       "id": "wuOfKq0"
     },
     {
-      "name": "Another New Trip",
-      "budget": 11,
+      "name": "DUMMY TRIP",
+      "budget": 0,
       "ownerId": "AwrYOEc",
       "sharedWith": [],
-      "id": "j2Fcb7k"
+      "id": "pDB54Lm"
     }
   ],
   "itineraryItems": [],
@@ -46,6 +50,15 @@
       "packedStatus": "Not Packed",
       "tripId": "wuOfKq0",
       "id": "IRQzcnB"
+    },
+    {
+      "name": "Not deleted",
+      "category": "Other",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed",
+      "tripId": "pDB54Lm",
+      "id": "tjBX1Q0"
     }
   ],
   "budgetItems": []

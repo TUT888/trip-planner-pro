@@ -6,11 +6,10 @@ import {
   resetBudget,
   updateBudgetItem,
 } from './budgetThunks';
+import { clearTripData, deleteTrip } from '@/features/trip/tripThunks';
 
 const initialState = {
   items: [],
-  status: 'idle',
-  error: null,
 };
 
 const budgetSlice = createSlice({
@@ -19,30 +18,35 @@ const budgetSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBudgetItems.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
+      // Handle fetch
       .addCase(fetchBudgetItems.fulfilled, (state, action) => {
-        state.status = 'succeeded';
         state.items = action.payload;
       })
-      .addCase(fetchBudgetItems.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
+      // Handle add
       .addCase(addBudgetItem.fulfilled, (state, action) => {
         state.items.push(action.payload);
       })
+      // Handle update
       .addCase(updateBudgetItem.fulfilled, (state, action) => {
         const index = state.items.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) state.items[index] = action.payload;
       })
+      // Handle delete
       .addCase(deleteBudgetItem.fulfilled, (state, action) => {
         state.items = state.items.filter((item) => item.id !== action.payload);
       })
+      // Handle reset
       .addCase(resetBudget.fulfilled, (state, action) => {
         state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+      })
+
+      // Listen to clear trip thunk -> returned data from thunk is action.payload
+      .addCase(clearTripData.fulfilled, (state, action) => {
+        state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+      })
+      // Listen to delete trip thunk -> returned data from thunk is action.payload
+      .addCase(deleteTrip.fulfilled, (state, action) => {
+        state.items = state.items.filter((item) => item.tripId !== action.payload);
       });
   },
 });

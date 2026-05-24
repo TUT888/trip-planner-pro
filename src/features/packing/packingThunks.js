@@ -39,9 +39,7 @@ export const togglePacked = createAsyncThunk(
 export const clearAll = createAsyncThunk(
   "packing/clearAll",
   async (tripId, { getState }) => {
-    const items = getState().packing.checklist.filter(
-      (item) => item.tripId === tripId,
-    );
+    const items = getState().packing.checklist;
 
     // JSON server does not have delete all option -> manually delete one by one
     await Promise.all(items.map((item) => apiClient.delete(`/packingItems/${item.id}`)));

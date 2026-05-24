@@ -7,10 +7,11 @@ import { useModal } from "@/hooks/useModal";
 
 import { addToChecklist, clearAll } from "../packingThunks";
 import { PageTitle } from "@/components/PageTitle";
+import { selectSelectedTripId } from "@/features/trip/tripSelector";
 
 export function PackingHeader({ canEdit = true }) {
   const dispatch = useDispatch();
-  const selectedTripId = useSelector((state) => state.trips.selectedTripId);
+  const selectedTripId = useSelector(selectSelectedTripId);
 
   const formModal = useModal(null);
   const handleSubmitForm = (newItem) => {

@@ -4,12 +4,11 @@ import { isTripOwner, isTripSharedWithUser } from "./tripAuthorization";
 
 export const selectTrips = (state) => state.trips.items;
 
-export const selectSelectedTripId = (state) => state.trips.selectedTripId;
+export const selectSelectedTrip = (state) => state.trips.selectedTrip;
 
-export const selectSelectedTrip = createSelector(
-  [selectTrips, selectSelectedTripId],
-  (trips, selectedTripId) =>
-    trips.find((trip) => String(trip.id) === selectedTripId),
+export const selectSelectedTripId = createSelector(
+  [selectSelectedTrip],
+  (selectedTrip) => selectedTrip?.id || null,
 );
 
 export const selectSelectedTripBudget = createSelector(

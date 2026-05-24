@@ -7,6 +7,7 @@ export function DeleteConfirmationModal({
   onClose,
   onConfirm,
   title, // Optional, it is "Delete Confirmation" by default
+  confirmLabel = "Delete",
   children, // Optional, but you SHOULD add a specific message as its CHILDREN
 }) {
   return (
@@ -51,7 +52,7 @@ export function DeleteConfirmationModal({
             variant="destructive"
             onClick={() => onConfirm()}
           >
-            Delete
+            {confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
