@@ -12,15 +12,24 @@ export const TRIP_PROPERTIES = Object.freeze({
   PACKING_LIST: "packingList", 
   BUDGET_ITEMS: "budgetItems"
 })
+const saveTripData = (data) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  window.dispatchEvent(new CustomEvent(TRIP_DATA_CHANGE_EVENT, { detail: data }));
+};
 
-// Save/load the entire trip object
-export const saveTripData = (property, value) => {
+const loadTripData = () => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : null;
+};
+
+export const saveData = (property, value) => {
   const currentTrip = loadTripData() || {};
 
   const updatedTrip = {
     ...currentTrip,
     [property]: value
   };
+
   saveTripData(updatedTrip);
 }
 
@@ -36,17 +45,6 @@ export const loadData = (property) => {
 
   return tripData[property];
 }
-
-// Save/load the entire trip object
-const saveTripData = (data) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  window.dispatchEvent(new CustomEvent(TRIP_DATA_CHANGE_EVENT, { detail: data }));
-};
-
-const loadTripData = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : null;
-};
 
 const shouldRefreshMockData = () => {
   return localStorage.getItem(MOCK_DATA_VERSION_KEY) !== MOCK_DATA_VERSION;
