@@ -1,20 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginUser, registerUser } from "./authThunks";
-
-const AUTH_USER_STORAGE_KEY = "authUser";
-const loadCurrentUser = () => {
-  const storedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY);
-  return storedUser ? JSON.parse(storedUser) : null;
-};
-const saveCurrentUser = (user) => {
-  localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
-};
-const clearCurrentUser = () => {
-  localStorage.removeItem(AUTH_USER_STORAGE_KEY);
-};
+import { clearCurrentSessionStorage, loadAuthUser, saveAuthUser } from "@/services/localStorageService";
 
 const initialState = {
-  currentUser: loadCurrentUser(),
+  currentUser: loadAuthUser(),
   status: "idle",
   error: null,
 };
@@ -27,7 +16,7 @@ const authSlice = createSlice({
       state.currentUser = null;
       state.status = "idle";
       state.error = null;
-      clearCurrentUser();
+      clearCurrentSessionStorage();
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -43,7 +32,7 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.currentUser = action.payload;
         state.error = null;
-        saveCurrentUser(action.payload);
+        saveAuthUser(action.payload);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
@@ -53,11 +42,9 @@ const authSlice = createSlice({
         state.status = "loading";
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.status = "succeeded";
-        state.currentUser = action.payload;
         state.error = null;
-        saveCurrentUser(action.payload);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";

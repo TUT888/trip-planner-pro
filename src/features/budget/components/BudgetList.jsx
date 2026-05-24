@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 
-export function BudgetList({ selectedCategory }) {
+export function BudgetList({ selectedCategory, canEdit = true }) {
   const allItems = useSelector(selectBudgetItems);
   const totals = useSelector(selectBudgetTotals);
   const selectedTripId = useSelector(selectSelectedTripId);
@@ -78,15 +78,17 @@ export function BudgetList({ selectedCategory }) {
           </p>
         </div>
 
-        <Button
-          variant="ghost"
-          onClick={() => handleOpenForm()}
-          disabled={!selectedTripId}
-          className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
-        >
-          <Plus className="h-4 w-4" />
-          Add Item
-        </Button>
+        {canEdit && (
+          <Button
+            variant="ghost"
+            onClick={() => handleOpenForm()}
+            disabled={!selectedTripId || !canEdit}
+            className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
+          >
+            <Plus className="h-4 w-4" />
+            Add Item
+          </Button>
+        )}
       </div>
 
       <Table className="w-full min-w-190 table-fixed border-collapse">
@@ -115,6 +117,7 @@ export function BudgetList({ selectedCategory }) {
                 item={item}
                 onEdit={handleOpenForm}
                 onDelete={handleOpenDelete}
+                canEdit={canEdit}
               />
             ))
           )}

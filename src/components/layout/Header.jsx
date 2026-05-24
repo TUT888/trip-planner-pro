@@ -41,7 +41,11 @@ export function Header() {
     // or throw error if rejected
     dispatch(loginUser(loginData))
       .unwrap()
-      .then(() => navigate("/"))
+      .then(() => {
+        setLoginFormOpen(false);
+        setRegisterFormOpen(false);
+        navigate("/")
+      })
       .catch(() => {});
   };
 
@@ -50,11 +54,17 @@ export function Header() {
     // or throw error if rejected
     dispatch(registerUser(registerData))
       .unwrap()
-      .then(() => navigate("/"))
+      .then(() => {
+        setRegisterFormOpen(false);
+        setLoginFormOpen(true);
+      })
       .catch(() => {});
   };
 
   const handleLogout = () => {
+    setLoginFormOpen(false);
+    setRegisterFormOpen(false);
+    setnavMenuOpen(false);
     dispatch(logout());
   };
 

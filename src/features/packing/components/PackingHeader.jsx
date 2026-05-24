@@ -8,7 +8,7 @@ import { useModal } from "@/hooks/useModal";
 import { addToChecklist, clearAll } from "../packingThunks";
 import { PageTitle } from "@/components/PageTitle";
 
-export function PackingHeader() {
+export function PackingHeader({ canEdit = true }) {
   const dispatch = useDispatch();
   const selectedTripId = useSelector((state) => state.trips.selectedTripId);
 
@@ -33,29 +33,31 @@ export function PackingHeader() {
       />
 
       {/* Button */}
-      <div className="flex flex-row items-center gap-2">
-        <Button
-          variant="ghost"
-          size="default"
-          onClick={() => formModal.handleOpen()}
-          disabled={!selectedTripId}
-          className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
-        >
-          <Plus aria-hidden="true" />
-          Add new item
-        </Button>
+      {canEdit && (
+        <div className="flex flex-row items-center gap-2">
+          <Button
+            variant="ghost"
+            size="default"
+            onClick={() => formModal.handleOpen()}
+            disabled={!selectedTripId || !canEdit}
+            className="bg-primary/20 text-primary hover:bg-primary/30 hover:text-primary"
+          >
+            <Plus aria-hidden="true" />
+            Add new item
+          </Button>
 
-        {/* Clear all */}
-        <Button
-          variant="destructive"
-          size="default"
-          onClick={() => deleteModal.handleOpen()}
-          disabled={!selectedTripId}
-        >
-          <RotateCcw aria-hidden="true" />
-          Clear
-        </Button>
-      </div>
+          {/* Clear all */}
+          <Button
+            variant="destructive"
+            size="default"
+            onClick={() => deleteModal.handleOpen()}
+            disabled={!selectedTripId || !canEdit}
+          >
+            <RotateCcw aria-hidden="true" />
+            Clear
+          </Button>
+        </div>
+      )}
 
       {/* Form Modal */}
       {formModal.isOpen && (

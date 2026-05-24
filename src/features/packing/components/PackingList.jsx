@@ -55,7 +55,7 @@ function EmptyState({ isFiltered }) {
 }
 
 // Main component
-export function PackingList({ items = [], isFiltered = false }) {
+export function PackingList({ items = [], isFiltered = false, canEdit = true }) {
   const dispatch = useDispatch();
 
   const handleTogglePacked = (item) => dispatch(togglePacked(item));
@@ -106,6 +106,7 @@ export function PackingList({ items = [], isFiltered = false }) {
                 onTogglePacked={() => handleTogglePacked(item)}
                 onEdit={editModal.handleOpen}
                 onDelete={deleteModal.handleOpen}
+                canEdit={canEdit}
               />
             ))
           )}

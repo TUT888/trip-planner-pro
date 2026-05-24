@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { formatCurrency } from '@/utils/formatUtils';
 
-export function BudgetTracking() {
+export function BudgetTracking({ canEdit = true }) {
   const dispatch = useDispatch();
   const totals = useSelector(selectBudgetTotals);
   const initialBudget = useSelector(selectInitialBudget);
@@ -58,6 +58,7 @@ export function BudgetTracking() {
               <div>
                 <p className="text-lg leading-tight text-gray-600 uppercase font-semibold">Starting Balance</p>
                 <div className="flex items-center gap-2">
+                  {/* Edit field */}
                   {isEditing ? (
                     <Input
                       type="number"
@@ -68,15 +69,19 @@ export function BudgetTracking() {
                   ) : (
                     <span className="text-2xl font-black tracking-tight text-gray-600">{formatCurrency(initialBudget.toFixed(2))}</span>
                   )}
-                  <Button
-                    variant="ghost"
-                    onClick={isEditing ? handleSaveClick : handleEditClick}
-                    disabled={!selectedTripId}
-                    className="rounded-full p-1 text-primary hover:bg-primary/20"
-                    aria-label={isEditing ? 'Save starting balance' : 'Edit starting balance'}
-                  >
-                    {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
-                  </Button>
+
+                  {/* Edit button */}
+                  {canEdit && (
+                    <Button
+                      variant="ghost"
+                      onClick={isEditing ? handleSaveClick : handleEditClick}
+                      disabled={!selectedTripId || !canEdit}
+                      className="rounded-full p-1 text-primary hover:bg-primary/20"
+                      aria-label={isEditing ? 'Save starting balance' : 'Edit starting balance'}
+                    >
+                      {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
+                    </Button>
+                  )}
                 </div>
               </div>
               

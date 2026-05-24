@@ -7,7 +7,7 @@ import { RotateCcw } from 'lucide-react';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { useState } from 'react';
 
-export function BudgetHeader() {
+export function BudgetHeader({ canEdit = true }) {
   const dispatch = useDispatch();
   const selectedTripId = useSelector(selectSelectedTripId);
 
@@ -27,15 +27,17 @@ export function BudgetHeader() {
       />
 
       {/* Clear all */}
-      <Button
-        variant="destructive"
-        size="default"
-        onClick={() => setIsDeleteModalOpen(true)}
-        disabled={!selectedTripId}
-      >
-        <RotateCcw aria-hidden="true" />
-        Reset Planning Data
-      </Button>
+      {canEdit && (
+        <Button
+          variant="destructive"
+          size="default"
+          onClick={() => setIsDeleteModalOpen(true)}
+          disabled={!selectedTripId || !canEdit}
+        >
+          <RotateCcw aria-hidden="true" />
+          Reset Planning Data
+        </Button>
+      )}
 
       {isDeleteModalOpen && (
         <DeleteConfirmationModal

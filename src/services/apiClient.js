@@ -28,6 +28,11 @@ export const apiClient = {
       method: "POST",
       body: JSON.stringify(body),
     }),
+  put: (path, body) =>
+    request(path, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
   patch: (path, body) =>
     request(path, {
       method: "PATCH",

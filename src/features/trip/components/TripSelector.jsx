@@ -10,21 +10,26 @@ import {
 import { TripForm } from "./TripForm";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { setSelectedTripId } from "../tripSlice";
 import { createTrip, fetchTrips } from "../tripThunks";
+import { selectCurrentUser } from "@/features/auth/authSelector";
+import { selectSelectedTripAccessRole, selectSelectedTripId, selectTrips } from "../tripSelector";
 
 export function TripSelector() {
   const dispatch = useDispatch();
-  const trips = useSelector((state) => state.trips.items);
-  const selectedTripId = useSelector((state) => state.trips.selectedTripId);
-  const tripStatus = useSelector((state) => state.trips.status);
+  const currentUser = useSelector(selectCurrentUser);
+  const trips = useSelector(selectTrips);
+  const selectedTripId = useSelector(selectSelectedTripId);
+  const selectedTripAccessRole = useSelector(selectSelectedTripAccessRole);
+
   const [isTripFormOpen, setTripFormOpen] = useState(false);
 
   useEffect(() => {
-    if (tripStatus === "idle") {
+    if (currentUser?.id) {
       dispatch(fetchTrips());
     }
-  }, [dispatch, tripStatus]);
+  }, [currentUser, dispatch]);
 
   const handleSelectTrip = (tripId) => {
     dispatch(setSelectedTripId(tripId));
@@ -36,7 +41,13 @@ export function TripSelector() {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
+      {selectedTripAccessRole && (
+        <Badge variant={selectedTripAccessRole === "owner" ? "default" : "secondary"}>
+          {selectedTripAccessRole === "owner" ? "Owner" : "Guest"}
+        </Badge>
+      )}
+
       <div className="w-25 ">
         <Select value={selectedTripId ?? ""} onValueChange={handleSelectTrip}>
           <SelectTrigger className="bg-background w-full">

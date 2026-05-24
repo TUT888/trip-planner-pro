@@ -1,97 +1,52 @@
 {
   "users": [
     {
-      "id": "u1",
-      "name": "Nguyen Van A",
-      "email": "abc@gmail.com",
-      "password": "password123"
-    },
-    {
-      "id": "u2",
-      "name": "Demo Traveler",
-      "email": "demo@example.com",
-      "password": "demo123"
-    },
-    {
       "name": "New User",
       "email": "new@gmail.com",
       "password": "new123",
       "id": "AwrYOEc"
+    },
+    {
+      "name": "Test",
+      "email": "test@gmail.com",
+      "password": "test123",
+      "id": "iimq7Ap"
     }
   ],
   "trips": [
     {
-      "id": "1",
-      "name": "Da Nang Family Trip",
-      "budget": 12000000
+      "name": "Some New Trip",
+      "budget": 10,
+      "ownerId": "AwrYOEc",
+      "sharedWith": [],
+      "id": "GLCPvkf"
     },
     {
-      "name": "Summer Vacation",
-      "budget": 10000,
-      "id": "oYHS_i0"
+      "name": "Test Trip",
+      "budget": 20,
+      "ownerId": "iimq7Ap",
+      "sharedWith": ["AwrYOEc"],
+      "id": "wuOfKq0"
     },
     {
-      "name": "123",
-      "budget": 0,
-      "id": "byLuAND"
-    },
-    {
-      "name": "Test",
-      "budget": 111110,
-      "id": "SUHcjPP"
+      "name": "Another New Trip",
+      "budget": 11,
+      "ownerId": "AwrYOEc",
+      "sharedWith": [],
+      "id": "j2Fcb7k"
     }
   ],
-  "itineraryItems": [
-    {
-      "id": "1",
-      "tripId": "1",
-      "title": "Flight to Da Nang",
-      "location": "Tan Son Nhat Airport",
-      "date": "2026-06-10",
-      "time": "08:00",
-      "category": "Transport",
-      "priority": "High",
-      "status": "Planned"
-    }
-  ],
+  "itineraryItems": [],
   "packingItems": [
     {
-      "name": "Passport",
+      "name": "Passport for test trip",
       "category": "Other",
       "quantity": 1,
       "requiredStatus": "Required",
       "packedStatus": "Not Packed",
-      "tripId": "oYHS_i0",
-      "id": "yQZmsOD"
-    },
-    {
-      "name": "Passport",
-      "category": "Documents",
-      "quantity": 1,
-      "requiredStatus": "Required",
-      "packedStatus": "Packed",
-      "tripId": "1",
-      "id": "NmD0K-Y"
-    },
-    {
-      "name": "Something new",
-      "category": "Other",
-      "quantity": 1,
-      "requiredStatus": "Required",
-      "packedStatus": "Packed",
-      "tripId": "SUHcjPP",
-      "id": "5I4vN-T"
+      "tripId": "wuOfKq0",
+      "id": "IRQzcnB"
     }
   ],
-  "budgetItems": [
-    {
-      "id": "1",
-      "tripId": "1",
-      "name": "Flight tickets",
-      "category": "Transport",
-      "estimatedCost": 4000000,
-      "actualCost": 4200000,
-      "paymentStatus": "Paid"
-    }
-  ]
+  "budgetItems": []
 }
