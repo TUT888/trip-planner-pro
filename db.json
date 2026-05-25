@@ -42,6 +42,13 @@
       "ownerId": "yxlIitH",
       "sharedWith": [],
       "id": "PTQx32W"
+    },
+    {
+      "name": "123",
+      "budget": 100,
+      "ownerId": "iimq7Ap",
+      "sharedWith": [],
+      "id": "B_7TdjC"
     }
   ],
   "itineraryItems": [
@@ -88,6 +95,15 @@
       "paymentStatus": "Unpaid",
       "tripId": "DyGrgf_",
       "id": 1
+    },
+    {
+      "name": "dfds",
+      "category": "Transport",
+      "estimatedCost": 1,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "B_7TdjC",
+      "id": 2
     }
   ]
 }
