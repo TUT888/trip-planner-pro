@@ -19,7 +19,7 @@ export function PackingChecklist() {
 
   return (
     <div className="flex flex-col h-full gap-3">
-      <PackingHeader canEdit={canEdit} />
+      <PackingHeader canEdit={canEdit} selectedTripId={selectedTripId}/>
       <PackingProgressBar />
       <PackingPanel canEdit={canEdit} />
     </div>

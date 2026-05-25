@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Plus, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PackingForm } from "./PackingForm";
@@ -7,11 +7,9 @@ import { useModal } from "@/hooks/useModal";
 
 import { addToChecklist, clearAll } from "../packingThunks";
 import { PageTitle } from "@/components/PageTitle";
-import { selectSelectedTripId } from "@/features/trip/tripSelector";
 
-export function PackingHeader({ canEdit = true }) {
+export function PackingHeader({ canEdit = true, selectedTripId }) {
   const dispatch = useDispatch();
-  const selectedTripId = useSelector(selectSelectedTripId);
 
   const formModal = useModal(null);
   const handleSubmitForm = (newItem) => {

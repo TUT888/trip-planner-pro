@@ -39,7 +39,7 @@ function BudgetCategoryBreakdown({ selectedCategory, onSelectCategory }) {
   );
 }
 
-export function BudgetPanel({ canEdit = true }) {
+export function BudgetPanel({ canEdit = true, selectedTripId }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   return (
@@ -49,7 +49,7 @@ export function BudgetPanel({ canEdit = true }) {
           selectedCategory={selectedCategory} 
           onSelectCategory={setSelectedCategory} 
         />
-        <BudgetList selectedCategory={selectedCategory} canEdit={canEdit} />
+        <BudgetList selectedCategory={selectedCategory} canEdit={canEdit} selectedTripId={selectedTripId} />
       </CardContent>
     </Card>
   )

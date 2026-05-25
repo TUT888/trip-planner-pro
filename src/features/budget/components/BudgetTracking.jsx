@@ -3,19 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AlertTriangle, Check, Pencil } from 'lucide-react';
 import { setInitialBudget } from '../budgetThunks';
 import { selectBudgetTotals, selectInitialBudget, selectBudgetAlerts } from '../budgetSelectors';
-import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { formatCurrency } from '@/utils/formatUtils';
 
-export function BudgetTracking({ canEdit = true }) {
+export function BudgetTracking({ canEdit = true, selectedTripId }) {
   const dispatch = useDispatch();
   const totals = useSelector(selectBudgetTotals);
   const initialBudget = useSelector(selectInitialBudget);
   const alerts = useSelector(selectBudgetAlerts);
-  const selectedTripId = useSelector(selectSelectedTripId);
+
   const [isEditing, setIsEditing] = useState(false);
   const [newBalance, setNewBalance] = useState(initialBudget);
 
@@ -108,8 +107,17 @@ export function BudgetTracking({ canEdit = true }) {
                 ></path>
                 <defs>
                   <linearGradient gradientUnits="userSpaceOnUse" id="gauge_gradient" x1="20" x2="180" y1="90" y2="90">
-                    <stop stopColor="#9ca3af"></stop>
-                    <stop offset="1" stopColor="#00786f"></stop>
+                    {Math.round(Number(progressPercentage)) <= 0 ? (
+                      <>
+                        <stop stopColor="#9ca3af"></stop>
+                        <stop offset="1" stopColor="rgba(130,95,150,0.12)"></stop>
+                      </>
+                    ) : (
+                      <>
+                        <stop stopColor="#9ca3af"></stop>
+                        <stop offset="1" stopColor="#00786f"></stop>
+                      </>
+                    )}
                   </linearGradient>
                 </defs>
               </svg>

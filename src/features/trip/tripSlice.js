@@ -8,6 +8,7 @@ import {
 } from "./tripThunks";
 import { resetBudget, setInitialBudget } from "@/features/budget/budgetThunks";
 import { clearSelectedTripId, loadSelectedTripId, saveSelectedTripId } from "@/services/localStorageService";
+import { logout } from "../auth/authSlice";
 
 const initialState = {
   items: [],
@@ -88,6 +89,10 @@ const tripSlice = createSlice({
             clearSelectedTripId();
           }
         }
+      })
+      .addCase(logout, (state) => {
+        state.items = [];
+        state.selectedTrip = null;
       })
       .addCase(shareTripByEmail.fulfilled, (state, action) => {
         replaceTrip(state, action.payload);
