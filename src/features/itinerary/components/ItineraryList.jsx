@@ -1,11 +1,5 @@
 import { CalendarDays } from "lucide-react";
 import { ItineraryCard } from "./ItineraryCard";
-import {
-    loadData,
-    saveData,
-    TRIP_DATA_CHANGE_EVENT,
-    TRIP_PROPERTIES,
-} from "@/services/tripDataService";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -93,10 +87,7 @@ function compareItineraryDateTime(firstItem, secondItem) {
     return firstDateTime.getTime() - secondDateTime.getTime();
 }
 
-export function ItineraryList(props) {
-    const [itineraryItems, setItineraryItems] = useState(
-        loadData(TRIP_PROPERTIES.ITINERARY) || []
-    );
+export function ItineraryList({ selectedTripId, canEdit = true }) {
     const [createOpen, setCreateOpen] = useState(false);
     const [filters, setFilters] = useState({
         date: "",
@@ -106,35 +97,19 @@ export function ItineraryList(props) {
     });
     const [list, setList] = useState([]);
 
-    console.log("list", list);
-
     useEffect(() => {
         const getItems = async () => {
-            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${selectedTripId}`);
             setList(await res.json());
         }
 
-        if (props.selectedTripId) {
+        if (selectedTripId) {
             getItems();
         }
-    }, [props.selectedTripId])
-
-    useEffect(() => {
-        function syncItineraryItems() {
-            setItineraryItems(loadData(TRIP_PROPERTIES.ITINERARY) || []);
-        }
-
-        window.addEventListener(TRIP_DATA_CHANGE_EVENT, syncItineraryItems);
-        window.addEventListener("storage", syncItineraryItems);
-
-        return () => {
-            window.removeEventListener(TRIP_DATA_CHANGE_EVENT, syncItineraryItems);
-            window.removeEventListener("storage", syncItineraryItems);
-        };
-    }, []);
+    }, [selectedTripId])
 
     function handleUpdateItinerary(updatedItem) {
-        console.log("updatedItem", updatedItem);
+        if (!canEdit) return;
 
         const update = async function () {
             await fetch(`http://localhost:3001/itineraryItems/${updatedItem.id}`, {
@@ -143,11 +118,11 @@ export function ItineraryList(props) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(
-                    { ...updatedItem, tripId: props.selectedTripId }
+                    { ...updatedItem, tripId: selectedTripId }
                 ),
             });
 
-            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${selectedTripId}`);
 
             setList(await res.json());
         }
@@ -155,6 +130,8 @@ export function ItineraryList(props) {
         update();
     }
     function handleCreateItinerary(formData) {
+        if (!canEdit) return;
+
         const newItem = {
             id: Date.now(),
             ...formData,
@@ -168,11 +145,11 @@ export function ItineraryList(props) {
                 },
                 body: JSON.stringify({
                     ...newItem,
-                    tripId: props.selectedTripId,
+                    tripId: selectedTripId,
                 }),
             });
 
-            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${selectedTripId}`);
 
             setList(await res.json());
             setCreateOpen(false);
@@ -181,14 +158,14 @@ export function ItineraryList(props) {
     }
 
     function handleDeleteItinerary(itemId) {
-        const nextItems = itineraryItems.filter((item) => item.id !== itemId);
+        if (!canEdit) return;
 
         const remove = async () => {
             await fetch(`http://localhost:3001/itineraryItems/${itemId}`, {
                 method: "DELETE",
             });
 
-            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${selectedTripId}`);
 
             setList(await res.json());
         }
@@ -305,23 +282,27 @@ export function ItineraryList(props) {
                     Reset
                 </Button>
             </div>
-            <div className="flex justify-end">
-                <Button type="button" onClick={() => setCreateOpen(true)}>
-                    Add itinerary
-                </Button>
-            </div>
-            <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-                <DialogContent className="sm:max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle>Create itinerary</DialogTitle>
-                        <DialogDescription className="sr-only">
-                            Add a new itinerary activity.
-                        </DialogDescription>
-                    </DialogHeader>
+            {canEdit && (
+                <>
+                    <div className="flex justify-end">
+                        <Button type="button" onClick={() => setCreateOpen(true)}>
+                            Add itinerary
+                        </Button>
+                    </div>
+                    <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+                        <DialogContent className="sm:max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>Create itinerary</DialogTitle>
+                                <DialogDescription className="sr-only">
+                                    Add a new itinerary activity.
+                                </DialogDescription>
+                            </DialogHeader>
 
-                    <ItineraryForm onSubmit={handleCreateItinerary} />
-                </DialogContent>
-            </Dialog>
+                            <ItineraryForm onSubmit={handleCreateItinerary} />
+                        </DialogContent>
+                    </Dialog>
+                </>
+            )}
 
             {filteredItineraryItems.length === 0 ? (
                 <ItineraryEmptyState />) : (
@@ -338,6 +319,7 @@ export function ItineraryList(props) {
                         priority={item.priority}
                         status={item.status}
                         isOverdue={isItineraryOverdue(item)}
+                        canEdit={canEdit}
                         onUpdate={handleUpdateItinerary}
                         onDelete={handleDeleteItinerary}
                     />

@@ -35,6 +35,7 @@ import { ItineraryCategoryIcon } from "@/features/itinerary/components/Itinerary
 export function ItineraryCard(props) {
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const canEdit = props.canEdit ?? true;
     const isOverdue = Boolean(props.isOverdue);
     const category = normalizeItineraryCategory(props.category) || props.category;
     const priority = normalizeItineraryPriority(props.priority) || props.priority;
@@ -42,16 +43,8 @@ export function ItineraryCard(props) {
     const status = normalizeItineraryStatus(props.status) || props.status;
 
     function handleStatusChange(nextStatus) {
-        console.log("Changing status to", {
-            id: props.id,
-            activityTitle: props.activityTitle,
-            location: props.location,
-            date: props.date,
-            time: props.time,
-            category,
-            priority,
-            status: nextStatus,
-        });
+        if (!canEdit) return;
+
         props.onUpdate?.({
             id: props.id,
             activityTitle: props.activityTitle,
@@ -78,9 +71,11 @@ export function ItineraryCard(props) {
                     <div className="itinerary_top flex flex-col gap-2">
                         <div className="card_title flex justify-between">
                             <h1 className="text-4xl font-bold text-black">{props.activityTitle}</h1>
-                            <DropdownMenuTrigger>
-                                <EllipsisVertical className="text-[#3DC59D]" />
-                            </DropdownMenuTrigger>
+                            {canEdit && (
+                                <DropdownMenuTrigger>
+                                    <EllipsisVertical className="text-[#3DC59D]" />
+                                </DropdownMenuTrigger>
+                            )}
                         </div>
                         <div className="card_location flex gap-2">
                             <MapPin className="text-[#3DC59D]" />
@@ -111,117 +106,126 @@ export function ItineraryCard(props) {
                             </Badge>
                         )}
                         <Badge className={cn("text-xs", priorityClassName)}>{priority}</Badge>
-                        <div
-                            className="flex flex-wrap gap-1 rounded-full bg-white/65 p-1"
-                            role="group"
-                            aria-label={`Change status for ${props.activityTitle}`}
-                        >
-                            {ITINERARY_STATUS_OPTIONS.map((statusOption) => {
-                                const isSelected = statusOption === status;
+                        {canEdit ? (
+                            <div
+                                className="flex flex-wrap gap-1 rounded-full bg-white/65 p-1"
+                                role="group"
+                                aria-label={`Change status for ${props.activityTitle}`}
+                            >
+                                {ITINERARY_STATUS_OPTIONS.map((statusOption) => {
+                                    const isSelected = statusOption === status;
 
-                                return (
-                                    <button
-                                        key={statusOption}
-                                        type="button"
-                                        aria-pressed={isSelected}
-                                        onClick={() => handleStatusChange(statusOption)}
-                                        className={cn(
-                                            "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
-                                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3DC59D]/40",
-                                            isSelected
-                                                ? "bg-[#3DC59D] text-white shadow-sm"
-                                                : "text-gray-700 hover:bg-[#dff8f0] hover:text-gray-950"
-                                        )}
-                                    >
-                                        {statusOption}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                                    return (
+                                        <button
+                                            key={statusOption}
+                                            type="button"
+                                            aria-pressed={isSelected}
+                                            onClick={() => handleStatusChange(statusOption)}
+                                            className={cn(
+                                                "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3DC59D]/40",
+                                                isSelected
+                                                    ? "bg-[#3DC59D] text-white shadow-sm"
+                                                    : "text-gray-700 hover:bg-[#dff8f0] hover:text-gray-950"
+                                            )}
+                                        >
+                                            {statusOption}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <Badge className="bg-[#3DC59D] text-xs">{status}</Badge>
+                        )}
                     </div>
                 </div>
 
-                <DropdownMenuContent className="w-40" align="end">
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onSelect={(event) => {
-                                event.preventDefault();
-                                setEditOpen(true);
-                            }}
-                        >
-                            Update
-                            <DropdownMenuShortcut>
-                                <Pencil />
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            variant="destructive"
-                            className="text-red-500 focus:text-red-500"
-                            onSelect={(event) => {
-                                event.preventDefault();
-                                setDeleteOpen(true);
-                            }}
-                        >
-                            Delete
-                            <DropdownMenuShortcut>
-                                <Trash2 className="text-red-500" />
-                            </DropdownMenuShortcut>
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                </DropdownMenuContent>
+                {canEdit && (
+                    <DropdownMenuContent className="w-40" align="end">
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                onSelect={(event) => {
+                                    event.preventDefault();
+                                    setEditOpen(true);
+                                }}
+                            >
+                                Update
+                                <DropdownMenuShortcut>
+                                    <Pencil />
+                                </DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                variant="destructive"
+                                className="text-red-500 focus:text-red-500"
+                                onSelect={(event) => {
+                                    event.preventDefault();
+                                    setDeleteOpen(true);
+                                }}
+                            >
+                                Delete
+                                <DropdownMenuShortcut>
+                                    <Trash2 className="text-red-500" />
+                                </DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                )}
             </DropdownMenu>
 
-            {/* DialogContent is a sibling of DropdownMenu so portals/focus behave correctly */}
-            <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent className="sm:max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle>Update itinerary</DialogTitle>
-                        <DialogDescription className="sr-only">
-                            Edit activity details for this itinerary item.
-                        </DialogDescription>
-                    </DialogHeader>
+            {canEdit && (
+                <Dialog open={editOpen} onOpenChange={setEditOpen}>
+                    <DialogContent className="sm:max-w-2xl">
+                        <DialogHeader>
+                            <DialogTitle>Update itinerary</DialogTitle>
+                            <DialogDescription className="sr-only">
+                                Edit activity details for this itinerary item.
+                            </DialogDescription>
+                        </DialogHeader>
 
-                    <ItineraryForm
-                        initialValues={{
-                            activityTitle: props.activityTitle,
-                            location: props.location,
-                            date: props.date,
-                            time: props.time,
-                            category: props.category,
-                            priority: props.priority,
-                            status: props.status,
-                        }}
-                        onSubmit={(formData) => {
-                            props.onUpdate?.({
-                                id: props.id,
-                                ...formData,
-                            });
-                            setEditOpen(false);
-                        }}
-                    />
-                </DialogContent>
-            </Dialog>
+                        <ItineraryForm
+                            initialValues={{
+                                activityTitle: props.activityTitle,
+                                location: props.location,
+                                date: props.date,
+                                time: props.time,
+                                category: props.category,
+                                priority: props.priority,
+                                status: props.status,
+                            }}
+                            onSubmit={(formData) => {
+                                props.onUpdate?.({
+                                    id: props.id,
+                                    ...formData,
+                                });
+                                setEditOpen(false);
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
+            )}
 
-            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Delete itinerary item?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This will permanently remove "{props.activityTitle}" from your itinerary.
-                            This action cannot be undone.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                            variant="destructive"
-                            onClick={() => props.onDelete?.(props.id)}
-                        >
-                            Delete
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            {canEdit && (
+                <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Delete itinerary item?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will permanently remove "{props.activityTitle}" from your itinerary.
+                                This action cannot be undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                variant="destructive"
+                                onClick={() => props.onDelete?.(props.id)}
+                            >
+                                Delete
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            )}
         </>
     );
 }

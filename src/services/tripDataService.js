@@ -34,7 +34,6 @@ export const saveData = (property, value) => {
 }
 
 export const loadData = (property) => {
-  // property: one of the values "budgetItems" | "packingList" | "itinerary"
   let tripData = loadTripData();
 
   if (!tripData || shouldRefreshMockData()) {
