@@ -93,9 +93,7 @@ function compareItineraryDateTime(firstItem, secondItem) {
     return firstDateTime.getTime() - secondDateTime.getTime();
 }
 
-
-
-export function ItineraryList() {
+export function ItineraryList(props) {
     const [itineraryItems, setItineraryItems] = useState(
         loadData(TRIP_PROPERTIES.ITINERARY) || []
     );
@@ -106,6 +104,20 @@ export function ItineraryList() {
         status: "",
         priority: "",
     });
+    const [list, setList] = useState([]);
+
+    console.log("list", list);
+
+    useEffect(() => {
+        const getItems = async () => {
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+            setList(await res.json());
+        }
+
+        if (props.selectedTripId) {
+            getItems();
+        }
+    }, [props.selectedTripId])
 
     useEffect(() => {
         function syncItineraryItems() {
@@ -122,16 +134,25 @@ export function ItineraryList() {
     }, []);
 
     function handleUpdateItinerary(updatedItem) {
-        const nextItems = itineraryItems.map((item) => {
-            if (item.id === updatedItem.id) {
-                return updatedItem;
-            }
+        console.log("updatedItem", updatedItem);
 
-            return item;
-        });
+        const update = async function () {
+            await fetch(`http://localhost:3001/itineraryItems/${updatedItem.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(
+                    { ...updatedItem, tripId: props.selectedTripId }
+                ),
+            });
 
-        setItineraryItems(nextItems);
-        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+
+            setList(await res.json());
+        }
+
+        update();
     }
     function handleCreateItinerary(formData) {
         const newItem = {
@@ -139,18 +160,40 @@ export function ItineraryList() {
             ...formData,
         };
 
-        const nextItems = [...itineraryItems, newItem];
+        const create = async () => {
+            await fetch(`http://localhost:3001/itineraryItems`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...newItem,
+                    tripId: props.selectedTripId,
+                }),
+            });
 
-        setItineraryItems(nextItems);
-        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
-        setCreateOpen(false);
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+
+            setList(await res.json());
+            setCreateOpen(false);
+        }
+        create();
     }
 
     function handleDeleteItinerary(itemId) {
         const nextItems = itineraryItems.filter((item) => item.id !== itemId);
 
-        setItineraryItems(nextItems);
-        saveData(TRIP_PROPERTIES.ITINERARY, nextItems);
+        const remove = async () => {
+            await fetch(`http://localhost:3001/itineraryItems/${itemId}`, {
+                method: "DELETE",
+            });
+
+            const res = await fetch(`http://localhost:3001/itineraryItems?tripId=${props.selectedTripId}`);
+
+            setList(await res.json());
+        }
+
+        remove();
     }
     function updateFilter(filterName, value) {
         setFilters({
@@ -168,7 +211,7 @@ export function ItineraryList() {
         });
     }
 
-    const filteredItineraryItems = itineraryItems
+    const filteredItineraryItems = list
         .filter((item) => {
             const matchesDate = !filters.date || item.date === filters.date;
             const matchesCategory =

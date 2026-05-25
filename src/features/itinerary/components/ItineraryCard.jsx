@@ -42,6 +42,16 @@ export function ItineraryCard(props) {
     const status = normalizeItineraryStatus(props.status) || props.status;
 
     function handleStatusChange(nextStatus) {
+        console.log("Changing status to", {
+            id: props.id,
+            activityTitle: props.activityTitle,
+            location: props.location,
+            date: props.date,
+            time: props.time,
+            category,
+            priority,
+            status: nextStatus,
+        });
         props.onUpdate?.({
             id: props.id,
             activityTitle: props.activityTitle,
