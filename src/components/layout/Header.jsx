@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/button";
 
@@ -10,35 +10,42 @@ import { UserMenu } from "@/features/auth/components/UserMenu";
 import { TripSelector } from "@/features/trip/components/TripSelector";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { RegisterForm } from "@/features/auth/components/RegisterForm";
-import { clearAuthError, logout } from "@/features/auth/authSlice";
+import { logout } from "@/features/auth/authSlice";
 import { loginUser, registerUser } from "@/features/auth/authThunks";
-import { selectAuthError, selectCurrentUser, selectIsAuthLoading } from "@/features/auth/authSelector";
+import { fetchTrips } from "@/features/trip/tripThunks";
 
-export function Header() {
+export function Header({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const user = useSelector(selectCurrentUser);
-  const isAuthLoading = useSelector(selectIsAuthLoading);
-  const authError = useSelector(selectAuthError);
   
   const [navMenuOpen, setnavMenuOpen] = useState(false);
   const [loginFormOpen, setLoginFormOpen] = useState(false);
   const [registerFormOpen, setRegisterFormOpen] = useState(false);
 
+  const [authError, setAuthError] = useState("");
+  const [isAuthLoading, setAuthLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchTrips());
+    }
+  }, [user, dispatch]);
+
   const openLoginForm = () => {
-    dispatch(clearAuthError());
+    setAuthError("");
     setLoginFormOpen(true);
   };
 
   const openRegisterForm = () => {
-    dispatch(clearAuthError());
+    setAuthError("");
     setRegisterFormOpen(true);
   };
 
   const handleLogin = (loginData) => {
     // unwrap allows us to extract the payload on success, 
     // or throw error if rejected
+    setAuthError("");
+    setAuthLoading(true);
     dispatch(loginUser(loginData))
       .unwrap()
       .then(() => {
@@ -46,25 +53,26 @@ export function Header() {
         setRegisterFormOpen(false);
         navigate("/")
       })
-      .catch(() => {});
+      .catch((error) => setAuthError(error?.message || "Something went wrong."))
+      .finally(() => setAuthLoading(false));
   };
 
   const handleRegister = (registerData) => {
     // unwrap allows us to extract the payload on success, 
     // or throw error if rejected
+    setAuthError("");
+    setAuthLoading(true);
     dispatch(registerUser(registerData))
       .unwrap()
       .then(() => {
         setRegisterFormOpen(false);
         setLoginFormOpen(true);
       })
-      .catch(() => {});
+      .catch((error) => setAuthError(error?.message || "Something went wrong."))
+      .finally(() => setAuthLoading(false));
   };
 
   const handleLogout = () => {
-    setLoginFormOpen(false);
-    setRegisterFormOpen(false);
-    setnavMenuOpen(false);
     dispatch(logout());
   };
 

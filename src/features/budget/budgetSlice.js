@@ -7,6 +7,7 @@ import {
   updateBudgetItem,
 } from './budgetThunks';
 import { clearTripData, deleteTrip } from '@/features/trip/tripThunks';
+import { logout } from '../auth/authSlice';
 
 const initialState = {
   items: [],
@@ -36,18 +37,25 @@ const budgetSlice = createSlice({
         state.items = state.items.filter((item) => item.id !== action.payload);
       })
       // Handle reset
-      .addCase(resetBudget.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+      .addCase(resetBudget.fulfilled, (state) => {
+        // state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+        state.items = []; // Always fetch budget items with tripId, so we don't need filter
       })
 
       // Listen to clear trip thunk -> returned data from thunk is action.payload
-      .addCase(clearTripData.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+      .addCase(clearTripData.fulfilled, (state) => {
+        // state.items = state.items.filter((item) => item.tripId !== action.payload.tripId);
+        state.items = []; // Always fetch budget items with tripId, so we don't need filter
       })
       // Listen to delete trip thunk -> returned data from thunk is action.payload
-      .addCase(deleteTrip.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.tripId !== action.payload);
-      });
+      .addCase(deleteTrip.fulfilled, (state) => {
+        // state.items = state.items.filter((item) => item.tripId !== action.payload);
+        state.items = []; // Always fetch budget items with tripId, so we don't need filter
+      })
+      // Listen to logout -> clear all data when logout
+      .addCase(logout, (state) => {
+        state.items = [];
+      });;
   },
 });
 
