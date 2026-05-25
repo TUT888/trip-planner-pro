@@ -44,27 +44,21 @@ export const packingSlice = createSlice({
         if (itemIdx !== -1) state.checklist[itemIdx] = action.payload;
       })
       // Handle clear all
-      .addCase(clearAll.fulfilled, (state, action) => {
-        state.checklist = state.checklist.filter(
-          (item) => item.tripId !== action.payload,
-        );
+      .addCase(clearAll.fulfilled, (state) => {
+        state.checklist = [];
       })
 
       // Listen to clear trip thunk -> returned data from thunk is action.payload
-      .addCase(clearTripData.fulfilled, (state, action) => {
-        state.checklist = state.checklist.filter(
-          (item) => item.tripId !== action.payload.tripId,
-        );
+      .addCase(clearTripData.fulfilled, (state) => {
+        state.checklist = [];
       })
       // Listen to delete trip thunk -> returned data from thunk is action.payload
-      .addCase(deleteTrip.fulfilled, (state, action) => {
-        state.checklist = state.checklist.filter(
-          (item) => item.tripId !== action.payload,
-        );
+      .addCase(deleteTrip.fulfilled, (state) => {
+        state.checklist = [];
       })
       // Listen to logout -> clear all data when logout
       .addCase(logout, (state) => {
-        state.items = [];
+        state.checklist = [];
       });;
   },
 });

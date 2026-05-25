@@ -107,8 +107,17 @@ export function BudgetTracking({ canEdit = true, selectedTripId }) {
                 ></path>
                 <defs>
                   <linearGradient gradientUnits="userSpaceOnUse" id="gauge_gradient" x1="20" x2="180" y1="90" y2="90">
-                    <stop stopColor="#9ca3af"></stop>
-                    <stop offset="1" stopColor="#00786f"></stop>
+                    {Math.round(Number(progressPercentage)) <= 0 ? (
+                      <>
+                        <stop stopColor="#9ca3af"></stop>
+                        <stop offset="1" stopColor="rgba(130,95,150,0.12)"></stop>
+                      </>
+                    ) : (
+                      <>
+                        <stop stopColor="#9ca3af"></stop>
+                        <stop offset="1" stopColor="#00786f"></stop>
+                      </>
+                    )}
                   </linearGradient>
                 </defs>
               </svg>
