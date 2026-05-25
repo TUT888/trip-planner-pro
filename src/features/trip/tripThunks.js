@@ -19,6 +19,8 @@ export const fetchTrips = createAsyncThunk("trips/fetchTrips", async (_, { getSt
   const currentUser = getState().auth.currentUser;
   if (!currentUser) return [];
 
+  // Since json-server is not a real backend, it supports limited feature
+  // => As a workaround, we fetch all trips and filter them
   const trips = await apiClient.get("/trips");
   return trips.filter((trip) => isTripAccessible(trip, currentUser));
 });

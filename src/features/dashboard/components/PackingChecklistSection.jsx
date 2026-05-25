@@ -11,12 +11,44 @@ export function PackingChecklistSection() {
   const packingSummary = useSelector(selectDashboardPackingSummary);
 
   
-  console.log("packingSummary:", packingSummary); // ← thêm dòng này
+
 
 
   const { cards: packing, progress: packingCategoriesProgess } = packingSummary;
-
-  
+  const isPackingEmpty = 
+    !packingSummary || 
+    !packingSummary.cards || 
+    packingSummary.cards.length === 0 ||
+    packingSummary.cards.every(card => Number(card.value) === 0); 
+  if (isPackingEmpty) {
+    return (
+      <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 flex flex-col h-[500px] max-h-[500px]">
+        <CardHeader className="flex flex-row items-center justify-between py-3.5 px-5 border-b border-gray-100 bg-white space-y-0 flex-none">
+          <CardTitle className="text-md font-semibold text-gray-800">Packing checklist</CardTitle>
+          <Button 
+            variant="default"
+            size="sm"
+            className="text-xs h-7 px-3 bg-gray-400 font-medium text-white cursor-not-allowed"
+            disabled 
+          >
+            View more
+          </Button>
+        </CardHeader>
+        
+        <CardContent className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          {/* Icon */}
+          <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          
+          <p className="text-sm font-medium text-gray-500">No items on your checklist</p>
+          <p className="text-xs text-gray-400 mt-1">Start organizing your luggage by adding packing items!</p>
+        </CardContent>    
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 ">

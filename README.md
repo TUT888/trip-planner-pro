@@ -28,3 +28,11 @@ This project uses shadcn/ui. Since we are using a JavaScript configuration with 
     ```bash
     npx shadcn@latest add <component-name>
     ```
+
+---
+GET    http://localhost:3001/itineraryItems
+GET    http://localhost:3001/itineraryItems?tripId={tripId}
+POST   http://localhost:3001/itineraryItems
+GET    http://localhost:3001/itineraryItems/{itemId}
+PATCH  http://localhost:3001/itineraryItems/{itemId}
+DELETE http://localhost:3001/itineraryItems/{itemId}

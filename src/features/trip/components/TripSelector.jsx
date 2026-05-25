@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Select,
@@ -25,10 +25,8 @@ import {
   createTrip,
   deleteTrip,
   exportTripData,
-  fetchTrips,
   shareTripByEmail,
 } from "../tripThunks";
-import { selectCurrentUser } from "@/features/auth/authSelector";
 import {
   selectSelectedTrip,
   selectSelectedTripAccessRole,
@@ -38,61 +36,22 @@ import { ShareTripForm } from "./ShareTripForm";
 
 export function TripSelector() {
   const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
+
   const trips = useSelector(selectTrips);
   const selectedTrip = useSelector(selectSelectedTrip);
-  const selectedTripAccessRole = useSelector(selectSelectedTripAccessRole); // owner or guest
+  const selectedTripAccessRole = useSelector(selectSelectedTripAccessRole);
 
+  // Trip operation modals and its error
   const [isTripFormOpen, setTripFormOpen] = useState(false);
   const [isShareFormOpen, setShareFormOpen] = useState(false);
   const [isClearModalOpen, setClearModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [actionError, setActionError] = useState("");
 
-  useEffect(() => {
-    if (currentUser?.id) {
-      dispatch(fetchTrips());
-    }
-  }, [currentUser, dispatch]);
-
-  const handleSelectTrip = (tripId) => {
-    dispatch(setSelectedTrip(tripId));
-  };
-
-  const handleCreateTrip = (newTrip) => {
-    dispatch(createTrip(newTrip));
+  // Handle form open state
+  const handleOpenTripForm = () => {
+    setActionError("");
     setTripFormOpen(false);
-  };
-
-  const handleClearTripData = () => {
-    setActionError("");
-    dispatch(clearTripData())
-      .unwrap()
-      .then(() => setClearModalOpen(false))
-      .catch((error) => setActionError(error?.message || "Something went wrong."));
-  };
-
-  const handleDeleteTrip = () => {
-    setActionError("");
-    dispatch(deleteTrip())
-      .unwrap()
-      .then(() => setDeleteModalOpen(false))
-      .catch((error) => setActionError(error?.message || "Something went wrong."));
-  };
-
-  const handleShareTrip = ({ email }) => {
-    setActionError("");
-    dispatch(shareTripByEmail(email))
-      .unwrap()
-      .then(() => setShareFormOpen(false))
-      .catch((error) => setActionError(error?.message || "Something went wrong."));
-  };
-
-  const handleExportTrip = () => {
-    setActionError("");
-    dispatch(exportTripData())
-      .unwrap()
-      .catch((error) => setActionError(error?.message || "Something went wrong."));
   };
 
   const handleOpenShareForm = () => {
@@ -110,16 +69,59 @@ export function TripSelector() {
     setDeleteModalOpen(true);
   };
 
+  // Handle operations
+  const handleSelectTrip = (tripId) => {
+    dispatch(setSelectedTrip(tripId));
+  };
+
+  const handleCreateTrip = (newTrip) => {
+    dispatch(createTrip(newTrip));
+    setTripFormOpen(false);
+  };
+
+  const handleClearTripData = () => {
+    dispatch(clearTripData());
+    setClearModalOpen(false);
+  };
+
+  const handleDeleteTrip = () => {
+    dispatch(deleteTrip());
+    setDeleteModalOpen(false);
+  };
+
+  const handleShareTrip = ({ email }) => {
+    // Share trip has validation -> must unwrap and response
+    setActionError("");
+    dispatch(shareTripByEmail(email))
+      .unwrap()
+      .then(() => setShareFormOpen(false))
+      .catch((error) =>
+        setActionError(error?.message || "Something went wrong."),
+      );
+  };
+
+  const handleExportTrip = () => {
+    // Export trip also has potential error -> must unwrap and response
+    setActionError("");
+    dispatch(exportTripData())
+      .unwrap()
+      .catch((error) =>
+        setActionError(error?.message || "Something went wrong."),
+      );
+  };
+
   return (
     <div className="flex items-center gap-2">
       {selectedTripAccessRole && (
-        <Badge variant={selectedTripAccessRole === "owner" ? "default" : "secondary"}>
+        <Badge
+          variant={selectedTripAccessRole === "owner" ? "default" : "secondary"}
+        >
           {selectedTripAccessRole === "owner" ? "Owner" : "Guest"}
         </Badge>
       )}
 
       {/* Trip Select */}
-      <div className="w-25 ">
+      <div className="w-35 ">
         <Select value={selectedTrip?.id ?? ""} onValueChange={handleSelectTrip}>
           <SelectTrigger className="bg-background w-full">
             <SelectValue placeholder="Select a trip" />
@@ -154,7 +156,7 @@ export function TripSelector() {
             </DropdownMenuItem>
           )}
 
-          {(selectedTripAccessRole === "owner") && (
+          {selectedTripAccessRole === "owner" && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={handleOpenShareForm}>
@@ -177,69 +179,81 @@ export function TripSelector() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Form Modal */}
-      {isTripFormOpen && (
-        <TripForm
-          isOpen={isTripFormOpen}
-          onClose={() => setTripFormOpen(false)}
-          onSubmit={handleCreateTrip}
-        />
-      )}
+      {/* Form Modals */}
+      <div>
+        {isTripFormOpen && (
+          <TripForm
+            isOpen={isTripFormOpen}
+            onClose={handleOpenTripForm}
+            onSubmit={handleCreateTrip}
+          />
+        )}
 
-      {isShareFormOpen && (
-        <ShareTripForm
-          isOpen={isShareFormOpen}
-          onClose={() => setShareFormOpen(false)}
-          onSubmit={handleShareTrip}
-          error={actionError}
-        />
-      )}
+        {isShareFormOpen && (
+          <ShareTripForm
+            isOpen={isShareFormOpen}
+            onClose={() => setShareFormOpen(false)}
+            onSubmit={handleShareTrip}
+            error={actionError}
+          />
+        )}
 
-      {isClearModalOpen && (
-        <DeleteConfirmationModal
-          isOpen={isClearModalOpen}
-          onClose={() => setClearModalOpen(false)}
-          onConfirm={handleClearTripData}
-          title="Clear Trip Data"
-          confirmLabel="Clear"
-        >
-          <div className="space-y-2">
-            <p>
-              Clear all planning data for{" "}
-              <span className="font-bold text-gray-900">{selectedTrip?.name}</span>?
-            </p>
-            <p className="text-sm text-muted-foreground">
-              The trip name, owner, and shared users will stay. Budget, itinerary,
-              packing, and budget items will be reset.
-            </p>
-            {actionError && (
-              <p className="text-sm font-medium text-destructive">{actionError}</p>
-            )}
-          </div>
-        </DeleteConfirmationModal>
-      )}
+        {isClearModalOpen && (
+          <DeleteConfirmationModal
+            isOpen={isClearModalOpen}
+            onClose={() => setClearModalOpen(false)}
+            onConfirm={handleClearTripData}
+            title="Clear Trip Data"
+            confirmLabel="Clear"
+          >
+            <div className="space-y-2">
+              <p>
+                Clear all planning data for{" "}
+                <span className="font-bold text-gray-900">
+                  {selectedTrip?.name}
+                </span>
+                ?
+              </p>
+              <p className="text-sm text-muted-foreground">
+                The trip name, owner, and shared users will stay. Budget,
+                itinerary, packing, and budget items will be reset.
+              </p>
+              {actionError && (
+                <p className="text-sm font-medium text-destructive">
+                  {actionError}
+                </p>
+              )}
+            </div>
+          </DeleteConfirmationModal>
+        )}
 
-      {isDeleteModalOpen && (
-        <DeleteConfirmationModal
-          isOpen={isDeleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={handleDeleteTrip}
-          title="Delete Trip"
-        >
-          <div className="space-y-2">
-            <p>
-              Are you sure you want to delete{" "}
-              <span className="font-bold text-gray-900">{selectedTrip?.name}</span>?
-            </p>
-            <p className="text-sm text-muted-foreground">
-              This removes the trip and all related planning data.
-            </p>
-            {actionError && (
-              <p className="text-sm font-medium text-destructive">{actionError}</p>
-            )}
-          </div>
-        </DeleteConfirmationModal>
-      )}
+        {isDeleteModalOpen && (
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setDeleteModalOpen(false)}
+            onConfirm={handleDeleteTrip}
+            title="Delete Trip"
+          >
+            <div className="space-y-2">
+              <p>
+                Are you sure you want to delete{" "}
+                <span className="font-bold text-gray-900">
+                  {selectedTrip?.name}
+                </span>
+                ?
+              </p>
+              <p className="text-sm text-muted-foreground">
+                This removes the trip and all related planning data.
+              </p>
+              {actionError && (
+                <p className="text-sm font-medium text-destructive">
+                  {actionError}
+                </p>
+              )}
+            </div>
+          </DeleteConfirmationModal>
+        )}
+      </div>
     </div>
   );
 }

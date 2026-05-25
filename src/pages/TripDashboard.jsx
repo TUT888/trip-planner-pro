@@ -9,6 +9,7 @@ import { AllActivitiesSection } from "@/features/dashboard/components/AllActivit
 import { TravelBudgetSection } from "@/features/dashboard/components/TravelBudgetSection";
 import { PackingChecklistSection } from "@/features/dashboard/components/PackingChecklistSection";
 import { selectDashboardSummary } from "@/features/dashboard/dashboardSelector"
+import { PageTitle } from "@/components/PageTitle";
 //import { fetchDashboardData } from "@/features/dashboard/dashboardThunks";
 export function TripDashboard() {
   const dispatch = useDispatch();
@@ -37,10 +38,13 @@ export function TripDashboard() {
     <div className="px-2">
 
       {/* Hiển thị tên trip */}
-      <h1 className="trip-name font-bold text-xl mb-2">{tripName}</h1>
+      <PageTitle 
+        title={tripName} 
+        subtitle="Overview of your planned trip"
+      />
       
     {/* Hiển thị 5 thẻ hàng ngang đầu tiên */}
-      <div className="grid grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-5 gap-4 mb-8 uppercase">
         
         <SummaryCard
           title="itinerary completed"

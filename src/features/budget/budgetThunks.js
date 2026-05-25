@@ -34,9 +34,11 @@ export const setInitialBudget = createAsyncThunk(
 export const resetBudget = createAsyncThunk(
   "budget/resetBudget",
   async (tripId, { getState }) => {
-    const items = getState().budget.items.filter(
-      (item) => item.tripId === tripId,
-    );
+    // const items = getState().budget.items.filter(
+    //   (item) => item.tripId === tripId,
+    // );
+    // Budget items always fetched with trip id -> no need filter
+    const items = getState().budget.items;
 
     await Promise.all(items.map((item) => apiClient.delete(`/budgetItems/${item.id}`)));
     const trip = await apiClient.patch(`/trips/${tripId}`, { budget: DEFAULT_BUDGET });

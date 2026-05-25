@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
-import { selectDashboardState } from "@/features/dashboard/dashboardSelector";
 import { useState } from "react";
 import {
     renderStatusBadge,
@@ -24,6 +23,36 @@ export function AllActivitiesSection() {
 
     const uniqueDate = ["All",...new Set(activities.map((act)=>act.date))]
 
+    //nếu chưa thêm dữ liệu, mảng rỗng
+    if (!activities || activities.length === 0) {
+    return (
+      <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 flex flex-col h-[500px] max-h-[500px]">
+        <CardHeader className="flex flex-row items-center justify-between py-3.5 px-5 border-b border-gray-100 bg-white space-y-0">
+          <CardTitle className="text-md font-semibold text-gray-800">All Activities</CardTitle>
+          <Button 
+            variant="default"
+            size="sm"
+            className="text-xs h-7 px-3 bg-gray-500 font-medium text-white"
+            disabled 
+          >
+            View all
+          </Button>
+        </CardHeader>
+        
+        <CardContent className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          {/* icon */}
+          <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mb-3">
+            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          
+          <p className="text-sm font-medium text-gray-500">No activities scheduled yet</p>
+          <p className="text-xs text-gray-400 mt-1">Ready to plan? Start adding your first activity!</p>
+        </CardContent>    
+      </Card>
+    );
+}
   
   return (
     <Card className="bg-white shadow-sm overflow-hidden border border-gray-100 flex flex-col max-h-[500px]">
@@ -87,7 +116,7 @@ export function AllActivitiesSection() {
                     
                     {/* Cột mốc thời gian */}
                     <div className="w-10 text-xs font-bold text-gray-700 pt-0.5">
-                        {item.time}
+                        {item.time && item.time.slice(0, 5)}
                     </div>
 
                     {/* Dấu chấm tròn  */}
@@ -98,7 +127,7 @@ export function AllActivitiesSection() {
                     {/* nội dung chi tiết hoạt động */}
                     <div className="pl-6 pb-2 flex-1 space-y-1.5">
                         <p className="text-xs font-semibold text-gray-800 leading-tight">
-                        {item.title}
+                        {item.activityTitle}
                         </p>
                         <div className="flex items-center gap-2">
                        

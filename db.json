@@ -17,6 +17,12 @@
       "email": "xuan@gmail.com",
       "password": "123",
       "id": "B2-H4q2"
+    },
+    {
+      "name": "Trang",
+      "email": "alo123@gmail.com",
+      "password": "alo123",
+      "id": "yxlIitH"
     }
   ],
   "trips": [
@@ -30,15 +36,6 @@
       "id": "GLCPvkf"
     },
     {
-      "name": "Test Trip",
-      "budget": 20,
-      "ownerId": "iimq7Ap",
-      "sharedWith": [
-        "AwrYOEc"
-      ],
-      "id": "wuOfKq0"
-    },
-    {
       "name": "DUMMY TRIP",
       "budget": 0,
       "ownerId": "AwrYOEc",
@@ -46,69 +43,45 @@
       "id": "pDB54Lm"
     },
     {
-      "name": "Winter Vaction",
-      "budget": 20,
+      "name": "AAAA",
+      "budget": 2,
+      "ownerId": "yxlIitH",
+      "sharedWith": [],
+      "id": "PTQx32W"
+    },
+    {
+      "name": "Disney trip",
+      "budget": 12,
       "ownerId": "B2-H4q2",
       "sharedWith": [],
-      "id": "yOQA-84"
+      "id": "rfSI9G5"
     }
   ],
   "itineraryItems": [
     {
-    "id": 1,
-    "title": "Flight to Da Nang",
-    "location": "Tan Son Nhat Airport",
-    "date": "2026-06-10",
-    "time": "08:00",
-    "category": "Transport",
-    "priority": "High",
-    "status": "Planned",
-    "tripId": "yOQA-84"
-  },
-  {
-    "id": 2,
-    "title": "Check in hotel",
-    "location": "Da Nang",
-    "date": "2026-06-10",
-    "time": "14:00",
-    "category": "Accommodation",
-    "priority": "High",
-    "status": "Done",
-    "tripId": "yOQA-84"
-  },
-  {
-    "id": 3,
-    "title": "Beach visit",
-    "location": "My Khe Beach",
-    "date": "2026-06-11",
-    "time": "09:00",
-    "category": "Activity",
-    "priority": "Medium",
-    "status": "Overdue",
-    "tripId": "yOQA-84"
-  },
-  {
-    "id": 4,
-    "title": "Museum visit",
-    "location": "My Khe Beach",
-    "date": "2026-06-15",
-    "time": "09:00",
-    "category": "Activity",
-    "priority": "Medium",
-    "status": "Overdue",
-    "tripId": "yOQA-84"
-  }
+      "id": 1779625101778,
+      "activityTitle": "BBB",
+      "location": "BBB",
+      "date": "2026-05-30",
+      "time": "12:30:00",
+      "category": "Food",
+      "priority": "Medium",
+      "status": "Done",
+      "tripId": "PTQx32W"
+    },
+    {
+      "id": 1779682494208,
+      "activityTitle": "Testname",
+      "location": "testlocation",
+      "date": "2026-05-27",
+      "time": "12:30:00",
+      "category": "Shopping",
+      "priority": "High",
+      "status": "Planned",
+      "tripId": "PTQx32W"
+    }
   ],
   "packingItems": [
-    {
-      "name": "Passport for test trip",
-      "category": "Other",
-      "quantity": 1,
-      "requiredStatus": "Required",
-      "packedStatus": "Not Packed",
-      "tripId": "wuOfKq0",
-      "id": "IRQzcnB"
-    },
     {
       "name": "Not deleted",
       "category": "Other",
@@ -117,80 +90,7 @@
       "packedStatus": "Not Packed",
       "tripId": "pDB54Lm",
       "id": "tjBX1Q0"
-    },
-    {
-      "name": "Clothes 1",
-      "category": "Clothes",
-      "quantity": 1,
-      "requiredStatus": "Required",
-      "packedStatus": "Packed",
-      "tripId": "yOQA-84",
-      "id": "E21WQUp"
-    },
-    {
-      "name": "mèo",
-      "category": "Other",
-      "quantity": 10,
-      "requiredStatus": "Required",
-      "packedStatus": "Packed",
-      "tripId": "yOQA-84",
-      "id": "VWo9NR_"
-    },
-    {
-      "name": "MIMI",
-      "category": "Electronics",
-      "quantity": 10,
-      "requiredStatus": "Required",
-      "packedStatus": "Packed",
-      "tripId": "yOQA-84",
-      "id": "iW0xGBF"
     }
   ],
-  "budgetItems": [
-    {
-      "name": "Hotel",
-      "category": "Accommodation",
-      "estimatedCost": 2,
-      "actualCost": 2,
-      "paymentStatus": "Paid",
-      "tripId": "yOQA-84",
-      "id": 1
-    },
-    {
-      "name": "Passport fee",
-      "category": "Other",
-      "estimatedCost": 1,
-      "actualCost": 1,
-      "paymentStatus": "Paid",
-      "tripId": "yOQA-84",
-      "id": 2
-    },
-    {
-      "name": "HIHI",
-      "category": "Food",
-      "estimatedCost": 3,
-      "actualCost": 4,
-      "paymentStatus": "Paid",
-      "tripId": "yOQA-84",
-      "id": 3
-    },
-    {
-      "name": "Drinks",
-      "category": "Food",
-      "estimatedCost": 10,
-      "actualCost": 11,
-      "paymentStatus": "Paid",
-      "tripId": "yOQA-84",
-      "id": 4
-    },
-    {
-      "name": "ice cream",
-      "category": "Food",
-      "estimatedCost": 2,
-      "actualCost": 2,
-      "paymentStatus": "Paid",
-      "tripId": "yOQA-84",
-      "id": 5
-    }
-  ]
+  "budgetItems": []
 }

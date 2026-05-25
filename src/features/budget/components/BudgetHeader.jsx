@@ -1,15 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { PageTitle } from "@/components/PageTitle";
 import { resetBudget } from '../budgetThunks';
-import { selectSelectedTripId } from '@/features/trip/tripSelector';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import { DeleteConfirmationModal } from '@/components/modals/DeleteConfirmationModal';
 import { useState } from 'react';
 
-export function BudgetHeader({ canEdit = true }) {
+export function BudgetHeader({ canEdit = true, selectedTripId }) {
   const dispatch = useDispatch();
-  const selectedTripId = useSelector(selectSelectedTripId);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
