@@ -304,9 +304,6 @@ All trip-related records are connected by `tripId`. Because `json-server` is onl
 
 - Testing is not currently implemented in the project.
 
-## Authors and Contribution
-## Contributions
-
 ## Contributions
 
 - Application layout design: [@ThaoHocCode](https://github.com/ThaoHocCode), [@nhatxuaan](https://github.com/nhatxuaan)
