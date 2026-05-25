@@ -22,7 +22,7 @@
     return Math.round(packingPercent);
  }
 
- export const calculateBudgeProgress = (budgetItems) => {
+ export const calculateBudgetProgress = (budgetItems) => {
     if(!budgetItems||budgetItems.length==0) return 0;
 
     const paidCount = budgetItems.filter((bud)=>
@@ -51,25 +51,3 @@
     
     return overdueCount;
  }
-//  "itinerary": [
-//         {
-//         "id": 1,
-//         "title": "Flight to Da Nang",
-//         "location": "Tan Son Nhat Airport",
-//         "date": "2026-06-10",
-//         "time": "08:00",
-//         "category": "Transport",
-//         "priority": "High",
-//         "status": "Planned"
-//         }
-//     ],
-
-//  "budgetItems": [
-        // {
-        // "id": 1,
-        // "name": "Flight tickets",
-        // "category": "Transport",
-        // "estimatedCost": 4000000,
-        // "actualCost": 4200000,
-        // "paymentStatus": "Paid"
-        // },

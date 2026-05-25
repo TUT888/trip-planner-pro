@@ -86,21 +86,3 @@ export const calculatePackingCategoriesProgress = (packingList = []) => {
 
 };
 
-// "packingList": [
-//         {
-//         "id": 1,
-//         "name": "Passport / ID card",
-//         "category": "Documents",
-//         "quantity": 1,
-//         "requiredStatus": "Required",
-//         "packedStatus": "Packed"
-//         },
-//         {
-//         "id": 2,
-//         "name": "T-shirt",
-//         "category": "Clothes",
-//         "quantity": 10,
-//         "requiredStatus": "Required",
-//         "packedStatus": "Not Packed"
-//         }
-//     ],

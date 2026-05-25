@@ -4,17 +4,19 @@ import { BudgetBar } from "../../../components/dashboard/BudgetBar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-    budgetAll,
+    //budgetAll,
     getStatusBadge
 }from "@/features/dashboard/dashboardBudgetUtils";
 import { useNavigate } from "react-router-dom"
 
+import { useSelector } from "react-redux"
+import { selectDashboardBudgetSummary } from "@/features/dashboard/dashboardSelector"
+console.log("selector:", selectDashboardBudgetSummary); // thêm dòng này
 
 
-export const TravelBudgetSection = ({ budget = [] }) => {
+export const TravelBudgetSection = () => {
     const navigate = useNavigate();
-    const budgetObject = budgetAll(budget);
-    console.log("Dữ liệu budget nhận được tại component con:", budget);    
+    const budgetObject = useSelector(selectDashboardBudgetSummary);
     
     return (
         <div>
@@ -39,7 +41,7 @@ export const TravelBudgetSection = ({ budget = [] }) => {
                         </div>
                         <div className="right">
                             <div className="text-xl font-semibold text-gray-800">${budgetObject.remaining.toLocaleString()}</div>
-                            <div className="text-[11px] text-gray-500 font-medium text-right uppercase tracking-wider">remaining</div>
+                            <div className="text-[11px] text-gray-500 font-medium text-right uppercase tracking-wider">Remaining Wallet</div>
                         </div>
                     </div>
 

@@ -2,17 +2,19 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import GeneralProgressBar from "../../../components/dashboard/GeneralProgressBar"; 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  calculatePackingSummaryCards,
-  calculatePackingCategoriesProgress
-} from "@/features/dashboard/dashboardPackingSummaryUtils";
+import { useSelector } from "react-redux";
 
-//  prop 
-export function PackingChecklistSection({ packingList = [] }) {
+import { selectDashboardPackingSummary } from "@/features/dashboard/dashboardSelector";
+export function PackingChecklistSection() {
 
   const navigate = useNavigate();
-  const packing = calculatePackingSummaryCards(packingList);
-  const packingCategoriesProgess = calculatePackingCategoriesProgress(packingList);
+  const packingSummary = useSelector(selectDashboardPackingSummary);
+
+  
+  console.log("packingSummary:", packingSummary); // ← thêm dòng này
+
+
+  const { cards: packing, progress: packingCategoriesProgess } = packingSummary;
 
   
 

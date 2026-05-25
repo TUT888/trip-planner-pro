@@ -1,9 +1,9 @@
 
-export const budgetAll = (budget)=>{
-    const totalActual = budget.reduce((sum, item) => sum + item.actualCost, 0);
-    const totalEstimated = budget.reduce((sum, item) => sum + item.estimatedCost, 0);
-    const remainingMoney = totalEstimated - totalActual;
-    const percentUsed = totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0;
+export const budgetAll = (budget, tripBudget = 0)=>{
+    const totalActual = budget.reduce((sum, item) => sum + Number(item.actualCost), 0);
+    const totalEstimated = budget.reduce((sum, item) => sum + Number(item.estimatedCost), 0);
+    const remainingMoney = tripBudget - totalActual;
+    const percentUsed = totalEstimated > 0 ? Math.round((totalActual / tripBudget) * 100) : 0;
 
     const staticCategories = [
         { name: "Accommodation", color: "bg-pink-500" },
@@ -18,8 +18,8 @@ export const budgetAll = (budget)=>{
     const processedCategories = staticCategories.map((cat, index) => {
         const itemsInGroup = budget.filter(item => item.category === cat.name);
         
-        const actSum = itemsInGroup.reduce((sum, item) => sum + item.actualCost, 0);
-        const estSum = itemsInGroup.reduce((sum, item) => sum + item.estimatedCost, 0);
+        const actSum = itemsInGroup.reduce((sum, item) =>  sum + Number(item.actualCost), 0);
+        const estSum = itemsInGroup.reduce((sum, item) => sum + Number(item.estimatedCost), 0);
         const catPercentage = totalEstimated > 0 ? (actSum / totalEstimated) * 100 : 0;
         return {
             id: index,
@@ -36,7 +36,7 @@ export const budgetAll = (budget)=>{
     const budgetObject = {
         actual: totalActual,
         remaining: remainingMoney,
-        total: totalEstimated,
+        total: tripBudget,
         percentageUsed: percentUsed,
         categories: segmentsForBar, 
         //category: processedCategories    

@@ -1,21 +1,28 @@
-import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
+import { useSelector } from "react-redux";
+import { selectDashboardState } from "@/features/dashboard/dashboardSelector";
+import { useState } from "react";
 import {
     renderStatusBadge,
     setFilteredTimeline
 } from "@/features/dashboard/dashboardAllActivitesUtils";
-import { Itinerary } from "@/pages/Itinerary";
+//import { Itinerary } from "@/pages/Itinerary";
 
-export function ActivitiesSection({ activities }) {
+export function AllActivitiesSection() {
     const navigate = useNavigate(); 
     const [activeTab, setActiveTab] = useState("All");
+    
+    // const dashboardData = useSelector(selectDashboardState);
+    // const activities = dashboardData.itinerary || [];
+
+    const activities = useSelector((state) => state.itinerary.items || []);
+
     const filteredTimeline = setFilteredTimeline(activeTab, activities);
 
-    const uniqueDate = ["All",...new Set(activities.map((act)=>act.date))].slice(0, 3);
+    const uniqueDate = ["All",...new Set(activities.map((act)=>act.date))]
 
   
   return (
@@ -50,7 +57,7 @@ export function ActivitiesSection({ activities }) {
               {day}
             </Button>
           ))}
-          <button className="text-xs px-2 py-1 rounded-md border border-gray-300 font-bold">···</button>
+          {/* <button className="text-xs px-2 py-1 rounded-md border border-gray-300 font-bold">···</button> */}
         </div>
 
           {/* Timeline */}
