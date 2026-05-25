@@ -10,10 +10,13 @@ import { TravelBudgetSection } from "@/features/dashboard/components/TravelBudge
 import { PackingChecklistSection } from "@/features/dashboard/components/PackingChecklistSection";
 import { selectDashboardSummary } from "@/features/dashboard/dashboardSelector"
 import { PageTitle } from "@/components/PageTitle";
+import { selectSelectedTrip } from "@/features/trip/tripSelector";
 //import { fetchDashboardData } from "@/features/dashboard/dashboardThunks";
 export function TripDashboard() {
   const dispatch = useDispatch();
-  const selectedTripId = useSelector(selectSelectedTripId);
+  const selectedTrip = useSelector(selectSelectedTrip);
+  const selectedTripId = selectedTrip?.id;
+  const selectedTripName = selectedTrip?.name || "Loading trip...";
 
   console.log("tripId:", selectedTripId);
 
@@ -39,7 +42,7 @@ export function TripDashboard() {
 
       {/* Hiển thị tên trip */}
       <PageTitle 
-        title={tripName} 
+        title={selectedTripName} 
         subtitle="Overview of your planned trip"
       />
       
