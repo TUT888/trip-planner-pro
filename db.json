@@ -50,11 +50,11 @@
       "id": "PTQx32W"
     },
     {
-      "name": "Disney trip",
-      "budget": 12,
-      "ownerId": "B2-H4q2",
+      "name": "123",
+      "budget": 100,
+      "ownerId": "iimq7Ap",
       "sharedWith": [],
-      "id": "rfSI9G5"
+      "id": "B_7TdjC"
     }
   ],
   "itineraryItems": [
@@ -92,5 +92,24 @@
       "id": "tjBX1Q0"
     }
   ],
-  "budgetItems": []
+  "budgetItems": [
+    {
+      "name": "dfdf",
+      "category": "Transport",
+      "estimatedCost": 1,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "DyGrgf_",
+      "id": 1
+    },
+    {
+      "name": "dfds",
+      "category": "Transport",
+      "estimatedCost": 1,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "B_7TdjC",
+      "id": 2
+    }
+  ]
 }

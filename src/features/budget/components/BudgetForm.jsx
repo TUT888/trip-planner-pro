@@ -61,7 +61,8 @@ export function BudgetForm({ isOpen, initialValues, remainingBudget, onSubmit, o
     }
 
     const estimated = Number(formData.estimatedCost);
-    if (!isEditMode && !isNaN(estimated) && estimated > remainingBudget) {
+    // if (!isEditMode && !isNaN(estimated) && estimated > remainingBudget) {
+    if (!isNaN(estimated) && estimated > remainingBudget) {
       newErrors.estimatedCost = `Estimated cost must be less than remaining budget ($${remainingBudget.toFixed(2)}).`;
     }
 

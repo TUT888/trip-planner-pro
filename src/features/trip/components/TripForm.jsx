@@ -62,7 +62,6 @@ export function TripForm({ isOpen, onClose, onSubmit }) {
         <Input
           id="input-budget"
           type="number"
-          min="0"
           name="budget"
           value={form.data.budget}
           onChange={handleChangeEvent}
