@@ -1,6 +1,10 @@
 import mockTripData from "../data/mockTripData.json" with { type: 'json' }
 
 const STORAGE_KEY = "trip"
+const MOCK_DATA_VERSION_KEY = "tripMockDataVersion"
+const MOCK_DATA_VERSION = "hoi-an-sample-data-v1"
+export const TRIP_DATA_CHANGE_EVENT = "trip-data-change"
+
 export const TRIP_PROPERTIES = Object.freeze({
   NAME: "tripName", 
   INIT_BUDGET: "budget", 
@@ -8,32 +12,43 @@ export const TRIP_PROPERTIES = Object.freeze({
   PACKING_LIST: "packingList", 
   BUDGET_ITEMS: "budgetItems"
 })
+const saveTripData = (data) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  window.dispatchEvent(new CustomEvent(TRIP_DATA_CHANGE_EVENT, { detail: data }));
+};
 
-// Save/load the entire trip object
-export const saveTripData = (property, value) => {
+const loadTripData = () => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : null;
+};
+
+export const saveData = (property, value) => {
   const currentTrip = loadTripData() || {};
+
   const updatedTrip = {
     ...currentTrip,
     [property]: value
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedTrip));
-};
 
-export const loadTripData = (property) => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  const tripData = data ? JSON.parse(data) : mockTripData;
-  
-  if (property) {
-    return tripData[property];
-  }
-  return tripData;
-};
-
-// Save/load specific properties (legacy API)
-export const saveData = (property, value) => {
-  saveTripData(property, value);
+  saveTripData(updatedTrip);
 }
 
 export const loadData = (property) => {
-  return loadTripData(property);
+  let tripData = loadTripData();
+
+  if (!tripData || shouldRefreshMockData()) {
+    saveTripData(mockTripData);
+    saveMockDataVersion();
+    tripData = mockTripData;
+  }
+
+  return tripData[property];
+}
+
+const shouldRefreshMockData = () => {
+  return localStorage.getItem(MOCK_DATA_VERSION_KEY) !== MOCK_DATA_VERSION;
+}
+
+const saveMockDataVersion = () => {
+  localStorage.setItem(MOCK_DATA_VERSION_KEY, MOCK_DATA_VERSION);
 }

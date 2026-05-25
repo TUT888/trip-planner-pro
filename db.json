@@ -13,10 +13,10 @@
       "id": "iimq7Ap"
     },
     {
-      "name": "New User",
-      "email": "newuser@gmail.com",
-      "password": "newuser",
-      "id": "YKmtohq"
+      "name": "Trang",
+      "email": "alo123@gmail.com",
+      "password": "alo123",
+      "id": "yxlIitH"
     }
   ],
   "trips": [
@@ -37,14 +37,37 @@
       "id": "pDB54Lm"
     },
     {
-      "name": "dfdfs",
-      "budget": 1111,
-      "ownerId": "iimq7Ap",
+      "name": "AAAA",
+      "budget": 2,
+      "ownerId": "yxlIitH",
       "sharedWith": [],
-      "id": "DyGrgf_"
+      "id": "PTQx32W"
     }
   ],
-  "itineraryItems": [],
+  "itineraryItems": [
+    {
+      "id": 1779625101778,
+      "activityTitle": "BBB",
+      "location": "BBB",
+      "date": "2026-05-30",
+      "time": "12:30:00",
+      "category": "Food",
+      "priority": "Medium",
+      "status": "Done",
+      "tripId": "PTQx32W"
+    },
+    {
+      "id": 1779682494208,
+      "activityTitle": "Testname",
+      "location": "testlocation",
+      "date": "2026-05-27",
+      "time": "12:30:00",
+      "category": "Shopping",
+      "priority": "High",
+      "status": "Planned",
+      "tripId": "PTQx32W"
+    }
+  ],
   "packingItems": [
     {
       "name": "Not deleted",

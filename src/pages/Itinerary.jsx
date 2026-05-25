@@ -1,18 +1,20 @@
-import { SampleItineraryComponent } from "@/features/itinerary/SampleItineraryComponent";
-import { selectIsSelectedTripOwner, selectSelectedTripId } from "@/features/trip/tripSelector";
-import { useSelector } from "react-redux";
+import './Itinerary.css';
+import { useSelector } from 'react-redux';
+import { PageTitle } from "@/components/PageTitle";
+import { ItineraryList } from "@/features/itinerary/components/ItineraryList";
+import { selectIsSelectedTripOwner, selectSelectedTripId } from "@/features/trip/tripSelector"
 
 export function Itinerary() {
   const selectedTripId = useSelector(selectSelectedTripId);
-  const canEdit = useSelector(selectIsSelectedTripOwner);
+  const canEdit = useSelector(selectIsSelectedTripOwner) === "owner";
 
   return (
-    <>
-      <h1 className="text-2xl">Hello from Itinerary</h1>
-      <SampleItineraryComponent 
-        selectedTripId={selectedTripId} 
-        canEdit={canEdit}
+    <div className="flex flex-col gap-4 font-[Ubuntu,sans-serif]">
+      <PageTitle
+        title="Itinerary"
+        subtitle="Plan and review your trip activities"
       />
-    </>
+      <ItineraryList selectedTripId={selectedTripId} canEdit={canEdit} />
+    </div>
   )
 }

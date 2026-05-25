@@ -37,7 +37,4 @@ export const itinerarySlice = createSlice({
   },
 });
 
-// Actions 
-// export const {} = itinerarySlice.actions;
-
 export default itinerarySlice.reducer;
