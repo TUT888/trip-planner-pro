@@ -1,6 +1,6 @@
 # Nine2Six - Trip Planner Pro
 
-Trip Planner Pro is a React travel-planning app for managing trips, packing tasks, and travel budget data.
+**Trip Planner Pro** is a web application that helps users plan, track, and manage a personal or family travel plan.
 
 The app uses:
 
@@ -34,6 +34,7 @@ The app uses:
 The frontend expects the mock API to run at `http://localhost:3001`.
 
 ### Adding Shadcn Components
+> This section is written for contributors during development phase.
 
 This project uses shadcn/ui. Since the project uses JavaScript configuration with path aliases, follow these steps to add new UI components:
 
