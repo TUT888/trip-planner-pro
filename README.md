@@ -88,12 +88,12 @@ This project uses shadcn/ui. Since the project uses JavaScript configuration wit
 
 The dashboard shows:
 
-- Itinerary grouped by date
-- Packing progress
-- Budget usage
+- Activities grouped by date
+- Packing progress and category progress
+- Budget overview by category
 - Itinerary completion percentage
 - Packing completion percentage
-- Budget usage percentage
+- Budget progress percentage
 - Number of unpaid budget items
 - Number of overdue activities
 
@@ -115,6 +115,7 @@ Users can:
 - Based on user interactions:
   - For global app data such as auth, trips, packing, itinerary, and budget, the app dispatches the related thunk and updates Redux state when the request is fulfilled.
     > Exception: the Itinerary feature currently uses local `useState` for its page data instead of Redux.
+    > The Dashboard does not have its own Redux slice. It fetches itinerary, packing, and budget data, then derives summaries from those existing slices.
   - For component-only state, such as form inputs, modal open/close state, and filter options, each component manages its own state with `useState`.
 - When the selected trip changes, related components that depend on the trip id re-render and fetch data again.
 - When the user logs out, related Redux state is cleared, along with the user session and selected trip saved in `localStorage`.
@@ -133,7 +134,7 @@ The Redux store is configured in `src/app/store.js` with five slices:
 }
 ```
 
-#### `auth`
+**`auth`**
 
 ```js
 {
@@ -156,7 +157,7 @@ User objects are stored in `db.json` like:
 }
 ```
 
-#### `trips`
+**`trips`**
 
 ```js
 {
@@ -185,7 +186,7 @@ Trip objects are stored in `db.json` like:
 }
 ```
 
-#### `packing`
+**`packing`**
 
 ```js
 {
@@ -213,7 +214,7 @@ Packing items are stored in `db.json` like:
 }
 ```
 
-#### `budget`
+**`budget`**
 
 ```js
 {
@@ -242,7 +243,7 @@ Budget items are stored in `db.json` like:
 }
 ```
 
-#### `itinerary`
+**`itinerary`**
 
 ```js
 {
@@ -251,7 +252,7 @@ Budget items are stored in `db.json` like:
 ```
 
 - `items` contains itinerary records fetched by selected `tripId`.
-- The dashboard fetches itinerary items so dashboard summaries can access them from Redux.
+- The dashboard fetches itinerary items, packing items, and budget items so its summaries can use Redux state from the existing feature slices.
 - The slice clears itinerary items when the user logs out, the selected trip is deleted, or trip data is reset.
 
 ### Mock API Data
@@ -272,7 +273,7 @@ All trip-related records are connected by `tripId`. Because `json-server` is onl
 
 ## Known Limitations
 
-### Itinerary
+**Itinerary**
 
 - `Itinerary.jsx` currently uses local `useState` instead of Redux, so data sync is more limited than in other features.
     - The list display depends on local state.
@@ -280,16 +281,16 @@ All trip-related records are connected by `tripId`. Because `json-server` is onl
 - `itinerarySlice` is still used for basic fetching and clearing data for the dashboard.
 - After clearing trip data, the itinerary page needs to be reloaded to show the updated state.
 
-### UI
+**UI**
 
 - The app is not fully responsive or mobile-friendly yet.
 - Color themes and component styling are not fully unified across the app.
 
-### Shared Trips
+**Shared Trips**
 
 - There are no real-time updates for shared trips. Owners see their own edits immediately, but guests need to refresh the page to see changes from the owner's side.
 
-### Mock Backend
+**Mock Backend**
 
 - The app depends on `json-server`; there is no real backend, database, token authentication, or production authorization layer.
 - There is no auth token.
@@ -298,6 +299,22 @@ All trip-related records are connected by `tripId`. Because `json-server` is onl
 - Error and loading state are handled locally in some components, but most Redux slices do not keep shared `loading` or `error` fields.
 - `json-server` does not support bulk deletes, so reset and delete operations remove related packing, itinerary, and budget records one request at a time.
 
-### Testing
+**Testing**
 
 - Testing is not currently implemented in the project.
+
+## Authors and Contribution
+## Contributions
+
+## Contributions
+
+- Application layout design: [@ThaoHocCode](https://github.com/ThaoHocCode), [@nhatxuaan](https://github.com/nhatxuaan)
+- Color theme and shadcn/ui component decisions: [@TUT888](https://github.com/TUT888)
+- Project setup and management: [@TUT888](https://github.com/TUT888)
+- Core feature development:
+  - User authentication and authorization: [@TUT888](https://github.com/TUT888)
+  - Trip management: [@TUT888](https://github.com/TUT888)
+  - Trip dashboard: [@nhatxuaan](https://github.com/nhatxuaan)
+  - Itinerary management: [@chachachawithlife](https://github.com/chachachawithlife)
+  - Packing checklist: [@ThienAn2712](https://github.com/ThienAn2712), [@TUT888](https://github.com/TUT888)
+  - Travel budget: [@ThaoHocCode](https://github.com/ThaoHocCode), [@nnvananh](https://github.com/nnvananh)
