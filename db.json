@@ -1,0 +1,115 @@
+{
+  "users": [
+    {
+      "name": "New User",
+      "email": "new@gmail.com",
+      "password": "new123",
+      "id": "AwrYOEc"
+    },
+    {
+      "name": "Test",
+      "email": "test@gmail.com",
+      "password": "test123",
+      "id": "iimq7Ap"
+    },
+    {
+      "name": "xuan",
+      "email": "xuan@gmail.com",
+      "password": "123",
+      "id": "B2-H4q2"
+    },
+    {
+      "name": "Trang",
+      "email": "alo123@gmail.com",
+      "password": "alo123",
+      "id": "yxlIitH"
+    }
+  ],
+  "trips": [
+    {
+      "name": "Some New Trip",
+      "budget": 0,
+      "ownerId": "AwrYOEc",
+      "sharedWith": [
+        "iimq7Ap"
+      ],
+      "id": "GLCPvkf"
+    },
+    {
+      "name": "DUMMY TRIP",
+      "budget": 0,
+      "ownerId": "AwrYOEc",
+      "sharedWith": [],
+      "id": "pDB54Lm"
+    },
+    {
+      "name": "AAAA",
+      "budget": 2,
+      "ownerId": "yxlIitH",
+      "sharedWith": [],
+      "id": "PTQx32W"
+    },
+    {
+      "name": "123",
+      "budget": 100,
+      "ownerId": "iimq7Ap",
+      "sharedWith": [],
+      "id": "B_7TdjC"
+    }
+  ],
+  "itineraryItems": [
+    {
+      "id": 1779625101778,
+      "activityTitle": "BBB",
+      "location": "BBB",
+      "date": "2026-05-30",
+      "time": "12:30:00",
+      "category": "Food",
+      "priority": "Medium",
+      "status": "Done",
+      "tripId": "PTQx32W"
+    },
+    {
+      "id": 1779682494208,
+      "activityTitle": "Testname",
+      "location": "testlocation",
+      "date": "2026-05-27",
+      "time": "12:30:00",
+      "category": "Shopping",
+      "priority": "High",
+      "status": "Planned",
+      "tripId": "PTQx32W"
+    }
+  ],
+  "packingItems": [
+    {
+      "name": "Not deleted",
+      "category": "Other",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed",
+      "tripId": "pDB54Lm",
+      "id": "tjBX1Q0"
+    }
+  ],
+  "budgetItems": [
+    {
+      "name": "dfdf",
+      "category": "Transport",
+      "estimatedCost": 1,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "DyGrgf_",
+      "id": 1
+    },
+    {
+      "name": "dfds",
+      "category": "Transport",
+      "estimatedCost": 1,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "B_7TdjC",
+      "id": 2
+    }
+  ]
+}

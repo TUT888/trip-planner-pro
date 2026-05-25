@@ -1,14 +1,15 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import { TripDashboard } from './pages/TripDashboard'
 import { Itinerary } from './pages/Itinerary'
-import { PackingChecklist } from './pages/PackingChecklist'
+import { PackingChecklist }  from './pages/PackingChecklist'
 import { TravelBudget } from './pages/TravelBudget'
 import { AppLayout } from './components/layout/AppLayout'
+import { Home } from './pages/Home'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<AppLayout />}>
-      <Route index element={<TripDashboard />}/>
+      <Route index element={<Home />}/>
       <Route path='/dashboard' element={<TripDashboard />}/>
       <Route path='/itinerary' element={< Itinerary/>}/>
       <Route path='/packing' element={<PackingChecklist />}/>
