@@ -13,6 +13,12 @@
       "id": "iimq7Ap"
     },
     {
+      "name": "xuan",
+      "email": "xuan@gmail.com",
+      "password": "123",
+      "id": "B2-H4q2"
+    },
+    {
       "name": "Trang",
       "email": "alo123@gmail.com",
       "password": "alo123",
@@ -42,6 +48,13 @@
       "ownerId": "yxlIitH",
       "sharedWith": [],
       "id": "PTQx32W"
+    },
+    {
+      "name": "Disney trip",
+      "budget": 12,
+      "ownerId": "B2-H4q2",
+      "sharedWith": [],
+      "id": "rfSI9G5"
     }
   ],
   "itineraryItems": [
@@ -79,15 +92,5 @@
       "id": "tjBX1Q0"
     }
   ],
-  "budgetItems": [
-    {
-      "name": "dfdf",
-      "category": "Transport",
-      "estimatedCost": 1,
-      "actualCost": "",
-      "paymentStatus": "Unpaid",
-      "tripId": "DyGrgf_",
-      "id": 1
-    }
-  ]
+  "budgetItems": []
 }
