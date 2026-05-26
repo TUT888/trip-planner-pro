@@ -69,7 +69,6 @@ This project uses shadcn/ui. Since the project uses JavaScript configuration wit
 ### Trip Management
 
 - Trip owners can create trips, reset trip data, delete trips, and share trips with other users by email.
-- Owners and guests can export the currently selected trip as JSON.
 
 ### Packing Checklist
 
