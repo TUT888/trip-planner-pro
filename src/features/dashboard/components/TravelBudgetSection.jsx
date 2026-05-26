@@ -89,7 +89,7 @@ export const TravelBudgetSection = () => {
                     {/* Cu the cac danh muc */}
                     <div className="space-y-3 pt-2 py-2">
                         {budgetObject.categories.map((cat)=>{
-                            const badge = getStatusBadge(cat.actual, cat.est);
+                            const badge = getStatusBadge(cat.paidItems, cat.totalItems);
                             return (
                             // ten + mau                            
                             <div key={cat.id} className="flex items-center justify-between text-xs">

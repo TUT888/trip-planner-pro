@@ -105,10 +105,10 @@ export function AllActivitiesSection() {
                 <div className="absolute left-[51px] top-2 bottom-6 w-[1.5px] bg-gray-400" />
 
                 {dayGroup.act.map((item) => {
-                const badge = renderStatusBadge(item.status);
+                const badge = renderStatusBadge(item);
                 let dotColor="bg-blue-500";
                 if(item.status?.toLowerCase()=="done") dotColor = "bg-green-500"
-                else if(item.status?.toLowerCase()=="overdue") dotColor="bg-red-500"
+                else if(badge.text === "Overdue") dotColor="bg-red-500"
 
 
                 return (
@@ -132,7 +132,7 @@ export function AllActivitiesSection() {
                         <div className="flex items-center gap-2">
                        
                         <Badge variant="outline" className={badge.className}>
-                            {item.status}
+                            {badge.text}
                         </Badge>
                         </div>
                     </div>
