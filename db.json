@@ -55,6 +55,13 @@
       "ownerId": "iimq7Ap",
       "sharedWith": [],
       "id": "B_7TdjC"
+    },
+    {
+      "name": "Da Nang Trip",
+      "budget": 100,
+      "ownerId": "B2-H4q2",
+      "sharedWith": [],
+      "id": "aqmLAsa"
     }
   ],
   "itineraryItems": [
@@ -79,6 +86,50 @@
       "priority": "High",
       "status": "Planned",
       "tripId": "PTQx32W"
+    },
+    {
+      "id": 1779758169381,
+      "activityTitle": "Flight to Da Nang",
+      "location": "Tan Son Nhat Airport",
+      "date": "2026-05-26",
+      "time": "20:00:00",
+      "category": "Transport",
+      "priority": "High",
+      "status": "Done",
+      "tripId": "aqmLAsa"
+    },
+    {
+      "id": 1779758199992,
+      "activityTitle": "Check in hotel",
+      "location": "Pullman Da Nang",
+      "date": "2026-05-26",
+      "time": "02:00:02",
+      "category": "Hotel",
+      "priority": "High",
+      "status": "Done",
+      "tripId": "aqmLAsa"
+    },
+    {
+      "id": 1779758290536,
+      "activityTitle": "Dinner at Han Market",
+      "location": "Han Market",
+      "date": "2026-05-26",
+      "time": "07:00:00",
+      "category": "Food",
+      "priority": "Medium",
+      "status": "Done",
+      "tripId": "aqmLAsa"
+    },
+    {
+      "id": 1779758361822,
+      "activityTitle": "My Khe Beach",
+      "location": "My Khe Beach",
+      "date": "2026-05-26",
+      "time": "08:00:00",
+      "category": "Sightseeing",
+      "priority": "Medium",
+      "status": "Planned",
+      "tripId": "aqmLAsa"
     }
   ],
   "packingItems": [
@@ -90,6 +141,69 @@
       "packedStatus": "Not Packed",
       "tripId": "pDB54Lm",
       "id": "tjBX1Q0"
+    },
+    {
+      "name": "Passport / ID card",
+      "category": "Documents",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "aqmLAsa",
+      "id": "ijOBuk0"
+    },
+    {
+      "name": "Flight tickets (printed)",
+      "category": "Documents",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "aqmLAsa",
+      "id": "zWjWjkB"
+    },
+    {
+      "name": "T-shirts",
+      "category": "Clothes",
+      "quantity": 5,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "aqmLAsa",
+      "id": "FyLe-wN"
+    },
+    {
+      "name": "Swimsuit",
+      "category": "Clothes",
+      "quantity": 2,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed",
+      "tripId": "aqmLAsa",
+      "id": "ftHSJyF"
+    },
+    {
+      "name": "Sunscreen",
+      "category": "Personal",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed",
+      "tripId": "aqmLAsa",
+      "id": "aO9iWvb"
+    },
+    {
+      "name": "Toothbrush & toothpaste",
+      "category": "Personal",
+      "quantity": 2,
+      "requiredStatus": "Required",
+      "packedStatus": "Packed",
+      "tripId": "aqmLAsa",
+      "id": "TZfKdYz"
+    },
+    {
+      "name": "Phone charger",
+      "category": "Electronics",
+      "quantity": 1,
+      "requiredStatus": "Required",
+      "packedStatus": "Not Packed",
+      "tripId": "aqmLAsa",
+      "id": "a8o6jAf"
     }
   ],
   "budgetItems": [
@@ -110,6 +224,60 @@
       "paymentStatus": "Unpaid",
       "tripId": "B_7TdjC",
       "id": 2
+    },
+    {
+      "name": "Flight tickets",
+      "category": "Transport",
+      "estimatedCost": 35,
+      "actualCost": 38,
+      "paymentStatus": "Paid",
+      "tripId": "aqmLAsa",
+      "id": 3
+    },
+    {
+      "name": "Hotel 3 nights",
+      "category": "Accommodation",
+      "estimatedCost": 30,
+      "actualCost": 28,
+      "paymentStatus": "Paid",
+      "tripId": "aqmLAsa",
+      "id": 4
+    },
+    {
+      "name": "Ba Na Hills tickets",
+      "category": "Activity",
+      "estimatedCost": 8,
+      "actualCost": 7,
+      "paymentStatus": "Paid",
+      "tripId": "aqmLAsa",
+      "id": 5
+    },
+    {
+      "name": "Food & drinks",
+      "category": "Food",
+      "estimatedCost": 10,
+      "actualCost": 5,
+      "paymentStatus": "Paid",
+      "tripId": "aqmLAsa",
+      "id": 6
+    },
+    {
+      "name": "Souvenirs",
+      "category": "Shopping",
+      "estimatedCost": 8,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "aqmLAsa",
+      "id": 7
+    },
+    {
+      "name": "Taxi & grab",
+      "category": "Transport",
+      "estimatedCost": 4,
+      "actualCost": "",
+      "paymentStatus": "Unpaid",
+      "tripId": "aqmLAsa",
+      "id": 8
     }
   ]
 }

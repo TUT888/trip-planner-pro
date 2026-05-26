@@ -42,12 +42,12 @@
 
  }
 
- export const calculateOverdueActivities = (initerary)=>{
-    if(!initerary||initerary.length==0) return 0;
+export const calculateOverdueActivities = (itinerary) => {
+    if (!itinerary || itinerary.length === 0) return 0;
 
-    const overdueCount = initerary.filter((act)=>(
-        act?.status?.toLowerCase()=="overdue"
-    )).length;
-    
-    return overdueCount;
- }
+    const now = new Date();
+    return itinerary.filter((act) => {
+        const activityDateTime = new Date(`${act.date}T${act.time}`);
+        return activityDateTime < now && act.status?.toLowerCase() !== "done";
+    }).length;
+};

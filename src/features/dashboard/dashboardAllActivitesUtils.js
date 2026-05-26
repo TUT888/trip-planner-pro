@@ -24,16 +24,20 @@ export const setFilteredTimeline = (activeTab,activities) =>{
 
 
 
-export const renderStatusBadge = (status) => {
-    const currentStatus = status?.toLowerCase();
-  
-    if (currentStatus === "overdue") {
+export const renderStatusBadge = (item) => {
+    const currentStatus = item.status?.toLowerCase();
+    
+    const activityDateTime = new Date(`${item.date}T${item.time}`);
+    const now = new Date();
+    const isOverdue = activityDateTime < now && currentStatus !== "done";
+
+    if (isOverdue) {
         return { text: "Overdue", className: "border-red-300 text-red-500 bg-red-50 text-[10px] rounded-md h-5 font-bold shadow-none" };
     }
     if (currentStatus === "done") {
         return { text: "Done", className: "border-green-300 text-green-500 bg-green-50 text-[10px] rounded-md h-5 font-bold shadow-none " };
     }
     
-    // (Planned, In Progress, v.v...)
-    return { text: status, className: "border-foreground-300 text-foreground-500 bg-foreground-50 text-[10px] rounded-md h-5 font-bold shadow-none " };
+    // (Planned v.v...)
+    return { text: "Planned", className: "border-foreground-300 text-foreground-500 bg-foreground-50 text-[10px] rounded-md h-5 font-bold shadow-none " };
   };
