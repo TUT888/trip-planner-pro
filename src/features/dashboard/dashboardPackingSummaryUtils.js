@@ -50,7 +50,7 @@ export const calculatePackingCategoriesProgress = (packingList = []) => {
     if(!packingList||packingList.length==0){
         return [
             {
-                name: "Overall Progress",
+                name: "OVERALL PROGRESS",
                 current: 0,
                 total: 0,
                 isPercent: true
@@ -80,7 +80,7 @@ export const calculatePackingCategoriesProgress = (packingList = []) => {
   });
 
   return [
-    { name: "Overall progress", current: overallPercent, total: overallPercent, isPercent: true },
+    { name: "OVERALL PROGRESS", current: overallPercent, total: overallPercent, isPercent: true },
     ...processedCategories
   ];
 

@@ -21,6 +21,9 @@ export const budgetAll = (budget, tripBudget = 0)=>{
         const actSum = itemsInGroup.reduce((sum, item) =>  sum + Number(item.actualCost), 0);
         const estSum = itemsInGroup.reduce((sum, item) => sum + Number(item.estimatedCost), 0);
         const catPercentage = totalEstimated > 0 ? (actSum / totalEstimated) * 100 : 0;
+
+        const totalItems = itemsInGroup.length;
+        const paidItems = itemsInGroup.filter(item => item.paymentStatus?.toLowerCase() === "paid").length;
         return {
             id: index,
             name: cat.name,
@@ -28,7 +31,9 @@ export const budgetAll = (budget, tripBudget = 0)=>{
             actual: actSum,
             est: estSum,
             percentage: catPercentage,
-            width: `${catPercentage}%` 
+            width: `${catPercentage}%` ,
+            totalItems,
+            paidItems
         };
     });
     const segmentsForBar = processedCategories.filter(cat => cat.est > 0);
@@ -47,12 +52,12 @@ export const budgetAll = (budget, tripBudget = 0)=>{
 
 
 
-export const getStatusBadge = (actual, est) => {
-        if (actual == 0) {
+export const getStatusBadge = (paidItems, totalItems) => {
+        if (paidItems == 0) {
             return {className: "border-red-300 text-red-500 bg-red-50 text-[10px] rounded-md h-5 font-bold shadow-none",
                     text: "Not Paid" }
         }
-        if (actual > 0 && actual < est) {
+        if (paidItems < totalItems) {
             return {className:"border-yellow-300 text-yellow-500 bg-yellow-50 text-[10px] rounded-md h-5 font-bold shadow-none ",
                     text: "Partially Paid" }
         }
